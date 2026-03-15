@@ -8,7 +8,6 @@ export function initRevenueChart() {
         return;
     }
 
-    // Đảm bảo thư viện Chart.js đã được tải
     if (typeof Chart === 'undefined') {
         console.error("Thư viện Chart.js chưa được tải.");
         return;

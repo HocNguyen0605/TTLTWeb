@@ -74,7 +74,6 @@
                         </div>
                     </c:if>
 
-                    <!-- Success Alert (Check Request Scope too) -->
                     <c:if test="${not empty requestScope.success or not empty sessionScope.success}">
                         <div class="alert alert-success mb-3">
                                 ${not empty requestScope.success ? requestScope.success : sessionScope.success}
