@@ -2,6 +2,8 @@ import { initNavbarToggle, initTabs } from './navbar-tabs.js';
 import { initCarousel } from './carousel.js';
 import {updateAuthUI, handleLogout} from './auth.js';
 import { initRevenueChart } from './chart.js';
+import { numberFormat} from  './number-format.js';
+
 
 // Hàm chính để khởi tạo tất cả chức năng
 function initApp() {
@@ -16,6 +18,9 @@ function initApp() {
 
     // Khởi tạo biểu đồ
     initRevenueChart();
+
+    // format giá tiền
+    numberFormat();
 
     //Gán Event Listener cho nút Đăng Xuất
     const logoutButton = document.getElementById('logoutButton'); // Giả sử nút Đăng Xuất có id="logoutButton"
