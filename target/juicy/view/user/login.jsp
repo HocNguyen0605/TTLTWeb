@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Trang Chủ" />
+    <jsp:param name="title" value="Trang Chủ"/>
 </jsp:include>
 <section class="container py-5">
     <div class="auth-container">
@@ -58,43 +58,34 @@
                     <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2">Đăng Nhập</button>
                 </form>
                 <div class="text-center mt-3">
-                    <p>Chưa có tài khoản? <a href="#" class="text-success fw-bold text-decoration-none"
-                                             onclick="document.getElementById('register-tab').click(); return false;">Đăng
-                        ký ngay</a></p>
+                    <p>Chưa có tài khoản?
+                        <a href="#" class="text-success fw-bold text-decoration-none"
+                           onclick="document.getElementById('register-tab').click(); return false;">Đăng ký ngay</a>
+                    </p>
                 </div>
             </div>
 
             <div class="tab-pane fade ${activeTab == 'register' ? 'show active' : ''}" id="register"
                  role="tabpanel" aria-labelledby="register-tab">
                 <form id="registerForm" action="${pageContext.request.contextPath}/register" method="post">
-                    <!--Hiển thị thông báo khi đăng nhập-->
-                    <c:if test="${not empty error}">
-                        <div class="alert alert-danger mb-3">
-                                ${error}
-                        </div>
-                    </c:if>
-
-                    <!-- Success Alert (Check Request Scope too) -->
-                    <c:if test="${not empty requestScope.success or not empty sessionScope.success}">
-                        <div class="alert alert-success mb-3">
-                                ${not empty requestScope.success ? requestScope.success : sessionScope.success}
-                        </div>
-                        <c:if test="${not empty sessionScope.success}">
-                            <c:remove var="success" scope="session"/>
-                        </c:if>
-                    </c:if>
 
                     <div class="mb-3">
-                        <label for="regFullName" class="form-label fw-semibold">Họ và Tên</label>
-                        <input type="text" class="form-control" id="regFullName" name="username" required
-                               placeholder="Nhập họ tên của bạn" value="${oldUsername}"/>
+                        <label for="regUserame" class="form-label fw-semibold">Tên người dùng</label>
+                        <input type="text" class="form-control" id="regUserame" name="username" required
+                               placeholder="Nhập tên của bạn" value="${oldUsername}"/>
                         <c:if test="${errors.username != null}">
                             <div class="text-danger small">
                                     ${errors.username}
                             </div>
                         </c:if>
-
                     </div>
+
+                    <div class="mb-3">
+                        <label for="regFullname" class="form-label fw-semibold">Họ và tên</label>
+                        <input type="text" class="form-control" id="regFullname" name="fullname"
+                               placeholder="Nhập họ và tên của bạn" value="${oldFullName}">
+                    </div>
+
                     <div class="mb-3">
                         <label for="regEmail" class="form-label fw-semibold">Email</label>
                         <input type="email" class="form-control" id="regEmail" name="email" required
@@ -104,19 +95,19 @@
                                     ${errors.email}
                             </div>
                         </c:if>
-
                     </div>
+
                     <div class="mb-3">
                         <label for="regPassword" class="form-label fw-semibold">Mật khẩu</label>
                         <input type="password" class="form-control" id="regPassword" name="password" required
-                               placeholder="Tạo mật khẩu (tối thiểu 8 ký tự, kí tự viết hoa và kí tự đặt biệt)"/>
+                               placeholder="Tối thiểu 8 ký tự, kí tự viết hoa và kí tự đặt biệt"/>
                         <c:if test="${errors.password != null}">
                             <div class="text-danger small">
                                     ${errors.password}
                             </div>
                         </c:if>
-
                     </div>
+
                     <div class="mb-4">
                         <label for="regConfirmPassword" class="form-label fw-semibold">Xác nhận Mật khẩu</label>
                         <input type="password" class="form-control" id="regConfirmPassword" name="confirmPassword"
@@ -126,8 +117,8 @@
                                     ${errors.confirmPassword}
                             </div>
                         </c:if>
-
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Mã xác thực OTP</label>
                         <div class="input-group">
@@ -136,6 +127,7 @@
                         </div>
                         <small id="otpTimer" class="text-danger"></small>
                     </div>
+
                     <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2">Đăng Ký</button>
                 </form>
                 <div class="text-center mt-3">
@@ -151,8 +143,10 @@
                 <form id="forgotPasswordForm">
                     <div class="mb-3">
                         <label class="form-label">Nhập Email đã đăng ký</label>
-                        <input type="email" name="email" id="forgotEmail" class="form-control" required placeholder="name@example.com">
-                        <div id="forgotMsg" class="mt-2 small"></div> </div>
+                        <input type="email" name="email" id="forgotEmail" class="form-control" required
+                               placeholder="name@example.com">
+                        <div id="forgotMsg" class="mt-2 small"></div>
+                    </div>
                     <button type="submit" class="btn btn-success w-100" id="btnForgot">Gửi mật khẩu mới</button>
                 </form>
                 <div class="text-center mt-3">
@@ -171,9 +165,9 @@
 <script type="module" src="${pageContext.request.contextPath}/js/init.js"></script>
 <script>
     // Xử lý gửi OTP bằng AJAX để không bị load lại trang
-    document.getElementById('btnSendOTP').addEventListener('click', function() {
+    document.getElementById('btnSendOTP').addEventListener('click', function () {
         const email = document.querySelector('#registerForm input[name="email"]').value;
-        if(!email) {
+        if (!email) {
             alert("Vui lòng nhập email trước khi nhận OTP!");
             return;
         }
@@ -188,7 +182,7 @@
                 let timeLeft = 60;
                 const timerDisplay = document.getElementById('otpTimer');
                 const interval = setInterval(() => {
-                    if(timeLeft <= 0) {
+                    if (timeLeft <= 0) {
                         clearInterval(interval);
                         btn.disabled = false;
                         timerDisplay.innerHTML = "Mã đã hết hạn, vui lòng gửi lại.";
@@ -201,7 +195,7 @@
     });
 </script>
 <script>
-    document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+    document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
         e.preventDefault(); // Ngăn load lại trang
 
         const email = document.getElementById('forgotEmail').value;
@@ -214,15 +208,15 @@
         // Gửi yêu cầu bằng Fetch thay vì submit form truyền thống
         fetch('${pageContext.request.contextPath}/forgot-password', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: 'email=' + encodeURIComponent(email)
         })
             .then(response => response.text())
             .then(data => {
-                if(data === "success") {
+                if (data === "success") {
                     msgDiv.className = "mt-2 small text-success";
                     msgDiv.innerHTML = "Mật khẩu mới đã được gửi vào Email của bạn!";
-                } else if(data === "not_found") {
+                } else if (data === "not_found") {
                     msgDiv.className = "mt-2 small text-danger";
                     msgDiv.innerHTML = "Email này không tồn tại trong hệ thống!";
                 } else {

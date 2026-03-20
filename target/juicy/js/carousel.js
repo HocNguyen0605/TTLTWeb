@@ -27,7 +27,6 @@ export function initCarousel(id, interval) {
 
     // 1. Tự động chuyển slide
     function startAutoSlide() {
-        // Xóa interval cũ trước khi tạo mới
         clearInterval(slideInterval);
         slideInterval = setInterval(nextSlide, interval);
     }

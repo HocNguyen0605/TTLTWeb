@@ -1,4 +1,3 @@
-// admin-chart.js
 
 document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('revenueChart');
@@ -6,14 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let myChart = null;
 
-    // Filter Elements
     const filterSelect = document.getElementById('chartFilter');
     const customRangeDiv = document.getElementById('customDateRange');
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
     const btnFilter = document.getElementById('btnFilter');
 
-    // 1. Initialize Chart
     function initChart(labels, data) {
         if (myChart) {
             myChart.destroy();
@@ -67,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 2. Fetch Data Generic Function
     async function fetchData(filterType, start = null, end = null) {
         try {
             let url = `${contextPath}/admin/api/chart-data?filter=${filterType}`;
@@ -88,9 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 3. Event Listeners
 
-    // Dropdown Change
     if (filterSelect) {
         filterSelect.addEventListener('change', function () {
             const val = this.value;
@@ -104,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Custom Filter Button
     if (btnFilter) {
         btnFilter.addEventListener('click', function () {
             const start = startDateInput.value;
@@ -118,8 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 4. Load Default Data (7 days)
-    // Use existing window data if available (fast load), otherwise fetch
     if (window.revenueLabels && window.revenueData) {
         initChart(window.revenueLabels, window.revenueData);
     } else {

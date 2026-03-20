@@ -26,18 +26,18 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
-        String fullName = request.getParameter("fullName");
+        String fullName = request.getParameter("fullname");
         String userOtp = request.getParameter("otp");
 
         Map<String, String> errors = new HashMap<>();
         HttpSession session = request.getSession();
 
         // --- BƯỚC 1: KIỂM TRA LỖI NHẬP LIỆU CƠ BẢN ---
-        if (userDAO.isUserEmailExists(email)) {
-            errors.put("email", "Email đã tồn tại!");
-        }
         if (userDAO.isUserNameExists(username)) {
             errors.put("username", "Tên tài khoản đã tồn tại!");
+        }
+        if (userDAO.isUserEmailExists(email)) {
+            errors.put("email", "Email đã tồn tại!");
         }
         if (password == null || password.isEmpty()) {
             errors.put("password", "Mật khẩu không được để trống");
@@ -94,6 +94,10 @@ public class RegisterServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Lỗi hệ thống: " + e.getMessage());
+            request.setAttribute("oldUsername", username);
+            request.setAttribute("oldFullName", fullName);
+            request.setAttribute("oldEmail", email);
+            request.setAttribute("activeTab", "register");
             request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
         }
     }
