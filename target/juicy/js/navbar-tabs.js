@@ -81,7 +81,6 @@ function addToCart(productId) {
 }
 
 function updateCartBadge() {
-    // Bạn có thể fetch lại số lượng mới từ server hoặc đơn giản là cộng thêm 1 vào Badge hiện tại
     let badge = document.querySelector('.badge');
     if (badge) {
         let currentCount = parseInt(badge.innerText) || 0;
