@@ -64,7 +64,7 @@ public class UserDAO {
             // 2. Insert into user
             handle.createUpdate("INSERT INTO user (id_account, name, email) VALUES (:aid, :name, :email)")
                     .bind("aid", accountId)
-                    .bind("name", user.getUsername())
+                    .bind("name", user.getFullName())
                     .bind("email", user.getEmail())
                     .execute();
         });
