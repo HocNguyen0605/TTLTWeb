@@ -94,8 +94,7 @@ public class ProductController extends HttpServlet {
         }
 
         // 2. Gọi DAO để lấy danh sách đã lọc (có phân trang)
-        // Note: We need to update DAO methods to accept minVol/maxVol instead of single
-        // volume string
+
         List<Product> list = dao.getFilteredProducts(minPrice, maxPrice, minVol, maxVol, supplier, sortBy, offset,
                 pageSize);
         int totalProducts = dao.getTotalFilteredProducts(minPrice, maxPrice, minVol, maxVol, supplier);
@@ -114,30 +113,12 @@ public class ProductController extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
-        // Giữ lại giá trị filter để điền lại vào form
-        // Giữ lại giá trị filter để điền lại vào form
+
         request.setAttribute("currentPriceRange", priceRange);
         request.setAttribute("currentVolume", volumeStr);
         request.setAttribute("currentSupplier", supplier);
         request.setAttribute("currentSort", sortBy);
 
-        // Chuyển hướng
         request.getRequestDispatcher("/view/user/products.jsp").forward(request, response);
     }
 }
-// @Override
-// protected void doGet(HttpServletRequest request, HttpServletResponse
-// response) throws ServletException, IOException {
-// // Khởi tạo DAO
-// ProductDAO dao = new ProductDAO();
-//
-// // Gọi đúng tên hàm trong DAO
-// List<Product> list = dao.getListProduct();
-//
-// // Đẩy dữ liệu sang JSP
-// request.setAttribute("productList", list);
-//
-// // Chuyển hướng sang file JSP (đảm bảo file này nằm trong thư mục webapp)
-// request.getRequestDispatcher("product-list.jsp").forward(request, response);
-// }
-// }
