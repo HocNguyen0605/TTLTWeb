@@ -70,8 +70,8 @@
                 <form id="registerForm" action="${pageContext.request.contextPath}/register" method="post">
 
                     <div class="mb-3">
-                        <label for="regUserame" class="form-label fw-semibold">Tên người dùng</label>
-                        <input type="text" class="form-control" id="regUserame" name="username" required
+                        <label for="regUserame" class="form-label fw-semibold">Tên người dùng *</label>
+                        <input type="text" class="form-control" maxlength="20" id="regUserame" name="username" required
                                placeholder="Nhập tên của bạn" value="${oldUsername}"/>
                         <c:if test="${errors.username != null}">
                             <div class="text-danger small">
@@ -82,12 +82,17 @@
 
                     <div class="mb-3">
                         <label for="regFullname" class="form-label fw-semibold">Họ và tên</label>
-                        <input type="text" class="form-control" id="regFullname" name="fullname"
+                        <input type="text" class="form-control" maxlength="50" id="regFullname" name="fullname"
                                placeholder="Nhập họ và tên của bạn" value="${oldFullName}">
+                        <c:if test="${errors.fullname != null}">
+                           <div class="text-danger small">
+                                    ${errors.fullname}
+                            </div>
+                        </c:if>
                     </div>
 
                     <div class="mb-3">
-                        <label for="regEmail" class="form-label fw-semibold">Email</label>
+                        <label for="regEmail" class="form-label fw-semibold">Email *</label>
                         <input type="email" class="form-control" id="regEmail" name="email" required
                                placeholder="Nhập địa chỉ email" value="${oldEmail}"/>
                         <c:if test="${errors.email != null}">
@@ -98,8 +103,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="regPassword" class="form-label fw-semibold">Mật khẩu</label>
-                        <input type="password" class="form-control" id="regPassword" name="password" required
+                        <label for="regPassword" class="form-label fw-semibold">Mật khẩu *</label>
+                        <input type="password" class="form-control" maxlength="20" id="regPassword" name="password" required
                                placeholder="Tối thiểu 8 ký tự, kí tự viết hoa và kí tự đặt biệt"/>
                         <c:if test="${errors.password != null}">
                             <div class="text-danger small">
@@ -109,8 +114,8 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="regConfirmPassword" class="form-label fw-semibold">Xác nhận Mật khẩu</label>
-                        <input type="password" class="form-control" id="regConfirmPassword" name="confirmPassword"
+                        <label for="regConfirmPassword" class="form-label fw-semibold">Xác nhận Mật khẩu *</label>
+                        <input type="password" class="form-control" maxlength="20" id="regConfirmPassword" name="confirmPassword"
                                required placeholder="Nhập lại mật khẩu"/>
                         <c:if test="${errors.confirmPassword != null}">
                             <div class="text-danger small">
@@ -120,9 +125,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Mã xác thực OTP</label>
+                        <label class="form-label fw-semibold">Mã xác thực OTP *</label>
                         <div class="input-group">
-                            <input type="text" name="otp" class="form-control" placeholder="Nhập mã 6 số" required>
+                            <input type="text" name="otp" class="form-control" maxlength="6" placeholder="Nhập mã 6 số" required>
                             <button class="btn btn-outline-success" type="button" id="btnSendOTP">Gửi mã</button>
                         </div>
                         <small id="otpTimer" class="text-danger"></small>

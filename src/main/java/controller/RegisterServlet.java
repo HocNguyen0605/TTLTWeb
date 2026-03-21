@@ -34,8 +34,14 @@ public class RegisterServlet extends HttpServlet {
 
         // --- BƯỚC 1: KIỂM TRA LỖI NHẬP LIỆU CƠ BẢN ---
         if (userDAO.isUserNameExists(username)) {
-            errors.put("username", "Tên tài khoản đã tồn tại!");
+            errors.put("username", "Tên người dùng đã tồn tại!");
+        } else if (hasSC(username)) {
+            errors.put("username", "Tên người dùng không được chứa kí tự đặc biệt");
         }
+        if (hasSpecialCharacter(fullName)){
+            errors.put("fullname", "Họ và tên không được chứa kí tự đặc biệt");
+        }
+
         if (userDAO.isUserEmailExists(email)) {
             errors.put("email", "Email đã tồn tại!");
         }
@@ -110,5 +116,15 @@ public class RegisterServlet extends HttpServlet {
         boolean hasSpecial = Pattern.compile("[^a-zA-Z0-9]").matcher(password).find();
 
         return hasUpper && hasSpecial;
+    }
+    // Hàm kiểm tra kí tự đặc biệt trong tên
+    private boolean hasSpecialCharacter(String name){
+        boolean isLegal = Pattern.compile("^[\\p{L}\\s]+$").matcher(name).matches();
+        return !isLegal;
+    }
+    // Hàm kiểm tra kí tự đặc biệt trong username
+    private boolean hasSC(String name){
+        boolean isLegal = Pattern.compile("^[\\s\\d]+$").matcher(name).matches();
+        return !isLegal;
     }
 }
