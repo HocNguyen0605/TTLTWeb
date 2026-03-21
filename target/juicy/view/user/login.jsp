@@ -172,30 +172,37 @@
     // Xử lý gửi OTP bằng AJAX để không bị load lại trang
     document.getElementById('btnSendOTP').addEventListener('click', function () {
         const email = document.querySelector('#registerForm input[name="email"]').value;
+        const notice = document.getElementById('otpTimer');
+        const btn = this;
         if (!email) {
-            alert("Vui lòng nhập email trước khi nhận OTP!");
+            notice.innerHTML = "Vui lòng nhập email trước";
             return;
         }
+        let interval;
+        let timeLeft = 60;
 
-        const btn = this;
         btn.disabled = true;
+        notice.innerHTML = "Đang gửi mã... (60s)";
+
+        const Updtimer = () => {
+            if(timeLeft <= 0){
+                clearInterval(interval);
+                btn.disabled = false;
+                notice.innerHTML = "Mã đã hết hạn, vui lòng gửi lại";
+            } else {
+                notice.innerHTML = "Mã hiệu lực trong: " + timeLeft + "s";
+                timeLeft -= 1;
+            }
+        }
+
+        Updtimer();
+        interval = setInterval(Updtimer, 1000);
 
         fetch('${pageContext.request.contextPath}/send-otp?email=' + email)
-            .then(response => response.text())
-            .then(data => {
-                alert("Mã OTP đã được gửi đến email của bạn!");
-                let timeLeft = 60;
-                const timerDisplay = document.getElementById('otpTimer');
-                const interval = setInterval(() => {
-                    if (timeLeft <= 0) {
-                        clearInterval(interval);
-                        btn.disabled = false;
-                        timerDisplay.innerHTML = "Mã đã hết hạn, vui lòng gửi lại.";
-                    } else {
-                        timerDisplay.innerHTML = "Mã hiệu lực trong: " + timeLeft + "s";
-                    }
-                    timeLeft -= 1;
-                }, 1000);
+            .catch(err => {
+                notice.innerHTML = "Lỗi gửi mã, thử lại sau.";
+                btn.disabled = false;
+                clearInterval(interval);
             });
     });
 </script>
