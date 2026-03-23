@@ -32,12 +32,13 @@ public class RegisterServlet extends HttpServlet {
         Map<String, String> errors = new HashMap<>();
         HttpSession session = request.getSession();
 
-        // --- BƯỚC 1: KIỂM TRA LỖI NHẬP LIỆU CƠ BẢN ---
+        // check fields
         if (userDAO.isUserNameExists(username)) {
             errors.put("username", "Tên người dùng đã tồn tại!");
         } else if (hasSC(username)) {
             errors.put("username", "Tên người dùng không được chứa kí tự đặc biệt");
         }
+
         if (hasSpecialCharacter(fullName)){
             errors.put("fullname", "Họ và tên không được chứa kí tự đặc biệt");
         }
@@ -53,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
             errors.put("confirmPassword", "Nhập lại mật khẩu chưa chính xác");
         }
 
-        // --- BƯỚC 2: KIỂM TRA OTP (QUAN TRỌNG) ---
+        // check otp
         String serverOtp = (String) session.getAttribute("otpCode");
         Long otpTime = (Long) session.getAttribute("otpTime");
 
@@ -63,7 +64,7 @@ public class RegisterServlet extends HttpServlet {
             errors.put("otp", "Mã OTP đã hết hạn (quá 60 giây)!");
         }
 
-        // --- BƯỚC 3: TRẢ VỀ NẾU CÓ BẤT KỲ LỖI NÀO ---
+        // trả về nếu có lỗi trong fields
         if (!errors.isEmpty()) {
             request.setAttribute("errors", errors);
             request.setAttribute("oldUsername", username);
@@ -74,7 +75,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // --- BƯỚC 4: TIẾN HÀNH ĐĂNG KÝ (KHI MỌI THỨ ĐÃ ĐÚNG) ---
+        // bắt đầu điền vào db
         try {
             User newUser = new User();
             newUser.setUsername(username);
@@ -85,17 +86,12 @@ public class RegisterServlet extends HttpServlet {
 
             userDAO.register(newUser);
 
-            // Xóa OTP khỏi session sau khi dùng xong để bảo mật
             session.removeAttribute("otpCode");
             session.removeAttribute("otpTime");
 
-            // 2. TỰ ĐỘNG ĐĂNG NHẬP: Lưu user vừa tạo vào Session
             session.setAttribute("auth", newUser);
-            // Nếu filter của bạn kiểm tra role, hãy đảm bảo set đúng
             session.setAttribute("role", "user");
 
-            // 3. CHUYỂN HƯỚNG: Đưa thẳng tới trang sản phẩm
-            // Thay "/products" bằng URL chuẩn của trang sản phẩm bên bạn (ví dụ: /product hoặc /shop)
             response.sendRedirect(request.getContextPath() + "/product");
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +120,7 @@ public class RegisterServlet extends HttpServlet {
     }
     // Hàm kiểm tra kí tự đặc biệt trong username
     private boolean hasSC(String name){
-        boolean isLegal = Pattern.compile("^[\\s\\d]+$").matcher(name).matches();
+        boolean isLegal = Pattern.compile("^[a-zA-Z0-9]+$").matcher(name).matches();
         return !isLegal;
     }
 }
