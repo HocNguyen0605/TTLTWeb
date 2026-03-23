@@ -169,7 +169,7 @@
 
 <script type="module" src="${pageContext.request.contextPath}/js/init.js"></script>
 <script>
-    // Xử lý gửi OTP bằng AJAX để không bị load lại trang
+    //login otp
     document.getElementById('btnSendOTP').addEventListener('click', function () {
         const email = document.querySelector('#registerForm input[name="email"]').value;
         const notice = document.getElementById('otpTimer');
@@ -207,6 +207,7 @@
     });
 </script>
 <script>
+    //logic quên mk
     document.getElementById('forgotPasswordForm').addEventListener('submit', function (e) {
         e.preventDefault(); // Ngăn load lại trang
 
@@ -217,7 +218,6 @@
         msgDiv.innerHTML = "Đang xử lý...";
         btn.disabled = true;
 
-        // Gửi yêu cầu bằng Fetch thay vì submit form truyền thống
         fetch('${pageContext.request.contextPath}/forgot-password', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
