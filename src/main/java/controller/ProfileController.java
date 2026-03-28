@@ -1,15 +1,12 @@
 package controller;
 
-import dao.ProductDAO;
 import dao.UserDAO;
-import model.Product;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.User;
-
 import java.io.IOException;
-import java.util.List;
+
 @WebServlet("/profile")
 public class ProfileController extends HttpServlet {
 
@@ -18,7 +15,6 @@ public class ProfileController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-
         if (session == null || session.getAttribute("auth") == null) {
             response.sendRedirect("login");
             return;
@@ -36,7 +32,6 @@ public class ProfileController extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
 
-        // Kiểm tra session phòng trường hợp hết hạn đột ngột
         if (user == null) {
             response.sendRedirect("login");
             return;
@@ -44,7 +39,6 @@ public class ProfileController extends HttpServlet {
 
         UserDAO dao = new UserDAO();
 
-        // Lấy dữ liệu từ form dựa trên action
         if ("updateProfile".equals(action)) {
             user.setUsername(request.getParameter("username"));
             user.setFullName(request.getParameter("fullName"));
@@ -72,17 +66,15 @@ public class ProfileController extends HttpServlet {
             }
             else {
                 if (dao.updatePassword(user.getEmail(), newPass)) {
-                    user.setPassword(newPass); // Cập nhật mật khẩu mới vào session
+                    user.setPassword(newPass);
                     session.setAttribute("auth", user);
                     request.setAttribute("message", "Đổi mật khẩu thành công!");
                 } else {
                     request.setAttribute("error", "Lỗi khi cập nhật mật khẩu!");
                 }
             }
-            // Gửi tín hiệu để JSP biết cần active tab mật khẩu
             request.setAttribute("activeTab", "password");
         }
-
         request.getRequestDispatcher("/view/user/profile.jsp").forward(request, response);
     }
 }

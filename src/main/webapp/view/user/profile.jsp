@@ -58,18 +58,18 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Họ và tên</label>
-                                    <input type="text" name="fullName" class="form-control"
-                                           value="${auth.fullName}" required>
+                                    <input type="text" maxlength="̀̀̀̀50" name="fullName" class="form-control"
+                                           value="${auth.fullName}" >
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Email</label>
-                                <input type="email" name="email" class="form-control"
-                                       value="${auth.email}" required>
+                                <input type="email" maxlength="̀̀̀̀50" name="email" class="form-control"
+                                       value="${auth.email}" >
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Số điện thoại</label>
-                                <input type="text" name="phone" class="form-control"
+                                <input type="text" maxlength="̀̀̀̀15" name="phone" class="form-control"
                                        value="${auth.phone}" placeholder="Chưa cập nhật">
                             </div>
                             <div class="mb-3">
@@ -117,16 +117,3 @@
 </section>
 
 <%@include file="/view/user/include/footer.jsp" %>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var activeTab = "${activeTab}";
-        if (activeTab === "password") {
-            var triggerEl = document.querySelector('#password-tab');
-            if(triggerEl) {
-                var tab = new bootstrap.Tab(triggerEl);
-                tab.show();
-            }
-        }
-    });
-</script>

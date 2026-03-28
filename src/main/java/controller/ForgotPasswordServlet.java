@@ -34,8 +34,7 @@ public class ForgotPasswordServlet extends HttpServlet {
                 String subject = "Mật khẩu mới cho tài khoản Juicy";
                 String content = "Chào bạn, mật khẩu mới của bạn là: <b>" + newPassword + "</b><br>Vui lòng đăng nhập và đổi lại mật khẩu ngay.";
 
-                // Dùng hàm gửi mail bạn đã có (nên dùng bản sendEmail trả về boolean)
-                boolean mailSent = util.MailUtil.sendForgotPasswordMail(email, newPassword); // Hoặc MailUtil.sendEmail(...)
+                boolean mailSent = util.MailUtil.sendForgotPasswordMail(email, newPassword);
 
                 if (mailSent) {
                     response.getWriter().write("success");

@@ -5,7 +5,6 @@ import model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-
 import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
@@ -15,7 +14,6 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Kiểm tra nếu đã có Session rồi thì không cần check Cookie nữa
         HttpSession session = request.getSession(true);
         if (session != null && session.getAttribute("auth") != null) {
             User u = (User) session.getAttribute("auth");
@@ -27,7 +25,6 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        // 2. Check "Remember Me" cookies
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             String cuser = null;
@@ -51,19 +48,15 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         }
-        // 3. Nếu không có Cookie hoặc Cookie sai, mới hiện trang Login
         request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String user = request.getParameter("email"); // Input name in JSP is loginEmail (used for both
-        // email/username)
+        String user = request.getParameter("email");
         String pass = request.getParameter("password");
-
-        String remember = request.getParameter("remember"); // Checkbox name
-
+        String remember = request.getParameter("remember");
         UserDAO dao = new UserDAO();
         User u = dao.login(user, pass);
 
