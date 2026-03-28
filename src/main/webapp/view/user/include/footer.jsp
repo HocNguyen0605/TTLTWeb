@@ -59,7 +59,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/init.js"></script>
 <script>window.contextPath = '${pageContext.request.contextPath}';</script>
-<script type="module" src="${pageContext.request.contextPath}/js/navbar-tabs.js"></script>
+<script type="module" src="${pageContext.request.contextPath}/js/cart.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/auth.js"></script>
 </body>
 

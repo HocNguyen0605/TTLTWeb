@@ -25,7 +25,9 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="fw-bold mb-0">Hồ sơ cá nhân</h3>
-                    <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger btn-sm fw-bold">
+                    <a href="${pageContext.request.contextPath}/logout"
+                       onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')"
+                       class="btn btn-outline-danger btn-sm fw-bold">
                         <i class="bi bi-box-arrow-right me-1"></i> Đăng xuất
                     </a>
                 </div>
@@ -58,18 +60,18 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-semibold">Họ và tên</label>
-                                    <input type="text" name="fullName" class="form-control"
-                                           value="${auth.fullName}" required>
+                                    <input type="text" maxlength="̀̀̀̀50" name="fullName" class="form-control"
+                                           value="${auth.fullName}" >
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Email</label>
-                                <input type="email" name="email" class="form-control"
-                                       value="${auth.email}" required>
+                                <input type="email" maxlength="̀̀̀̀50" name="email" class="form-control"
+                                       value="${auth.email}" >
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-semibold">Số điện thoại</label>
-                                <input type="text" name="phone" class="form-control"
+                                <input type="text" maxlength="̀̀̀̀15" name="phone" class="form-control"
                                        value="${auth.phone}" placeholder="Chưa cập nhật">
                             </div>
                             <div class="mb-3">
@@ -117,16 +119,3 @@
 </section>
 
 <%@include file="/view/user/include/footer.jsp" %>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var activeTab = "${activeTab}";
-        if (activeTab === "password") {
-            var triggerEl = document.querySelector('#password-tab');
-            if(triggerEl) {
-                var tab = new bootstrap.Tab(triggerEl);
-                tab.show();
-            }
-        }
-    });
-</script>

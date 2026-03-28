@@ -32,10 +32,10 @@
                 </div>
                 <button type="submit" class="btn btn-success rounded-pill fw-semibold">Gửi Liên Hệ</button>
                 <c:if test="${not empty success}">
-                    <p class="text-success mt-3 fw-semibold">✅ ${success}</p>
+                    <p class="text-success mt-3 fw-semibold"> ${success}</p>
                 </c:if>
                 <c:if test="${not empty error}">
-                    <p class="text-danger mt-3 fw-semibold">❌ ${error}</p>
+                    <p class="text-danger mt-3 fw-semibold"> ${error}</p>
                 </c:if>
             </form>
         </div>

@@ -11,13 +11,13 @@ public class DBContext {
     private static final String USER = "root";
     private static final String PASSWORD = "Hockun001$";
 
-    // Thêm biến static để dùng chung một đối tượng Jdbi duy nhất (Singleton)
+    //Tao Ham rỗng
     private static Jdbi jdbi;
 
     public static Jdbi getJdbi() {
         if (jdbi == null) {
             try {
-                // Ép buộc nạp Driver MySQL trước khi Jdbi khởi tạo
+                // Driver MySQL trước khi Jdbi khởi tạo
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 jdbi = Jdbi.create(URL, USER, PASSWORD);
             } catch (ClassNotFoundException e) {

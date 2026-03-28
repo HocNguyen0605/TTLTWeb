@@ -11,13 +11,11 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // 1. Hủy toàn bộ Session hiện tại
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
 
-        // 2. Xóa luôn Cookie "Remember Me" nếu có
         Cookie cUser = new Cookie("cuser", "");
         Cookie cPass = new Cookie("cpass", "");
         cUser.setMaxAge(0);
@@ -27,7 +25,6 @@ public class LogoutServlet extends HttpServlet {
         response.addCookie(cUser);
         response.addCookie(cPass);
 
-        // 3. Quay về trang chủ hoặc trang Login
         response.sendRedirect(request.getContextPath() + "/home");
     }
 }

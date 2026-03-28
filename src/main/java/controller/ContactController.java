@@ -29,11 +29,11 @@ public class ContactController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         try {
-            // Lấy dữ liệu từ các ô input (Lưu ý: name trong input phải khớp với các chuỗi này)
+            // Lấy dữ liệu từ các ô input
             String fullName = request.getParameter("fullName");
             String email = request.getParameter("email");
             String phone = request.getParameter("phone");
-            String subject = request.getParameter("subject"); // Thêm phần tiêu đề
+            String subject = request.getParameter("subject");
             String message = request.getParameter("message");
 
             // 1. Đóng gói dữ liệu vào Model
@@ -45,7 +45,7 @@ public class ContactController extends HttpServlet {
             contact.setMessage(message);
             contact.setIdUser(null); // Khách vãng lai
 
-            // 2. Lưu vào Database (Sửa lỗi Static bằng cách tạo 'new ContactDAO()')
+            // 2. Lưu vào Database
             ContactDAO dao = new ContactDAO();
             dao.insert(contact);
 

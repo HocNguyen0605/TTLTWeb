@@ -75,7 +75,6 @@ public class MailUtil {
 
         try {
             MimeMessage message = new MimeMessage(session);
-            // 1. Cấu hình Header tiếng Việt (Áp dụng từ code mới)
             message.addHeader("Content-type", "text/HTML; charset=UTF-8");
             message.setFrom(new InternetAddress(FROM_EMAIL));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
@@ -83,7 +82,6 @@ public class MailUtil {
             message.setSubject("Mã xác thực đăng ký - JUICY", "UTF-8");
             message.setSentDate(new Date()); // Quy định ngày gửi
 
-            // 2. Nội dung có định dạng HTML (Áp dụng từ code mới)
             String htmlContent = "<h3>Mã xác thực của bạn là: <b style='color:red;'>" + otp + "</b></h3>"
                     + "<p>Mã này có hiệu lực trong <b>60 giây</b>.</p>";
 
@@ -108,7 +106,6 @@ public class MailUtil {
 
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                // Đảm bảo bạn dùng đúng FROM_EMAIL và APP_PASSWORD đã cấu hình
                 return new PasswordAuthentication(FROM_EMAIL, APP_PASSWORD);
             }
         });
@@ -122,7 +119,6 @@ public class MailUtil {
             // Tiêu đề riêng biệt
             message.setSubject("Khôi phục mật khẩu tài khoản JUICY", "UTF-8");
 
-            // Nội dung email chuyên nghiệp hơn
             String htmlContent = "<h2>Yêu cầu cấp lại mật khẩu</h2>"
                     + "<p>Chào bạn,</p>"
                     + "<p>Chúng tôi đã nhận được yêu cầu khôi phục mật khẩu cho tài khoản liên kết với email này.</p>"

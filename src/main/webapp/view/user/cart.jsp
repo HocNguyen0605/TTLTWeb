@@ -244,4 +244,4 @@
         <input type="hidden" id="triggerModalFlag" value="true">
             <c:remove var="orderFlag" scope="session" />
         </c:if>
-        <%@include file="/view/user/include/footer.jsp" %>
+        <%@include file="/view/user/include/footer.jsp" %>l

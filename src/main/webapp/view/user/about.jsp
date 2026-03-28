@@ -6,11 +6,6 @@
     <jsp:param name="activePage" value="about" />
 </jsp:include>
 <jsp:include page="/view/user/include/search-bar.jsp" />
-<!-- HERO BANNER -->
-<section class="hero-section d-flex align-items-center justify-content-center text-center">
-    <section><img src="images/banner/bannerabout.jpg" class="hero-section"></section>
-    <!-- dành cho sửa đổi chỉnh banner -->
-</section>
 
 <!-- SỨ MỆNH & CAM KẾT -->
 <section class="container py-5">
