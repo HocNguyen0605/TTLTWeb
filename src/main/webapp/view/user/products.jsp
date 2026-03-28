@@ -95,14 +95,14 @@
                         <div class="mb-4">
                             <label class="form-label fw-bold text-dark small text-uppercase">Khoảng giá</label>
                             <div class="input-group input-group-sm mb-2">
-                                <span class="input-group-text bg-white">₫</span>
                                 <input type="number" name="minPrice" class="form-control" placeholder="Từ"
                                        value="${currentMinPrice}">
+                                <span class="input-group-text bg-white">₫</span>
                             </div>
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-white">₫</span>
                                 <input type="number" name="maxPrice" class="form-control" placeholder="Đến"
                                        value="${currentMaxPrice}">
+                                <span class="input-group-text bg-white">₫</span>
                             </div>
                         </div>
 
@@ -196,8 +196,7 @@
                                 <h6 class="text-muted small">${p.volume}ml</h6>
                                 <h5 class="card-title fw-bold fs-6">${p.name}</h5>
                                 <p class="card-text text-danger fw-bold fs-5 my-2">
-                                    <fmt:formatNumber value="${p.price}" type="currency"
-                                                      currencySymbol="đ" maxFractionDigits="0"/>
+                                    <fmt:formatNumber value="${p.price}" pattern="#,### đ" />
                                 </p>
                                 <div class="mt-auto pt-3">
                                     <a href="${pageContext.request.contextPath}/product-detail?id=${p.id}"

@@ -27,7 +27,7 @@
                     <tbody>
                     <c:choose>
                         <%-- Nếu giỏ hàng đang trống--%>
-                        <c:when test="${empty sessionScope.cart || empty sessionScope.cart.allItems}">
+                            <c:when test="${empty sessionScope.cart || empty sessionScope.cart.allItems}">
                             <tr>
                                 <td colspan="5" class="text-center text-muted py-4">
                                      Giỏ hàng đang trống!!!
@@ -78,17 +78,13 @@
                                     <%-- Đơn giá --%>
                                     <td class="text-end">
                                         <fmt:formatNumber value="${item.price}"
-                                                          type="currency"
-                                                          currencySymbol="đ"
-                                                          maxFractionDigits="0"/>
+                                                          pattern="#,### đ"/>
                                     </td>
 
                                     <%-- Thành tiền --%>
                                     <td class="text-end fw-bold text-success">
                                         <fmt:formatNumber value="${item.totalPrice}"
-                                                          type="currency"
-                                                          currencySymbol="đ"
-                                                          maxFractionDigits="0"/>
+                                                          pattern="#,### đ" />
                                     </td>
 
                                     <%-- Xóa --%>
@@ -124,9 +120,7 @@
                     <span>Tạm tính:</span>
                     <span>
                 <fmt:formatNumber value="${sessionScope.cart.totalPrice}"
-                                  type="currency"
-                                  currencySymbol="đ"
-                                  maxFractionDigits="0"/>
+                                  pattern="#,### đ" />
             </span>
                 </div>
 
@@ -135,9 +129,7 @@
                     <span>Phí giao hàng:</span>
                     <span>
                 <fmt:formatNumber value="${shippingFee}"
-                                  type="currency"
-                                  currencySymbol="đ"
-                                  maxFractionDigits="0"/>
+                                  pattern="#,### đ" />
             </span>
                 </div>
 
@@ -145,9 +137,7 @@
                     <span>Giảm Giá:</span>
                     <span class="text-danger"> <fmt:formatNumber
                             value="${not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0}"
-                            type="currency"
-                            currencySymbol="đ"
-                            maxFractionDigits="0"/>
+                            pattern="#,### đ" />
     </span>
                 </div>
 
@@ -156,9 +146,7 @@
                     <span class="text-success fs-5">
         <fmt:formatNumber
                 value="${sessionScope.cart.totalPrice + shippingFee }"
-                type="currency"
-                currencySymbol="đ"
-                maxFractionDigits="0"/>
+                pattern="#,### đ" />
     </span>
                 </div>
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
@@ -167,8 +155,7 @@
                 <fmt:formatNumber
                         value="${(sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0)) < 0 ? 0
                           : (sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0))}"                        type="currency"
-                        currencySymbol="đ"
-                        maxFractionDigits="0"/>
+                        pattern="#,### đ" />
             </span>
                 </div>
                 <!-- Mã giảm giá voucher -->
@@ -201,6 +188,7 @@
                 </c:choose>
             </div>
         </div>
+</section>
         <%--Modal xác nhận thông tin đặt hàng; ẩn đi, khi nào orderFlag có giá trị show sẽ được js set lại --%>
         <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered"> <div class="modal-content shadow-lg border-0">
