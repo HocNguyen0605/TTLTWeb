@@ -167,7 +167,7 @@
 
                 <c:forEach items="${productList}" var="p">
                     <div class="col">
-                        <div class="card product-card h-100 text-center">
+                        <div class="card product-card h-100 text-center" style="cursor: pointer;" onclick="if(!event.target.closest('.btn')) window.location.href='${pageContext.request.contextPath}/product-detail?id=${p.id}'">
                             <div class="product-img-wrapper"
                                  style="height: 250px; overflow: hidden;">
                                 <c:choose>
@@ -199,7 +199,7 @@
                                     <fmt:formatNumber value="${p.price}" type="currency"
                                                       currencySymbol="đ" maxFractionDigits="0"/>
                                 </p>
-                                <div class="mt-auto pt-3">
+                                <div class="mt-auto pt-3 position-relative" style="z-index: 2;">
                                     <a href="${pageContext.request.contextPath}/product-detail?id=${p.id}"
                                        class="btn btn-sm btn-outline-success rounded-pill px-3">Chi
                                         tiết</a>
@@ -252,7 +252,7 @@
 </div>
 <%@include file="/view/user/include/footer.jsp" %>
 
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-            </body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
-            </html>
+</html>

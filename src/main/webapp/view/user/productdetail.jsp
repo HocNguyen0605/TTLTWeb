@@ -110,7 +110,8 @@
                     </p>
                 </div>
 
-                <form action="add-to-cart" method="POST">
+                <form action="${pageContext.request.contextPath}/cart" method="POST">
+                    <input type="hidden" name="action" value="add">
                     <input type="hidden" name="productId" value="${product.id}">
                     <div class="d-flex align-items-center gap-3 mb-4">
                         <div class="input-group" style="width: 130px;">
@@ -140,7 +141,7 @@
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
             <c:forEach items="${relatedProducts}" var="rp">
                 <div class="col">
-                    <div class="card product-card h-100 text-center">
+                    <div class="card product-card h-100 text-center" style="cursor: pointer;" onclick="if(!event.target.closest('.btn')) window.location.href='${pageContext.request.contextPath}/product-detail?id=${rp.id}'">
                         <div class="product-img-wrapper"
                              style="height: 250px; overflow: hidden;">
                             <c:choose>
@@ -172,10 +173,15 @@
                                 <fmt:formatNumber value="${rp.price}" type="currency"
                                                   currencySymbol="đ" maxFractionDigits="0" />
                             </p>
-                            <div class="mt-auto pt-3">
+                            <div class="mt-auto pt-3 position-relative" style="z-index: 2;">
                                 <a href="${pageContext.request.contextPath}/product-detail?id=${rp.id}"
                                    class="btn btn-sm btn-outline-success rounded-pill px-3">Chi
                                     tiết</a>
+                                <button type="button"
+                                        class="btn btn-sm btn-primary-custom rounded-pill px-3 btn-add-to-cart"
+                                        data-id="${rp.id}">
+                                    Thêm vào giỏ
+                                </button>
                             </div>
                         </div>
                     </div>
