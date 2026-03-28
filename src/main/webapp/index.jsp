@@ -194,7 +194,7 @@
                         chất
                     </li>
                 </ul>
-                <a href="about.html" class="btn btn-primary-custom mt-3">Khám phá thêm</a>
+                <a href="${pageContext.request.contextPath}/about" class="btn btn-primary-custom mt-3">Khám phá thêm</a>
             </div>
         </div>
     </div>
