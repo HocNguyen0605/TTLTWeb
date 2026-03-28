@@ -84,7 +84,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-
     if (filterSelect) {
         filterSelect.addEventListener('change', function () {
             const val = this.value;

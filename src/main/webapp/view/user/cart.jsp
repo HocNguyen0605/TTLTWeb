@@ -248,4 +248,4 @@
             <%-- Xóa cờ ngay để không bị hiện lại khi F5 --%>
             <c:remove var="orderFlag" scope="session" />
         </c:if>
-        <%@include file="/view/user/include/footer.jsp" %>
+        <%@include file="/view/user/include/footer.jsp" %>l

@@ -53,6 +53,15 @@
                            href="${pageContext.request.contextPath}/contact">Liên hệ</a>
                     </li>
                 </ul>
+
+                <a href="${pageContext.request.contextPath}/cart"
+                   class="btn btn-warning rounded-pill ms-lg-3 my-2 my-lg-0 fw-semibold shadow-sm position-relative"><i
+                        class="bi bi-cart me-1"></i> Giỏ Hàng
+                    <c:if test="${not empty sessionScope.cart and sessionScope.cart.totalItems > 0}"><span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">${sessionScope.cart.totalItems}<span
+                            class="visually-hidden">sản phẩm</span></span></c:if>
+                </a>
+
                 <c:choose>
                     <c:when test="${not empty sessionScope.auth}">
                         <div id="userInfoContainer">
@@ -70,19 +79,10 @@
 
                     </c:otherwise>
                 </c:choose>
-
-                <a href="${pageContext.request.contextPath}/cart"
-                   class="btn btn-warning rounded-pill ms-lg-3 my-2 my-lg-0 fw-semibold shadow-sm position-relative">
-                    <i class="bi bi-cart me-1"></i> Giỏ Hàng
-                    <c:if test="${not empty sessionScope.cart and sessionScope.cart.totalItems > 0}">
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
-            ${sessionScope.cart.totalItems}
-             <span class="visually-hidden">sản phẩm</span>
-         </span>
-                    </c:if>
-                </a>
-                </a>
             </div>
         </div>
     </nav>
 </header>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
