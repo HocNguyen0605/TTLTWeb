@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Trang Chủ" />
+    <jsp:param name="title" value="Giỏ hàng" />
 </jsp:include>
 
 <!-- GIỎ HÀNG -->
@@ -26,12 +26,11 @@
 
                     <tbody>
                     <c:choose>
-
-                        <%-- Đưa comment vào trong hoặc xóa đi --%>
-                        <c:when test="${empty sessionScope.cart || empty sessionScope.cart.allItems}">
+                        <%-- Nếu giỏ hàng đang trống--%>
+                            <c:when test="${empty sessionScope.cart || empty sessionScope.cart.allItems}">
                             <tr>
                                 <td colspan="5" class="text-center text-muted py-4">
-                                    🛒 Giỏ hàng đang trống
+                                     Giỏ hàng đang trống!!!
                                 </td>
                             </tr>
                         </c:when>
@@ -79,17 +78,13 @@
                                     <%-- Đơn giá --%>
                                     <td class="text-end">
                                         <fmt:formatNumber value="${item.price}"
-                                                          type="currency"
-                                                          currencySymbol="đ"
-                                                          maxFractionDigits="0"/>
+                                                          pattern="#,### đ"/>
                                     </td>
 
                                     <%-- Thành tiền --%>
                                     <td class="text-end fw-bold text-success">
                                         <fmt:formatNumber value="${item.totalPrice}"
-                                                          type="currency"
-                                                          currencySymbol="đ"
-                                                          maxFractionDigits="0"/>
+                                                          pattern="#,### đ" />
                                     </td>
 
                                     <%-- Xóa --%>
@@ -125,9 +120,7 @@
                     <span>Tạm tính:</span>
                     <span>
                 <fmt:formatNumber value="${sessionScope.cart.totalPrice}"
-                                  type="currency"
-                                  currencySymbol="đ"
-                                  maxFractionDigits="0"/>
+                                  pattern="#,### đ" />
             </span>
                 </div>
 
@@ -136,9 +129,7 @@
                     <span>Phí giao hàng:</span>
                     <span>
                 <fmt:formatNumber value="${shippingFee}"
-                                  type="currency"
-                                  currencySymbol="đ"
-                                  maxFractionDigits="0"/>
+                                  pattern="#,### đ" />
             </span>
                 </div>
 
@@ -146,30 +137,25 @@
                     <span>Giảm Giá:</span>
                     <span class="text-danger"> <fmt:formatNumber
                             value="${not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0}"
-                            type="currency"
-                            currencySymbol="đ"
-                            maxFractionDigits="0"/>
+                            pattern="#,### đ" />
     </span>
                 </div>
 
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>Tổng Đơn:</span>
-                    <span class="text-success fs-5">
+                    <span class="text-success ">
         <fmt:formatNumber
                 value="${sessionScope.cart.totalPrice + shippingFee }"
-                type="currency"
-                currencySymbol="đ"
-                maxFractionDigits="0"/>
+                pattern="#,### đ" />
     </span>
                 </div>
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>TỔNG CỘNG:</span>
-                    <span class="text-success">
+                    <span class="text-success fs-5">
                 <fmt:formatNumber
                         value="${(sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0)) < 0 ? 0
                           : (sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0))}"                        type="currency"
-                        currencySymbol="đ"
-                        maxFractionDigits="0"/>
+                        pattern="#,### đ" />
             </span>
                 </div>
                 <!-- Mã giảm giá voucher -->
@@ -181,6 +167,16 @@
                             Áp dụng
                         </button>
                     </form>
+                </div>
+                <div>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.voucher}">
+                            <span class="text-danger">${sessionScope.voucherError}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="text-success">Áp dụng voucher thành công</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <!-- Thanh toán -->
@@ -202,6 +198,7 @@
                 </c:choose>
             </div>
         </div>
+</section>
         <%--Modal xác nhận thông tin đặt hàng; ẩn đi, khi nào orderFlag có giá trị show sẽ được js set lại --%>
         <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered"> <div class="modal-content shadow-lg border-0">
@@ -245,7 +242,6 @@
         </div>
         <c:if test="${sessionScope.orderFlag == 'show'}">
         <input type="hidden" id="triggerModalFlag" value="true">
-            <%-- Xóa cờ ngay để không bị hiện lại khi F5 --%>
             <c:remove var="orderFlag" scope="session" />
         </c:if>
         <%@include file="/view/user/include/footer.jsp" %>l

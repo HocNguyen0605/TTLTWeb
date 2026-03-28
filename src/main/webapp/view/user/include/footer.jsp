@@ -42,9 +42,9 @@
                 <h5 class="text-uppercase fw-bold text-success">
                     Theo Dõi Chúng Tôi
                 </h5>
-                <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-white me-3"><i class="bi bi-tiktok"></i></a>
+                <a href="https://web.facebook.com/share/1KmBmVoZrF/?mibextid=wwXIfr&_rdc=1&_rdr" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                <a href="https://web.facebook.com/share/1KmBmVoZrF/?mibextid=wwXIfr&_rdc=1&_rdr" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.tiktok.com/@hockun1?_r=1&_t=ZS-954OxRL6s2q" class="text-white me-3"><i class="bi bi-tiktok"></i></a>
             </div>
         </div>
         <div class="row mt-3">

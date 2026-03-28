@@ -8,7 +8,7 @@ import model.Voucher;
 
 import java.io.IOException;
 @WebServlet("/apply-voucher")
-public class VoucherServlet extends HttpServlet {
+public class VoucherController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -18,12 +18,16 @@ public class VoucherServlet extends HttpServlet {
 
         VoucherDAO vDAO = new VoucherDAO();
         Voucher v = vDAO.getVoucherWithDiscount(code);
-
-        if (v != null) {
+        if(code==null || code.trim().isEmpty()){
+            session.removeAttribute("voucher");
+            session.setAttribute("voucherError", "Vui lòng nhập mã giảm giá!");
+        }
+        else if (v != null) {
             session.setAttribute("voucher", v);
+            session.removeAttribute("voucherError");
         } else {
             session.removeAttribute("voucher");
-            session.setAttribute("voucherError", "Mã giảm giá không hợp lệ hoặc đã hết hạn!");
+            session.setAttribute("voucherError", "*Mã giảm giá không hợp lệ hoặc đã hết hạn!");
         }
         response.sendRedirect(request.getContextPath() + "/cart");
     }

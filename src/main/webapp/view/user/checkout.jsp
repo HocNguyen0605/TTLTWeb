@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Trang Chủ" />
+    <jsp:param name="title" value="Thanh toán" />
     <jsp:param name="activePage" value="home" />
 </jsp:include>
 <body>

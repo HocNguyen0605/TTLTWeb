@@ -101,7 +101,7 @@
                             <h6 class="text-muted small">${p.volume}ml</h6>
                             <h5 class="card-title fw-bold fs-6">${p.name}</h5>
                             <p class="card-text text-danger fw-bold fs-5 my-2">
-                                <span class="price-format" data-value="${p.price}"></span>
+                                <fmt:formatNumber value="${p.price}" pattern="#,### đ"/>
                             </p>
                             <div class="mt-auto pt-3 position-relative" style="z-index: 2;">
                                 <a href="${pageContext.request.contextPath}/product-detail?id=${p.id}"
@@ -171,10 +171,10 @@
             </div>
             <div class="col-md-6">
                 <h2 class="fw-bold text-success mb-3">
-                    Giới Thiệu Về Juicy 🍊
+                    Giới Thiệu Về Juicy
                 </h2>
                 <p class="lead">
-                    <strong>Juicy</strong>là thương hiệu chuyên cung cấp
+                    <strong>Juicy</strong> là thương hiệu chuyên cung cấp
                     <em>trái cây tươi, nước ép lạnh, và sinh tố nguyên chất</em>,
                     mang đến nguồn dinh dưỡng lành mạnh từ thiên nhiên cho mọi gia đình Việt.
                 </p>
