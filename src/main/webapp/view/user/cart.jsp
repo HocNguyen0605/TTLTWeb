@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Trang Chủ" />
+    <jsp:param name="title" value="Giỏ hàng" />
 </jsp:include>
 
 <!-- GIỎ HÀNG -->
@@ -26,12 +26,11 @@
 
                     <tbody>
                     <c:choose>
-
-                        <%-- Đưa comment vào trong hoặc xóa đi --%>
+                        <%-- Nếu giỏ hàng đang trống--%>
                         <c:when test="${empty sessionScope.cart || empty sessionScope.cart.allItems}">
                             <tr>
                                 <td colspan="5" class="text-center text-muted py-4">
-                                    🛒 Giỏ hàng đang trống
+                                     Giỏ hàng đang trống!!!
                                 </td>
                             </tr>
                         </c:when>
@@ -245,7 +244,6 @@
         </div>
         <c:if test="${sessionScope.orderFlag == 'show'}">
         <input type="hidden" id="triggerModalFlag" value="true">
-            <%-- Xóa cờ ngay để không bị hiện lại khi F5 --%>
             <c:remove var="orderFlag" scope="session" />
         </c:if>
         <%@include file="/view/user/include/footer.jsp" %>

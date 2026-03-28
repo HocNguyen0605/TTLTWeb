@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="images/png" href="images/logo/logo-juicy.png" sizes="32x32">
     <link rel="shortcut icon" href="images/logo/logo-juicy.png" type="image/png">
-    <title>Juicy - Nước Ép Tươi Ngon &amp; Healthy</title>
+    <title>${param.title}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">

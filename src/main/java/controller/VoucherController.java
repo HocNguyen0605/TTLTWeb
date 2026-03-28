@@ -8,7 +8,7 @@ import model.Voucher;
 
 import java.io.IOException;
 @WebServlet("/apply-voucher")
-public class VoucherServlet extends HttpServlet {
+public class VoucherController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

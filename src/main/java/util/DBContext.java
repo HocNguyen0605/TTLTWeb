@@ -9,7 +9,7 @@ public class DBContext {
             + "?useSSL=false&allowPublicKeyRetrieval=true"
             + "&serverTimezone=Asia/Ho_Chi_Minh";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "Hockun001$";
 
     // Thêm biến static để dùng chung một đối tượng Jdbi duy nhất (Singleton)
     private static Jdbi jdbi;

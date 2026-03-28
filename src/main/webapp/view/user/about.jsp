@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Trang Chủ" />
+    <jsp:param name="title" value="Thông tin của chúng tôi" />
     <jsp:param name="activePage" value="about" />
 </jsp:include>
 <!--Thêm thanh tìm kiếm vào dưới phần header của website-->

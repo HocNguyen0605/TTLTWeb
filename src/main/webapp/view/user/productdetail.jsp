@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Trang Chủ" />
+    <jsp:param name="title" value="Thông tin sản phẩm" />
     <jsp:param name="activePage" value="products" />
 </jsp:include>
 <style>
@@ -124,8 +124,8 @@
                         ${product.description != null ? product.description : "Chưa có mô tả cho sản phẩm này. Nước ép Juicy cam kết 100% nguyên chất, không đường hóa học."}
                     </p>
                 </div>
-
-                                    <form action="add-to-cart" method="POST">
+                                    <form action="${pageContext.request.contextPath}\cart" method="POST">
+                                        <input type="hidden" name="action" value="add">
                                         <input type="hidden" name="productId" value="${product.id}">
                                         <div class="d-flex align-items-center gap-3 mb-4">
                                             <div class="input-group" style="width: 130px;">
@@ -150,7 +150,7 @@
 
                         <%-- SECTION SẢN PHẨM LIÊN QUAN --%>
                             <div class="mt-5 pt-5 border-top">
-                                <h3 class="fw-bold text-success mb-4 text-center text-uppercase">Có thể bạn sẽ thích
+                                <h3 class="fw-bold text-success mb-4 text-cegit snter text-uppercase">Có thể bạn sẽ thích
                                 </h3>
                                 <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
                                     <c:forEach items="${relatedProducts}" var="rp">

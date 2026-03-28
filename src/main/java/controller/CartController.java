@@ -31,13 +31,11 @@ public class CartController extends HttpServlet {
         }
 
         String action = request.getParameter("action");
-
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        String quantityRaw = request.getParameter("quantity");
         try {
             if ("add".equals(action)) {
-                int productId = Integer.parseInt(request.getParameter("productId"));
-                String quantityRaw = request.getParameter("quantity");
-
-                // Nếu có truyền quantity (từ trang detail) thì lấy,
+                // Nếu có truyền quantity thì lấy,
                 // nếu không (từ trang list) thì mặc định là 1
                 int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
 
@@ -46,12 +44,9 @@ public class CartController extends HttpServlet {
                     cart.addProduct(product, quantity);
                 }
             } else if ("remove".equals(action)) {
-                int productId = Integer.parseInt(request.getParameter("productId"));
                 cart.deleteProduct(productId);
 
             } else if ("update".equals(action)) {
-                int productId = Integer.parseInt(request.getParameter("productId"));
-                String quantityRaw = request.getParameter("quantity");
                 int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
                 cart.update(productId, quantity);
             }
