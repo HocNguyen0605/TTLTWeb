@@ -80,8 +80,7 @@
                 <h1 class="display-5 fw-bold text-dark mb-3">${product.name}</h1>
 
                 <h2 class="text-danger fw-bold mb-4">
-                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"
-                                      maxFractionDigits="0" />
+                    <fmt:formatNumber value="${product.price}" pattern="#,### đ"/>
                 </h2>
 
                 <div class="mb-4">

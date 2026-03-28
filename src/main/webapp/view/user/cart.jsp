@@ -143,7 +143,7 @@
 
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>Tổng Đơn:</span>
-                    <span class="text-success fs-5">
+                    <span class="text-success ">
         <fmt:formatNumber
                 value="${sessionScope.cart.totalPrice + shippingFee }"
                 pattern="#,### đ" />
@@ -151,7 +151,7 @@
                 </div>
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>TỔNG CỘNG:</span>
-                    <span class="text-success">
+                    <span class="text-success fs-5">
                 <fmt:formatNumber
                         value="${(sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0)) < 0 ? 0
                           : (sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0))}"                        type="currency"
@@ -167,6 +167,16 @@
                             Áp dụng
                         </button>
                     </form>
+                </div>
+                <div>
+                    <c:choose>
+                        <c:when test="${empty sessionScope.voucher}">
+                            <span class="text-danger">${sessionScope.voucherError}</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class="text-success">Áp dụng voucher thành công</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
 
                 <!-- Thanh toán -->
