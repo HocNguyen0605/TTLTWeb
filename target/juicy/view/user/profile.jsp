@@ -25,7 +25,9 @@
 
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="fw-bold mb-0">Hồ sơ cá nhân</h3>
-                    <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger btn-sm fw-bold">
+                    <a href="${pageContext.request.contextPath}/logout"
+                       onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')"
+                       class="btn btn-outline-danger btn-sm fw-bold">
                         <i class="bi bi-box-arrow-right me-1"></i> Đăng xuất
                     </a>
                 </div>

@@ -1,9 +1,3 @@
-export function handleLogout() {
-    if (confirm("Bạn có chắc chắn muốn đăng xuất không?")) {
-        const contextPath = window.location.pathname.split('/')[1];
-        window.location.href = `/${contextPath}/logout`;
-    }
-}
 //kt flag lấy từ jsp cho viec hiện modal
 document.addEventListener("DOMContentLoaded", function() {
     const flag = document.getElementById('triggerModalFlag');
