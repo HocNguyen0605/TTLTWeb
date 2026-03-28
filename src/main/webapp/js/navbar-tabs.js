@@ -90,6 +90,7 @@ function updateCartBadge() {
         location.reload();
     }
 }
+
 document.addEventListener('click', function (e) {
     if (e.target && e.target.classList.contains('btn-add-to-cart')) {
         const productId = e.target.getAttribute('data-id');
