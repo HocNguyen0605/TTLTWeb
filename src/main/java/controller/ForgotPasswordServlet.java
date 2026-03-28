@@ -12,7 +12,7 @@ public class ForgotPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("login"); // Redirect if access via GET
+        response.sendRedirect("login");
     }
 
     @Override
@@ -23,19 +23,18 @@ public class ForgotPasswordServlet extends HttpServlet {
         response.setContentType("text/plain");
 
         if (dao.isUserEmailExists(email)) {
-            // 1. Tạo mật khẩu mới ngẫu nhiên (8 ký tự)
+            // Tạo mật khẩu mới ngẫu nhiên (8 ký tự)
             String newPassword = java.util.UUID.randomUUID().toString().substring(0, 8);
 
-            // 2. Cập nhật vào Database (Hàm updatePassword bạn đã có trong UserDAO)
+            // Cập nhật vào Database
             boolean isUpdated = dao.updatePassword(email, newPassword);
 
             if (isUpdated) {
-                // 3. Gửi email thực tế dùng MailUtil đã hoàn thiện ở bước trước
+                // Gửi email thực tế dùng MailUtil đã hoàn thiện ở bước trước
                 String subject = "Mật khẩu mới cho tài khoản Juicy";
                 String content = "Chào bạn, mật khẩu mới của bạn là: <b>" + newPassword + "</b><br>Vui lòng đăng nhập và đổi lại mật khẩu ngay.";
 
-                // Dùng hàm gửi mail bạn đã có (nên dùng bản sendEmail trả về boolean)
-                boolean mailSent = util.MailUtil.sendForgotPasswordMail(email, newPassword); // Hoặc MailUtil.sendEmail(...)
+                boolean mailSent = util.MailUtil.sendForgotPasswordMail(email, newPassword);
 
                 if (mailSent) {
                     response.getWriter().write("success");
