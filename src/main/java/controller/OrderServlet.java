@@ -31,7 +31,7 @@ public class OrderServlet extends HttpServlet {
         // 1. Lấy cart từ session
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null || cart.getAllItems().isEmpty()) {
-            response.sendRedirect("cart.jsp");
+            response.sendRedirect("product.jsp");
             return;
         }
 
@@ -100,13 +100,17 @@ public class OrderServlet extends HttpServlet {
 
         } catch (Exception e) {
             try {
-                if (conn != null)
-                    conn.rollback();
+                if (conn != null) conn.rollback();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
             throw new ServletException(e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-
 }

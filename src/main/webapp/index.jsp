@@ -171,10 +171,10 @@
             </div>
             <div class="col-md-6">
                 <h2 class="fw-bold text-success mb-3">
-                    Giới Thiệu Về Juicy 🍊
+                    Giới Thiệu Về Juicy
                 </h2>
                 <p class="lead">
-                    <strong>Juicy</strong>là thương hiệu chuyên cung cấp
+                    <strong>Juicy</strong> là thương hiệu chuyên cung cấp
                     <em>trái cây tươi, nước ép lạnh, và sinh tố nguyên chất</em>,
                     mang đến nguồn dinh dưỡng lành mạnh từ thiên nhiên cho mọi gia đình Việt.
                 </p>
@@ -194,7 +194,7 @@
                         chất
                     </li>
                 </ul>
-                <a href="about.html" class="btn btn-primary-custom mt-3">Khám phá thêm</a>
+                <a href="${pageContext.request.contextPath}/about" class="btn btn-primary-custom mt-3">Khám phá thêm</a>
             </div>
         </div>
     </div>
