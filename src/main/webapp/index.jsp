@@ -93,7 +93,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
             <c:forEach items="${featuredList}" var="p">
                 <div class="col">
-                    <div class="card product-card h-100 text-center">
+                    <div class="card product-card h-100 text-center" style="cursor: pointer;" onclick="window.location.href='${pageContext.request.contextPath}/product-detail?id=${p.id}'">
                         <img src="${p.img}" class="card-img-top" alt="${p.name}"
                              onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'"/>
 
@@ -103,13 +103,13 @@
                             <p class="card-text text-danger fw-bold fs-5 my-2">
                                 <span class="price-format" data-value="${p.price}"></span>
                             </p>
-                            <div class="mt-auto pt-3">
+                            <div class="mt-auto pt-3 position-relative" style="z-index: 2;">
                                 <a href="${pageContext.request.contextPath}/product-detail?id=${p.id}"
-                                   class="btn btn-sm btn-outline-success rounded-pill px-3">Chi
+                                   class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="event.stopPropagation();">Chi
                                     tiết</a>
                                 <button type="button"
                                         class="btn btn-sm btn-primary-custom rounded-pill px-3 btn-add-to-cart"
-                                        data-id="${p.id}">
+                                        data-id="${p.id}" onclick="event.stopPropagation();">
                                     Thêm vào giỏ
                                 </button>
                             </div>
@@ -215,4 +215,4 @@
     </script>
         <c:remove var="orderSuccess" scope="session" />
     </c:if>
-<%@include file="/view/user/include/footer.jsp" %>
+    <%@include file="/view/user/include/footer.jsp" %>
