@@ -24,7 +24,6 @@ public class User {
         this.role = role;
     }
 
-    // Các Getter và Setter (Bắt buộc phải có để JSP và Controller sử dụng)
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getUsername() { return username; }

@@ -6,15 +6,14 @@
     <jsp:param name="activePage" value="home" />
 </jsp:include>
 
-<!--Thêm thanh tìm kiếm vào dưới phần header của website-->
+<!--SEARCH BAR-->
 <section class="bg-light py-4 border-bottom">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <form class="d-flex" action="${pageContext.request.contextPath}/search" method="get">
                     <input class="form-control form-control-lg me-2 border-success" type="search"
-                           name="query" placeholder="Tìm kiếm tên sản phẩm, loại trái cây..."
-                           aria-label="Search">
+                           name="query" placeholder="Tìm kiếm tên sản phẩm, loại trái cây...">
                     <button class="btn btn-primary-custom btn-lg fw-bold" type="submit">
                         <i class="bi bi-search"></i>
                     </button>
@@ -102,7 +101,7 @@
                             <h6 class="text-muted small">${p.volume}ml</h6>
                             <h5 class="card-title fw-bold fs-6">${p.name}</h5>
                             <p class="card-text text-danger fw-bold fs-5 my-2">
-                                <fmt:formatNumber value="${p.price}" pattern="#,###" />.000đ
+                                <span class="price-format" data-value="${p.price}"></span>
                             </p>
                             <div class="mt-auto pt-3">
                                 <a href="${pageContext.request.contextPath}/product-detail?id=${p.id}"
@@ -201,7 +200,6 @@
     </div>
     <c:if test="${not empty sessionScope.orderSuccess}">
     <script>
-        // Hàm này đảm bảo mọi thứ (kể cả thư viện bên ngoài) đã load xong 100%
         window.onload = function() {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
@@ -211,7 +209,6 @@
                     confirmButtonColor: '#198754'
                 });
             } else {
-                // Phương án dự phòng nếu CDN lỗi
                 alert("${sessionScope.orderSuccess}");
             }
         };

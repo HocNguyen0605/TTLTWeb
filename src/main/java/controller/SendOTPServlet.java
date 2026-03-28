@@ -13,14 +13,12 @@ import java.io.IOException;
 public class SendOTPServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
-        String otp = String.valueOf((int)((Math.random() * 900000) + 100000)); // Tạo mã 6 số
+        String otp = String.valueOf((int)((Math.random() * 900000) + 100000));
 
         HttpSession session = request.getSession();
         session.setAttribute("otpCode", otp);
-        session.setAttribute("otpTime", System.currentTimeMillis()); // Lưu thời điểm tạo
+        session.setAttribute("otpTime", System.currentTimeMillis());
 
-        // Gửi mail (Dùng MailUtil bạn đã có)
-        // Lưu ý: Bạn cần sửa MailUtil để nhận tham số email người nhận
         MailUtil.sendOTPMail(email, otp);
 
         response.getWriter().write("success");
