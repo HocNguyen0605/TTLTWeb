@@ -73,12 +73,8 @@ public class LoginServlet extends HttpServlet {
                 tokenCookie.setHttpOnly(true);
                 tokenCookie.setPath("/");
                 response.addCookie(tokenCookie);
-            } else {
-                uCookie.setMaxAge(0);
-                pCookie.setMaxAge(0);
             }
-            response.addCookie(uCookie);
-            response.addCookie(pCookie);
+
             if (u.getRole() == 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             } else {
@@ -87,7 +83,7 @@ public class LoginServlet extends HttpServlet {
             return;
         } else {
             request.setAttribute("mess", "Sai tài khoản hoặc mật khẩu!");
-            request.setAttribute("loginEmail", user); // Keep input
+            request.setAttribute("loginEmail", user);
             request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
         }
     }
