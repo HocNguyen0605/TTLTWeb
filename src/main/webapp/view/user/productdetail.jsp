@@ -51,8 +51,7 @@
                      style="width: 100%; height: 500px; display: flex; align-items: center; justify-content: center;">
                     <c:choose>
                         <c:when test="${product.img != null && product.img.contains('http')}">
-                            <img src="${product.img}" class="img-fluid rounded"
-                                 alt="${product.name}"
+                            <img src="${product.img}" class="img-fluid rounded" alt="${product.name}"
                                  style="max-width: 100%; max-height: 100%; object-fit: contain;"
                                  onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'">
                         </c:when>
@@ -80,20 +79,20 @@
                 <h1 class="display-5 fw-bold text-dark mb-3">${product.name}</h1>
 
                 <h2 class="text-danger fw-bold mb-4">
-                    <fmt:formatNumber value="${product.price}" pattern="#,### đ"/>
+                    <fmt:formatNumber value="${product.price}" pattern="#,### đ" />
                 </h2>
 
                 <div class="mb-4">
-                    <p class="mb-1 text-muted">Dung tích: <span
-                            class="text-dark fw-bold">${product.volume} ml</span>
+                    <p class="mb-1 text-muted">Dung tích: <span class="text-dark fw-bold">${product.volume}
+                                        ml</span>
                     </p>
                     <p class="mb-1 text-muted">Nhà cung cấp: <span
                             class="text-dark fw-bold">${product.supplier_name}</span></p>
                     <p class="mb-1 text-muted">Tình trạng:
                         <c:choose>
                             <c:when test="${product.quantity > 0}">
-                                                    <span class="text-success fw-bold">Còn hàng
-                                                        (${product.quantity})</span>
+                                            <span class="text-success fw-bold">Còn hàng
+                                                (${product.quantity})</span>
                             </c:when>
                             <c:otherwise>
                                 <span class="text-danger fw-bold">Hết hàng</span>
@@ -110,8 +109,8 @@
                             <button class="btn btn-outline-secondary" type="button"
                                     onclick="this.parentNode.querySelector('input').stepDown()">-
                             </button>
-                            <input type="number" name="quantity" class="form-control text-center"
-                                   value="1" min="1">
+                            <input type="number" name="quantity" class="form-control text-center" value="1"
+                                   min="1">
                             <button class="btn btn-outline-secondary" type="button"
                                     onclick="this.parentNode.querySelector('input').stepUp()">+
                             </button>
@@ -131,10 +130,46 @@
         <h5 class="fw-bold text-success text-uppercase mb-4">Thông tin sản phẩm</h5>
         <div class="row">
             <div class="col-md-8">
-                <div class="card p-4 border rounded shadow-sm border-0" style="border: 1px solid #dee2e6 !important;">
+                <div class="card p-4 border rounded shadow-sm border-0"
+                     style="border: 1px solid #dee2e6 !important;">
                     <h6 class="fw-bold mb-3 fs-5">Mô tả sản phẩm</h6>
                     <div class="text-muted leading-relaxed text-break">
-                        ${product.description != null ? product.description : "Chưa có mô tả cho sản phẩm này. Nước ép Juicy cam kết 100% nguyên chất, không đường hóa học."}
+                        ${product.description != null ? product.description : "Chưa có mô tả cho sản
+                                phẩm này. Nước ép Juicy cam kết 100% nguyên chất, không đường hóa học."}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%-- SECTION ĐÁNH GIÁ SẢN PHẨM --%>
+    <div class="mt-5 mb-5 border-top pt-5">
+        <h5 class="fw-bold text-success text-uppercase mb-4">Đánh giá sản phẩm</h5>
+        <div class="row h-100">
+            <div class="col-md-5">
+                <div class="card border-0 shadow-sm p-4 h-100" style="border: 1px solid #dee2e6 !important;">
+                    <h6 class="fw-bold mb-3">Gửi đánh giá của bạn</h6>
+                    <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Tính năng đang được phát triển!');">
+                        <div class="mb-3 text-warning fs-4 d-flex gap-1" id="starRating">
+                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
+                            <i class="bi bi-star text-warning" style="cursor: pointer;"></i>
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="4" placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success fw-bold px-4 rounded-pill">Gửi Đánh Giá</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-7 mt-4 mt-md-0">
+                <div class="card border-0 shadow-sm p-4 h-100" style="border: 1px solid #dee2e6 !important;">
+                    <h6 class="fw-bold mb-4">Các lượt đánh giá (0)</h6>
+                    <div class="text-center py-5">
+                        <i class="bi bi-chat-square-text text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-3 mb-0">Chưa có đánh giá nào cho sản phẩm này.</p>
                     </div>
                 </div>
             </div>
@@ -148,9 +183,9 @@
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
             <c:forEach items="${relatedProducts}" var="rp">
                 <div class="col">
-                    <div class="card product-card h-100 text-center" style="cursor: pointer;" onclick="if(!event.target.closest('.btn')) window.location.href='${pageContext.request.contextPath}/product-detail?id=${rp.id}'">
-                        <div class="product-img-wrapper"
-                             style="height: 250px; overflow: hidden;">
+                    <div class="card product-card h-100 text-center" style="cursor: pointer;"
+                         onclick="if(!event.target.closest('.btn')) window.location.href='${pageContext.request.contextPath}/product-detail?id=${rp.id}'">
+                        <div class="product-img-wrapper" style="height: 250px; overflow: hidden;">
                             <c:choose>
                                 <c:when test="${rp.img != null && rp.img.contains('http')}">
                                     <img src="${rp.img}" class="card-img-top h-100 w-100"
@@ -160,14 +195,14 @@
                                 <c:when
                                         test="${rp.img != null && (rp.img.contains('/') || rp.img.contains('\\\\'))}">
                                     <img src="${pageContext.request.contextPath}/${rp.img}"
-                                         class="card-img-top h-100 w-100"
-                                         style="object-fit: cover;" alt="${rp.name}"
+                                         class="card-img-top h-100 w-100" style="object-fit: cover;"
+                                         alt="${rp.name}"
                                          onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'">
                                 </c:when>
                                 <c:otherwise>
                                     <img src="${pageContext.request.contextPath}/images/product/${rp.img}"
-                                         class="card-img-top h-100 w-100"
-                                         style="object-fit: cover;" alt="${rp.name}"
+                                         class="card-img-top h-100 w-100" style="object-fit: cover;"
+                                         alt="${rp.name}"
                                          onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'">
                                 </c:otherwise>
                             </c:choose>
@@ -203,5 +238,24 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="${pageContext.request.contextPath}/js/init.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const stars = document.querySelectorAll('#starRating i');
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                stars.forEach((s, i) => {
+                    if (i <= index) {
+                        s.classList.remove('bi-star');
+                        s.classList.add('bi-star-fill');
+                    } else {
+                        s.classList.remove('bi-star-fill');
+                        s.classList.add('bi-star');
+                    }
+                });
+            });
+        });
+    });
+</script>
 </body>
+
 </html>
