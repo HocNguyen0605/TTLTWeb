@@ -37,59 +37,30 @@ public class ProductController extends HttpServlet {
         Double minPrice = null;
         Double maxPrice = null;
 
-        if (priceRange != null) {
-            switch (priceRange) {
-                case "0-50":
-                    maxPrice = 50000.0;
-                    break;
-                case "50-100":
-                    minPrice = 50000.0;
-                    maxPrice = 100000.0;
-                    break;
-                case "100-150":
-                    minPrice = 100000.0;
-                    maxPrice = 150000.0;
-                    break;
-                case "150-200":
-                    minPrice = 150000.0;
-                    maxPrice = 200000.0;
-                    break;
-                case "200-300":
-                    minPrice = 200000.0;
-                    maxPrice = 300000.0;
-                    break;
-                case "300-500":
-                    minPrice = 300000.0;
-                    maxPrice = 500000.0;
-                    break;
-                case "above500":
-                    minPrice = 500000.0;
-                    break;
-                default:
-                    break;
+        if (priceRange != null && !priceRange.trim().isEmpty()) {
+            String[] parts = priceRange.trim().split("-");
+            try {
+                if (parts.length > 0 && !parts[0].trim().isEmpty()) {
+                    minPrice = Double.parseDouble(parts[0].trim().replace(",", ""));
+                }
+                if (parts.length > 1 && !parts[1].trim().isEmpty()) {
+                    maxPrice = Double.parseDouble(parts[1].trim().replace(",", ""));
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
         }
 
         Integer minVol = null;
         Integer maxVol = null;
 
-        if (volumeStr != null) {
-            switch (volumeStr) {
-                case "100-250":
-                    minVol = 100;
-                    maxVol = 250;
-                    break;
-                case "250-500":
-                    minVol = 250;
-                    maxVol = 500;
-                    break;
-                case "500-1000":
-                    minVol = 500;
-                    maxVol = 1000;
-                    break;
-                case "above1000":
-                    minVol = 1000;
-                    break;
+        if (volumeStr != null && !volumeStr.trim().isEmpty()) {
+            try {
+                Integer exactVol = Integer.parseInt(volumeStr.trim().replace(",", ""));
+                minVol = exactVol;
+                maxVol = exactVol;
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
         }
 
@@ -113,8 +84,7 @@ public class ProductController extends HttpServlet {
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
 
-
-        request.setAttribute("currentPriceRange", priceRange);
+        request.setAttribute("currentPriceRange", priceRange != null ? priceRange : "");
         request.setAttribute("currentVolume", volumeStr);
         request.setAttribute("currentSupplier", supplier);
         request.setAttribute("currentSort", sortBy);

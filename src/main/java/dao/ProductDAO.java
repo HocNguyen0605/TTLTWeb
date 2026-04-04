@@ -369,6 +369,14 @@ public class ProductDAO extends BaseDao {
                 .execute());
     }
 
+    public void updatePrice(int id, double price) {
+        String sql = "UPDATE products SET price = :price WHERE id = :id";
+        get().useHandle(handle -> handle.createUpdate(sql)
+                .bind("id", id)
+                .bind("price", price)
+                .execute());
+    }
+
     // --- PHÂN TRANG ---
     public int getTotalProducts() {
         String sql = "SELECT COUNT(*) FROM products WHERE quantity >= 0";
