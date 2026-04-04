@@ -11,6 +11,7 @@ public class Product implements Serializable {
     private int quantity;
     private String img;
     private String description;
+    private int promotion;
 
     public Product() {} // Cần thiết cho Jdbi
 
@@ -23,6 +24,7 @@ public class Product implements Serializable {
     public void setQuantity(int quantity) { this.quantity = quantity; }
     public void setImg(String img) { this.img = img; }
     public void setDescription(String description) { this.description = description; }
+    public void setPromotion(int promotion) { this.promotion = promotion; }
 
     // --- GIỮ NGUYÊN GETTERS ---
     public int getId() { return id; }
@@ -33,4 +35,5 @@ public class Product implements Serializable {
     public int getQuantity() { return quantity; }
     public String getImg() { return img; }
     public String getDescription() { return description; }
+    public int getPromotion() { return promotion; }
 }

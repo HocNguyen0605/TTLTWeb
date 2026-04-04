@@ -1,87 +1,103 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<!DOCTYPE html>
-<html lang="vi">
+    <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+        <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+            <!DOCTYPE html>
+            <html lang="vi">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Dashboard | Juicy</title>
+            <head>
+                <meta charset="UTF-8">
+                <title>Admin Dashboard | Juicy</title>
 
-    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/logo/logo-juicy.png">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-</head>
+                <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/logo/logo-juicy.png">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+                <link rel="stylesheet"
+                    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+                <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+            </head>
 
-<body>
+            <body>
 
-<!-- HEADER -->
-<header class="sticky-top shadow-sm">
-    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-success fs-3"
-               href="${pageContext.request.contextPath}/admin/dashboard">
-                <img src="${pageContext.request.contextPath}/images/logo/logo-juicy.png" height="40"
-                     class="me-2">
-                JUICY
-            </a>
-
-            <div class="collapse navbar-collapse show">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold"
-                           href="${pageContext.request.contextPath}/admin/dashboard">
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active fw-semibold"
-                           href="${pageContext.request.contextPath}/admin/products">
-                            Sản phẩm
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fw-semibold"
-                           href="${pageContext.request.contextPath}/admin/manage-orders">
-                            Đơn hàng
-                        </a>
-                    </li>
-                </ul>
-
-                <a href="${pageContext.request.contextPath}/logout"
-                   class="btn btn-outline-success rounded-pill ms-3">
-                    Đăng xuất
-                </a>
-            </div>
-        </div>
-    </nav>
-</header>
+                <!-- HEADER -->
+                <header class="sticky-top shadow-sm">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+                        <div class="container">
+                            <a class="navbar-brand fw-bold text-success fs-3"
+                                href="${pageContext.request.contextPath}/admin/dashboard">
+                                <img src="${pageContext.request.contextPath}/images/logo/logo-juicy.png" height="40"
+                                    class="me-2">
+                                JUICY
+                            </a>
+                        </div>
+                    </nav>
+                </header>
 
 
-<!-- Main Content -->
-<div class="container my-5">
-    <div
-            class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 animate__animated animate__fadeInDown">
-        <div>
-            <h2 class="fw-bold text-success mb-1">Quản Lý Sản Phẩm</h2>
-            <p class="text-muted mb-0">Xem và quản lý tất cả sản phẩm hiện có</p>
-        </div>
+                <!-- Main Content -->
+                <div class="d-flex">
+                    <!-- Sidebar -->
+                    <div class="bg-success text-white p-3" style="width: 250px; min-height: 100vh;">
+                        <h4>Menu</h4>
+                        <ol class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link text-white ${pageContext.request.requestURI.contains('dashboard') ? 'active' : ''} "
+                                   href="${pageContext.request.contextPath}/admin/dashboard">a. Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse" >
+                                    b. Quản lý
+                                </a>
+                                <ol class="collapse" id="menuQL">
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('products') ? 'active' : ''}"
+                                           href="${pageContext.request.contextPath}/admin/products">
+                                            Quản lý sản phẩm </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('banner') ? 'active' : ''}"
+                                           href="#">
+                                            Quản lý banner </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('#') ? 'active' : ''}"
+                                           href="#">
+                                            Quản lý CTKM </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('manage-orders') ? 'active' : ''}"
+                                        href="${pageContext.request.contextPath}/admin/manage-orders">
+                                        Quản lý đơn hàng </a>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="mt-3">
+                                <a href="${pageContext.request.contextPath}/logout"
+                                   class="btn btn-danger rounded-pill ms-3">
+                                    Đăng xuất
+                                </a>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="container my-5">
+                        <div
+                                class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 animate__animated animate__fadeInDown">
+                            <div>
+                                <h2 class="fw-bold text-success mb-1">Quản Lý Sản Phẩm</h2>
+                                <p class="text-muted mb-0">Xem và quản lý tất cả sản phẩm hiện có</p>
+                            </div>
 
-        <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
-            <div class="search-container d-none d-md-block">
-                <form action="products" method="get">
-                    <i class="bi bi-search search-icon"></i>
-                    <input type="text" name="search" class="search-input"
-                           placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
-                </form>
-            </div>
-            <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                <i class="bi bi-plus-lg me-2"></i>Thêm Mới
-            </button>
-        </div>
-    </div>
+                            <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
+                                <div class="search-container d-none d-md-block">
+                                    <form action="products" method="get">
+                                        <i class="bi bi-search search-icon"></i>
+                                        <input type="text" name="search" class="search-input"
+                                               placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
+                                    </form>
+                                </div>
+                                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                                    <i class="bi bi-plus-lg me-2"></i>Thêm Mới
+                                </button>
+                            </div>
+                        </div>
 
     <div class="card card-custom animate__animated animate__fadeInUp">
         <div class="card-body p-0">

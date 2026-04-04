@@ -17,7 +17,8 @@ public class ProductDAO extends BaseDao {
                         p.supplier_name,
                         p.quantity,
                         COALESCE(pi.image_URL, p.image) AS img,
-                        p.description
+                        p.description,
+                        p.promotion
                     FROM products p
                     LEFT JOIN product_images pi ON p.image = pi.id
                     GROUP BY p.id
@@ -43,7 +44,8 @@ public class ProductDAO extends BaseDao {
                         p.supplier_name,
                         p.quantity,
                         COALESCE(pi.image_URL, p.image) AS img,
-                        p.description
+                        p.description,
+                        p.promotion
                     FROM products p
                     LEFT JOIN product_images pi ON p.image = pi.id
                     WHERE p.id = :id
@@ -409,6 +411,20 @@ public class ProductDAO extends BaseDao {
         return get().withHandle(handle -> handle.createQuery(sql)
                 .bind("offset", offset)
                 .bind("limit", limit)
+                .mapToBean(Product.class)
+                .list());
+
+    }
+    public List<Product> getProductHasPromotion() {
+        String sql = """
+                    SELECT
+                        p.promotion
+                    FROM products p
+                    WHERE p.promotion IS NOT NULL
+                    GROUP BY p.id
+                """;
+
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .mapToBean(Product.class)
                 .list());
     }

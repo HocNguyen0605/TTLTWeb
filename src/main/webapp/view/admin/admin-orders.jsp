@@ -30,169 +30,195 @@
                                     alt="Juicy Logo" height="40" class="me-2">
                                 JUICY <span class="text-warning"></span>
                             </a>
-
-                            <div class="navbar-collapse show" id="navbarNav">
-                                <ul class="navbar-nav ms-auto align-items-lg-center">
-                                    <li class="nav-item">
-                                        <a class="nav-link"
-                                            href="${pageContext.request.contextPath}/admin/dashboard">Dashboard</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="${pageContext.request.contextPath}/admin/products">Sản
-                                            Phẩm</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active"
-                                            href="${pageContext.request.contextPath}/admin/manage-orders">Đơn hàng</a>
-                                    </li>
-                                </ul>
-                                <a href="${pageContext.request.contextPath}/logout"
-                                    class="btn btn-outline-success rounded-pill fw-semibold ms-lg-3 my-2 my-lg-0 me-lg-2">
-                                    <i class="bi bi-person-circle me-1"></i> Đăng Xuất
-                                </a>
-                            </div>
                         </div>
                     </nav>
                 </header>
-                <div class="container my-4">
+                <div class="d-flex">
 
-                    <h3 class="mb-4 text-success fw-bold">Danh sách đơn hàng</h3>
+                    <!-- Sidebar -->
+                    <div class="bg-success text-white p-3" style="width: 250px; min-height: 100vh;">
+                        <h4>Menu</h4>
+                        <ol class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link text-white ${pageContext.request.requestURI.contains('dashboard') ? 'active' : ''} "
+                                   href="${pageContext.request.contextPath}/admin/dashboard">a. Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse" >
+                                    b. Quản lý
+                                </a>
+                                <ol class="collapse" id="menuQL">
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('products') ? 'active' : ''}"
+                                           href="${pageContext.request.contextPath}/admin/products">
+                                            Quản lý sản phẩm </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('banner') ? 'active' : ''}"
+                                           href="#">
+                                            Quản lý banner </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('#') ? 'active' : ''}"
+                                           href="#">
+                                            Quản lý CTKM </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('manage-orders') ? 'active' : ''}"
+                                        href="${pageContext.request.contextPath}/admin/manage-orders">
+                                        Quản lý đơn hàng </a>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="mt-3">
+                                <a href="${pageContext.request.contextPath}/logout"
+                                   class="btn btn-danger rounded-pill ms-3">
+                                    Đăng xuất
+                                </a>
+                            </li>
+                        </ol>
+                    </div>
 
-                    <div class="card shadow-sm">
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Mã đơn</th>
-                                            <th>Khách hàng</th>
-                                            <th>Ngày đặt</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Trạng thái</th>
-                                            <th>Hành động</th>
-                                        </tr>
-                                    </thead>
+                        <div class="container my-4">
 
-                                    <tbody>
-                                        <c:forEach items="${orders}" var="o">
+                            <h3 class="mb-4 text-success fw-bold">Danh sách đơn hàng</h3>
+
+                            <div class="card shadow-sm">
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover align-middle mb-0">
+                                            <thead class="table-light">
                                             <tr>
-                                                <td>
-                                                    <a href="javascript:void(0)" onclick="viewOrderDetail(${o.id})"
-                                                        class="text-decoration-none fw-bold text-success">
-                                                        #DH${o.id}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    ${o.customerName}
-                                                    <c:if test="${o.userId > 0}">
-                                                        <br><small class="text-muted" style="font-size: 0.85em;">ID:
-                                                            ${o.userId}</small>
-                                                    </c:if>
-                                                </td>
-                                                <td>
-                                                    <fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy HH:mm" />
-                                                </td>
-                                                <td class="text-success fw-bold">
-                                                    <fmt:formatNumber value="${o.totalPrice}" type="currency"
-                                                        currencySymbol="₫" />
-                                                </td>
-                                                <td>
-                                                    <form method="post" action="manage-orders" class="m-0">
-                                                        <input type="hidden" name="action" value="updateStatus" />
-                                                        <input type="hidden" name="orderId" value="${o.id}" />
+                                                <th>Mã đơn</th>
+                                                <th>Khách hàng</th>
+                                                <th>Ngày đặt</th>
+                                                <th>Tổng tiền</th>
+                                                <th>Trạng thái</th>
+                                                <th>Hành động</th>
+                                            </tr>
+                                            </thead>
 
-                                                        <select name="status" onchange="this.form.submit()" class="form-select form-select-sm border-0 fw-bold rounded-3
+                                            <tbody>
+                                            <c:forEach items="${orders}" var="o">
+                                                <tr>
+                                                    <td>
+                                                        <a href="javascript:void(0)" onclick="viewOrderDetail(${o.id})"
+                                                           class="text-decoration-none fw-bold text-success">
+                                                            #DH${o.id}
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                            ${o.customerName}
+                                                        <c:if test="${o.userId > 0}">
+                                                            <br><small class="text-muted" style="font-size: 0.85em;">ID:
+                                                                ${o.userId}</small>
+                                                        </c:if>
+                                                    </td>
+                                                    <td>
+                                                        <fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy HH:mm" />
+                                                    </td>
+                                                    <td class="text-success fw-bold">
+                                                        <fmt:formatNumber value="${o.totalPrice}" type="currency"
+                                                                          currencySymbol="₫" />
+                                                    </td>
+                                                    <td>
+                                                        <form method="post" action="manage-orders" class="m-0">
+                                                            <input type="hidden" name="action" value="updateStatus" />
+                                                            <input type="hidden" name="orderId" value="${o.id}" />
+
+                                                            <select name="status" onchange="this.form.submit()" class="form-select form-select-sm border-0 fw-bold rounded-3
                                                     ${o.status == 'Đã giao hàng' ? 'text-success bg-success-subtle' :
                                                       o.status == 'Đang giao hàng' ? 'text-primary bg-primary-subtle' :
                                                       o.status == 'Đã hủy' ? 'text-danger bg-danger-subtle' :
                                                       o.status == 'Bị hoàn' ? 'text-danger bg-danger-subtle' :
                                                       'text-warning bg-warning-subtle'}" style="width: 160px;">
-                                                            <option value="Chờ xác nhận" ${o.status=='Chờ xác nhận'
-                                                                ? 'selected' : '' }>Chờ xác nhận</option>
-                                                            <option value="Đang xác nhận" ${o.status=='Đang xác nhận'
-                                                                ? 'selected' : '' }>Đang xác nhận</option>
-                                                            <option value="Đang giao hàng" ${o.status=='Đang giao hàng'
-                                                                ? 'selected' : '' }>Đang giao hàng</option>
-                                                            <option value="Đã giao hàng" ${o.status=='Đã giao hàng'
-                                                                ? 'selected' : '' }>Đã giao hàng</option>
-                                                            <option value="Bị hoàn" ${o.status=='Bị hoàn' ? 'selected'
-                                                                : '' }>Bị hoàn</option>
-                                                            <option value="Đã hủy" ${o.status=='Đã hủy' ? 'selected'
-                                                                : '' }>Đã hủy</option>
-                                                        </select>
-                                                    </form>
-                                                </td>
+                                                                <option value="Chờ xác nhận" ${o.status=='Chờ xác nhận'
+                                                                        ? 'selected' : '' }>Chờ xác nhận</option>
+                                                                <option value="Đang xác nhận" ${o.status=='Đang xác nhận'
+                                                                        ? 'selected' : '' }>Đang xác nhận</option>
+                                                                <option value="Đang giao hàng" ${o.status=='Đang giao hàng'
+                                                                        ? 'selected' : '' }>Đang giao hàng</option>
+                                                                <option value="Đã giao hàng" ${o.status=='Đã giao hàng'
+                                                                        ? 'selected' : '' }>Đã giao hàng</option>
+                                                                <option value="Bị hoàn" ${o.status=='Bị hoàn' ? 'selected'
+                                                                        : '' }>Bị hoàn</option>
+                                                                <option value="Đã hủy" ${o.status=='Đã hủy' ? 'selected'
+                                                                        : '' }>Đã hủy</option>
+                                                            </select>
+                                                        </form>
+                                                    </td>
 
-                                                <td>
-                                                    <form method="post" action="manage-orders"
-                                                        onsubmit="return confirm('Xóa đơn hàng này?')" class="m-0">
-                                                        <input type="hidden" name="action" value="delete" />
-                                                        <input type="hidden" name="orderId" value="${o.id}" />
-                                                        <button
-                                                            class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center"
-                                                            style="width: 32px; height: 32px;" title="Xóa">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <c:if test="${empty orders}">
-                        <div class="text-center py-5">
-                            <i class="bi bi-inbox fs-1 text-muted"></i>
-                            <p class="text-muted mt-2">Chưa có đơn hàng nào.</p>
-                        </div>
-                    </c:if>
-
-                </div>
-                </div>
-
-                <!-- Modal Chi Tiết Đơn Hàng -->
-                <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title fw-bold text-success">Thông tin nhận hàng</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div id="modalLoading" class="text-center py-3">
-                                    <div class="spinner-border text-success" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                </div>
-                                <div id="modalContent" style="display: none;">
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Người nhận:</label>
-                                        <div id="dName" class="text-dark"></div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Số điện thoại:</label>
-                                        <div id="dPhone" class="text-dark"></div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Địa chỉ:</label>
-                                        <div id="dAddress" class="text-dark"></div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="fw-bold">Ghi chú:</label>
-                                        <div id="dNote" class="text-dark fst-italic"></div>
+                                                    <td>
+                                                        <form method="post" action="manage-orders"
+                                                              onsubmit="return confirm('Xóa đơn hàng này?')" class="m-0">
+                                                            <input type="hidden" name="action" value="delete" />
+                                                            <input type="hidden" name="orderId" value="${o.id}" />
+                                                            <button
+                                                                    class="btn btn-outline-danger btn-sm rounded-circle d-flex align-items-center justify-content-center"
+                                                                    style="width: 32px; height: 32px;" title="Xóa">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+
+                            <c:if test="${empty orders}">
+                                <div class="text-center py-5">
+                                    <i class="bi bi-inbox fs-1 text-muted"></i>
+                                    <p class="text-muted mt-2">Chưa có đơn hàng nào.</p>
+                                </div>
+                            </c:if>
+
+                        </div>
+                    </div>
+
+                    <!-- Modal Chi Tiết Đơn Hàng -->
+                    <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold text-success">Thông tin nhận hàng</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="modalLoading" class="text-center py-3">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <div id="modalContent" style="display: none;">
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Người nhận:</label>
+                                            <div id="dName" class="text-dark"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Số điện thoại:</label>
+                                            <div id="dPhone" class="text-dark"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Địa chỉ:</label>
+                                            <div id="dAddress" class="text-dark"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Ghi chú:</label>
+                                            <div id="dNote" class="text-dark fst-italic"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
 
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
                 <script type="module" src="${pageContext.request.contextPath}/js/init.js"></script>
