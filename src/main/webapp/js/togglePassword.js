@@ -3,7 +3,7 @@ export function togglePassword(){
 
     btn.forEach(btn =>{
         btn.addEventListener("click", function (){
-            const container = this.closest('.input-group');
+                const container = this.closest('.input-group');
             const input = container.querySelector('input');
             const icon = this.querySelector('i');
 
@@ -13,7 +13,7 @@ export function togglePassword(){
 
                 if(icon){
                     icon.classList.toggle('bi-eye');
-                    icon.classList.toggle('bi-eye-slash');
+                        icon.classList.toggle('bi-eye-slash');
                 }
             }
         });

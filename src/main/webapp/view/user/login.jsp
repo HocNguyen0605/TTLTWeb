@@ -42,8 +42,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="loginPassword" class="form-label fw-semibold">Mật khẩu</label>
-                        <input type="password" class="form-control" id="loginPassword" name="password" required
-                               placeholder="Nhập mật khẩu"/>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="loginPassword" name="password" required
+                                   placeholder="Nhập mật khẩu"/>
+                            <button class="btn btn-outline-success btn-toggle-Password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div class="form-check">
@@ -105,7 +110,7 @@
                     <div class="mb-3">
                         <label for="regPassword" class="form-label fw-semibold">Mật khẩu *</label>
                         <div class="input-group">
-                            <input type="password" class="form-control input-password" maxlength="20" id="regPassword"
+                            <input type="password" class="form-control" maxlength="20" id="regPassword"
                                    name="password"
                                    required
                                    placeholder="Tối thiểu 8 ký tự, kí tự viết hoa và kí tự đặt biệt"/>
@@ -122,9 +127,15 @@
 
                     <div class="mb-4">
                         <label for="regConfirmPassword" class="form-label fw-semibold">Xác nhận Mật khẩu *</label>
-                        <input type="password" class="form-control" maxlength="20" id="regConfirmPassword"
-                               name="confirmPassword"
-                               required placeholder="Nhập lại mật khẩu"/>
+                        <div class="input-group">
+                            <input type="password" class="form-control" maxlength="20" id="regConfirmPassword"
+                                   name="confirmPassword"
+                                   required
+                                   placeholder="Nhập lại mật khẩu"/>
+                            <button class="btn btn-outline-success btn-toggle-Password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                         <c:if test="${errors.confirmPassword != null}">
                             <div class="text-danger small">
                                     ${errors.confirmPassword}
