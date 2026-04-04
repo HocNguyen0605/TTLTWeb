@@ -5,6 +5,7 @@ import model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+
 import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
@@ -26,26 +27,23 @@ public class LoginServlet extends HttpServlet {
         }
 
         Cookie[] cookies = request.getCookies();
+        String token = null;
         if (cookies != null) {
-            String cuser = null;
-            String cpass = null;
             for (Cookie c : cookies) {
-                if ("cuser".equals(c.getName())) cuser = c.getValue();
-                if ("cpass".equals(c.getName())) cpass = c.getValue();
+                if ("rememberToken".equals(c.getName())) token = c.getValue();
             }
-
-            if (cuser != null && cpass != null) {
-                UserDAO dao = new UserDAO();
-                User u = dao.login(cuser, cpass);
-                if (u != null) {
-                    request.getSession().setAttribute("auth", u);
-                    if (u.getRole() == 1) {
-                        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-                    } else {
-                        response.sendRedirect(request.getContextPath() + "/products");
-                    }
-                    return;
+        }
+        if (token != null) {
+            UserDAO dao = new UserDAO();
+            User u = dao.getUserByToken(token);
+            if (u != null) {
+                request.getSession().setAttribute("auth", u);
+                if (u.getRole() == 1) {
+                    response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/products");
                 }
+                return;
             }
         }
         request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
@@ -64,20 +62,19 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("auth", u);
 
-            // Handle Cookies
-            Cookie uCookie = new Cookie("cuser", user);
-            Cookie pCookie = new Cookie("cpass", pass);
-            uCookie.setPath("/");
-            pCookie.setPath("/");
+            // Xử lí Cookies
             if (remember != null) {
-                uCookie.setMaxAge(60 * 60 * 24 * 7); // 7 days
-                pCookie.setMaxAge(60 * 60 * 24 * 7);
-            } else {
-                uCookie.setMaxAge(0);
-                pCookie.setMaxAge(0);
+                String randToken = java.util.UUID.randomUUID().toString();
+
+                dao.saveUserToken(u.getId(), randToken);
+
+                Cookie tokenCookie = new Cookie("rememberToken", randToken);
+                tokenCookie.setMaxAge(60 * 60 * 24 * 7);
+                tokenCookie.setHttpOnly(true);
+                tokenCookie.setPath("/");
+                response.addCookie(tokenCookie);
             }
-            response.addCookie(uCookie);
-            response.addCookie(pCookie);
+
             if (u.getRole() == 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
             } else {
@@ -86,7 +83,7 @@ public class LoginServlet extends HttpServlet {
             return;
         } else {
             request.setAttribute("mess", "Sai tài khoản hoặc mật khẩu!");
-            request.setAttribute("loginEmail", user); // Keep input
+            request.setAttribute("loginEmail", user);
             request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
         }
     }

@@ -14,7 +14,6 @@ public class MailUtil {
     private static final String TO_EMAIL = "luonghoaisangvn@gmail.com";
 
     public static void sendContactMail(Contact c) {
-
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -60,7 +59,7 @@ public class MailUtil {
         }
     }
 
-    public static boolean sendOTPMail(String toEmail, String otp) {
+    public static boolean sendMail(String toEmail, String subject, String htmlContent) {
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
@@ -79,57 +78,11 @@ public class MailUtil {
             message.setFrom(new InternetAddress(FROM_EMAIL));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
 
-            message.setSubject("Mã xác thực đăng ký - JUICY", "UTF-8");
-            message.setSentDate(new Date()); // Quy định ngày gửi
-
-            String htmlContent = "<h3>Mã xác thực của bạn là: <b style='color:red;'>" + otp + "</b></h3>"
-                    + "<p>Mã này có hiệu lực trong <b>60 giây</b>.</p>";
-
+            message.setSubject(subject, "UTF-8");
             message.setContent(htmlContent, "text/HTML; charset=UTF-8");
 
             Transport.send(message);
-            System.out.println(">>> Gửi OTP thành công tới: " + toEmail);
-            return true;
-        } catch (MessagingException e) {
-            System.out.println(">>> LỖI GỬI MAIL: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public static boolean sendForgotPasswordMail(String toEmail, String newPassword) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
-        Session session = Session.getInstance(props, new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(FROM_EMAIL, APP_PASSWORD);
-            }
-        });
-
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.addHeader("Content-type", "text/HTML; charset=UTF-8");
-            message.setFrom(new InternetAddress(FROM_EMAIL));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
-
-            // Tiêu đề riêng biệt
-            message.setSubject("Khôi phục mật khẩu tài khoản JUICY", "UTF-8");
-
-            String htmlContent = "<h2>Yêu cầu cấp lại mật khẩu</h2>"
-                    + "<p>Chào bạn,</p>"
-                    + "<p>Chúng tôi đã nhận được yêu cầu khôi phục mật khẩu cho tài khoản liên kết với email này.</p>"
-                    + "<p>Mật khẩu mới của bạn là: <b style='color: #28a745; font-size: 1.2em;'>" + newPassword + "</b></p>"
-                    + "<p>Vui lòng sử dụng mật khẩu này để đăng nhập và <b>đổi lại mật khẩu mới</b> ngay lập tức để đảm bảo an toàn.</p>"
-                    + "<br><p>Trân trọng,<br>Đội ngũ hỗ trợ Juicy.</p>";
-
-            message.setContent(htmlContent, "text/HTML; charset=UTF-8");
-
-            Transport.send(message);
-            System.out.println(">>> Đã gửi mật khẩu mới tới: " + toEmail);
+            System.out.println(">>> Gửi mail thành công tới: " + toEmail);
             return true;
         } catch (MessagingException e) {
             e.printStackTrace();

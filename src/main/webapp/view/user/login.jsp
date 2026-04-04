@@ -42,8 +42,13 @@
                     </div>
                     <div class="mb-3">
                         <label for="loginPassword" class="form-label fw-semibold">Mật khẩu</label>
-                        <input type="password" class="form-control" id="loginPassword" name="password" required
-                               placeholder="Nhập mật khẩu"/>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="loginPassword" name="password" required
+                                   placeholder="Nhập mật khẩu"/>
+                            <button class="btn btn-outline-success btn-toggle-Password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div class="form-check">
@@ -85,7 +90,7 @@
                         <input type="text" class="form-control" maxlength="50" id="regFullname" name="fullname"
                                placeholder="Nhập họ và tên của bạn" value="${oldFullName}">
                         <c:if test="${errors.fullname != null}">
-                           <div class="text-danger small">
+                            <div class="text-danger small">
                                     ${errors.fullname}
                             </div>
                         </c:if>
@@ -104,8 +109,15 @@
 
                     <div class="mb-3">
                         <label for="regPassword" class="form-label fw-semibold">Mật khẩu *</label>
-                        <input type="password" class="form-control" maxlength="20" id="regPassword" name="password" required
-                               placeholder="Tối thiểu 8 ký tự, kí tự viết hoa và kí tự đặt biệt"/>
+                        <div class="input-group">
+                            <input type="password" class="form-control" maxlength="20" id="regPassword"
+                                   name="password"
+                                   required
+                                   placeholder="Tối thiểu 8 ký tự, kí tự viết hoa và kí tự đặt biệt"/>
+                            <button class="btn btn-outline-success btn-toggle-Password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                         <c:if test="${errors.password != null}">
                             <div class="text-danger small">
                                     ${errors.password}
@@ -115,8 +127,15 @@
 
                     <div class="mb-4">
                         <label for="regConfirmPassword" class="form-label fw-semibold">Xác nhận Mật khẩu *</label>
-                        <input type="password" class="form-control" maxlength="20" id="regConfirmPassword" name="confirmPassword"
-                               required placeholder="Nhập lại mật khẩu"/>
+                        <div class="input-group">
+                            <input type="password" class="form-control" maxlength="20" id="regConfirmPassword"
+                                   name="confirmPassword"
+                                   required
+                                   placeholder="Nhập lại mật khẩu"/>
+                            <button class="btn btn-outline-success btn-toggle-Password" type="button">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
                         <c:if test="${errors.confirmPassword != null}">
                             <div class="text-danger small">
                                     ${errors.confirmPassword}
@@ -127,7 +146,8 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Mã xác thực OTP *</label>
                         <div class="input-group">
-                            <input type="text" name="otp" class="form-control" maxlength="6" placeholder="Nhập mã 6 số" required>
+                            <input type="text" name="otp" class="form-control" maxlength="6" placeholder="Nhập mã 6 số"
+                                   required>
                             <button class="btn btn-outline-success" type="button" id="btnSendOTP">Gửi mã</button>
                         </div>
                         <small id="otpTimer" class="text-danger"></small>
@@ -167,7 +187,6 @@
 
 <%@include file="/view/user/include/footer.jsp" %>
 
-<script type="module" src="${pageContext.request.contextPath}/js/init.js"></script>
 <script>
     //login otp
     document.getElementById('btnSendOTP').addEventListener('click', function () {
@@ -185,7 +204,7 @@
         notice.innerHTML = "Đang gửi mã... (60s)";
 
         const Updtimer = () => {
-            if(timeLeft <= 0){
+            if (timeLeft <= 0) {
                 clearInterval(interval);
                 btn.disabled = false;
                 notice.innerHTML = "Mã đã hết hạn, vui lòng gửi lại";
