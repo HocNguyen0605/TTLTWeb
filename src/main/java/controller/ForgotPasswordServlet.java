@@ -4,6 +4,8 @@ import dao.UserDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import util.MailUtil;
+
 import java.io.IOException;
 import java.util.UUID;
 
@@ -31,10 +33,14 @@ public class ForgotPasswordServlet extends HttpServlet {
 
             if (isUpdated) {
                 // Gửi email thực tế dùng MailUtil đã hoàn thiện ở bước trước
-                String subject = "Mật khẩu mới cho tài khoản Juicy";
-                String content = "Chào bạn, mật khẩu mới của bạn là: <b>" + newPassword + "</b><br>Vui lòng đăng nhập và đổi lại mật khẩu ngay.";
+                // Thay vì MailUtil.sendForgotPasswordMail(email, newPassword);
+                String subject = "Khôi phục mật khẩu tài khoản JUICY";
+                String htmlContent = "<h2>Yêu cầu cấp lại mật khẩu</h2>"
+                        + "<p>Chào bạn,</p>"
+                        + "<p>Mật khẩu mới của bạn là: <b style='color: #28a745; font-size: 1.2em;'>" + newPassword + "</b></p>"
+                        + "<p>Vui lòng đăng nhập và đổi lại mật khẩu ngay.</p>";
 
-                boolean mailSent = util.MailUtil.sendForgotPasswordMail(email, newPassword);
+                boolean mailSent = MailUtil.sendMail(email, subject, htmlContent);
 
                 if (mailSent) {
                     response.getWriter().write("success");
