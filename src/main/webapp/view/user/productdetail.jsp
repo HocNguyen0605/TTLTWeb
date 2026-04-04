@@ -102,17 +102,10 @@
                     </p>
                 </div>
 
-                <div class="mb-4 pb-4 border-bottom">
-                    <h5 class="fw-bold">Mô tả sản phẩm:</h5>
-                    <p class="text-muted leading-relaxed">
-                        ${product.description != null ? product.description : "Chưa có mô tả cho sản phẩm này. Nước ép Juicy cam kết 100% nguyên chất, không đường hóa học."}
-                    </p>
-                </div>
-
-                <form action="${pageContext.request.contextPath}/cart" method="POST">
+                <form action="${pageContext.request.contextPath}/cart" method="POST" class="mb-4">
                     <input type="hidden" name="action" value="add">
                     <input type="hidden" name="productId" value="${product.id}">
-                    <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="d-flex align-items-center gap-3">
                         <div class="input-group" style="width: 130px;">
                             <button class="btn btn-outline-secondary" type="button"
                                     onclick="this.parentNode.querySelector('input').stepDown()">-
@@ -129,6 +122,21 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <%-- SECTION THÔNG TIN SẢN PHẨM --%>
+    <div class="mt-5 mb-5">
+        <h5 class="fw-bold text-success text-uppercase mb-4">Thông tin sản phẩm</h5>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card p-4 border rounded shadow-sm border-0" style="border: 1px solid #dee2e6 !important;">
+                    <h6 class="fw-bold mb-3 fs-5">Mô tả sản phẩm</h6>
+                    <div class="text-muted leading-relaxed text-break">
+                        ${product.description != null ? product.description : "Chưa có mô tả cho sản phẩm này. Nước ép Juicy cam kết 100% nguyên chất, không đường hóa học."}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
