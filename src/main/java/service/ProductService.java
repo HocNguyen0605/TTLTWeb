@@ -79,6 +79,11 @@ public class ProductService {
         pdao.updateQuantity(id, quantity);
     }
 
+
+    public void updatePrice(int id, double price) {
+        pdao.updatePrice(id, price);
+    }
+
     //
     // // Thêm sản phẩm (CHUYỂN QUA DAO)
     // public void add(Product p) {

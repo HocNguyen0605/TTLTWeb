@@ -16,14 +16,11 @@ public class LogoutServlet extends HttpServlet {
             session.invalidate();
         }
 
-        Cookie cUser = new Cookie("cuser", "");
-        Cookie cPass = new Cookie("cpass", "");
-        cUser.setMaxAge(0);
-        cPass.setMaxAge(0);
-        cUser.setPath("/");
-        cPass.setPath("/");
-        response.addCookie(cUser);
-        response.addCookie(cPass);
+        Cookie token = new Cookie("rememberToken", "");
+        token.setMaxAge(0);
+        token.setHttpOnly(true);
+        token.setPath("/");
+        response.addCookie(token);
 
         response.sendRedirect(request.getContextPath() + "/home");
     }

@@ -104,4 +104,39 @@ public class UserDAO {
             return rows > 0;
         });
     }
+
+    public void saveUserToken(int userId, String token) {
+        String query = "INSERT INTO user_tokens (user_id, token_value, expiry_date) " +
+                "VALUES (:uid, :token, DATE_ADD(NOW(), INTERVAL 7 DAY))";
+
+        DBContext.getJdbi().useHandle(handle ->
+                handle.createUpdate(query)
+                        .bind("uid", userId)
+                        .bind("token", token)
+                        .execute()
+        );
+    }
+
+    public User getUserByToken(String token) {
+        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
+                "FROM account a " +
+                "JOIN user u ON a.id = u.id_account " +
+                "JOIN User_Tokens ut ON a.id = ut.user_id " +
+                "WHERE ut.token_value = :token AND ut.expiry_date > NOW()";
+
+        return DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
+                .bind("token", token)
+                .map((rs, ctx) -> new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0))
+                .findFirst()
+                .orElse(null));
+    }
 }
+

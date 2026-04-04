@@ -18,7 +18,11 @@ public class SendOTPServlet extends HttpServlet {
         session.setAttribute("otpCode", otp);
         session.setAttribute("otpTime", System.currentTimeMillis());
 
-        MailUtil.sendOTPMail(email, otp);
+        String subject = "Mã xác thực đăng ký - JUICY";
+        String htmlContent = "<h3>Mã xác thực của bạn là: <b style='color:red;'>" + otp + "</b></h3>"
+                + "<p>Mã này có hiệu lực trong <b>60 giây</b>.</p>";
+
+        MailUtil.sendMail(email, subject, htmlContent);
 
         response.getWriter().write("success");
     }
