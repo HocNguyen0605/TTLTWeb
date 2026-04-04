@@ -39,7 +39,7 @@ public class ProductServlet extends HttpServlet {
             if (idStr != null)
                 id = Integer.parseInt(idStr);
         } catch (NumberFormatException e) {
-            // Ignore
+
         }
 
         if ("hidden".equals(action)) {
@@ -53,13 +53,24 @@ public class ProductServlet extends HttpServlet {
                 if (qtyStr != null)
                     quantity = Integer.parseInt(qtyStr);
                 if (quantity < 0)
-                    quantity = 0; // Prevent negative stock
+                    quantity = 0;
             } catch (NumberFormatException e) {
             }
             service.updateQuantity(id, quantity);
+        } else if ("update_price".equals(action)) {
+            String priceStr = req.getParameter("price");
+            double price = 0;
+            try {
+                if (priceStr != null)
+                    price = Double.parseDouble(priceStr);
+                if (price < 0)
+                    price = 0;
+            } catch (NumberFormatException e) {
+            }
+            service.updatePrice(id, price);
         }
 
-        // Redirect back to product list with success message
+
         resp.sendRedirect(req.getContextPath() + "/admin/products?success=update");
     }
 
