@@ -27,67 +27,83 @@
                                     class="me-2">
                                 JUICY
                             </a>
-
-                            <div class="collapse navbar-collapse show">
-                                <ul class="navbar-nav ms-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link fw-semibold"
-                                            href="${pageContext.request.contextPath}/admin/dashboard">
-                                            Dashboard
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link active fw-semibold"
-                                            href="${pageContext.request.contextPath}/admin/products">
-                                            Sản phẩm
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link fw-semibold"
-                                            href="${pageContext.request.contextPath}/admin/manage-orders">
-                                            Đơn hàng
-                                        </a>
-                                    </li>
-                                </ul>
-
-                                <a href="${pageContext.request.contextPath}/logout"
-                                    class="btn btn-outline-success rounded-pill ms-3">
-                                    Đăng xuất
-                                </a>
-                            </div>
                         </div>
                     </nav>
                 </header>
 
 
                 <!-- Main Content -->
-                <div class="container my-5">
-                    <div
-                        class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 animate__animated animate__fadeInDown">
-                        <div>
-                            <h2 class="fw-bold text-success mb-1">Quản Lý Sản Phẩm</h2>
-                            <p class="text-muted mb-0">Xem và quản lý tất cả sản phẩm hiện có</p>
-                        </div>
-
-                        <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
-                            <div class="search-container d-none d-md-block">
-                                <form action="products" method="get">
-                                    <i class="bi bi-search search-icon"></i>
-                                    <input type="text" name="search" class="search-input"
-                                        placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
-                                </form>
-                            </div>
-                            <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                                <i class="bi bi-plus-lg me-2"></i>Thêm Mới
-                            </button>
-                        </div>
+                <div class="d-flex">
+                    <!-- Sidebar -->
+                    <div class="bg-success text-white p-3" style="width: 250px; min-height: 100vh;">
+                        <h4>Menu</h4>
+                        <ol class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link text-white ${pageContext.request.requestURI.contains('dashboard') ? 'active' : ''} "
+                                   href="${pageContext.request.contextPath}/admin/dashboard">a. Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse" >
+                                    b. Quản lý
+                                </a>
+                                <ol class="collapse" id="menuQL">
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('products') ? 'active' : ''}"
+                                           href="${pageContext.request.contextPath}/admin/products">
+                                            Quản lý sản phẩm </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('banner') ? 'active' : ''}"
+                                           href="#">
+                                            Quản lý banner </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('#') ? 'active' : ''}"
+                                           href="#">
+                                            Quản lý CTKM </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('manage-orders') ? 'active' : ''}"
+                                        href="${pageContext.request.contextPath}/admin/manage-orders">
+                                        Quản lý đơn hàng </a>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="mt-3">
+                                <a href="${pageContext.request.contextPath}/logout"
+                                   class="btn btn-danger rounded-pill ms-3">
+                                    Đăng xuất
+                                </a>
+                            </li>
+                        </ol>
                     </div>
+                    <div class="container my-5">
+                        <div
+                                class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 animate__animated animate__fadeInDown">
+                            <div>
+                                <h2 class="fw-bold text-success mb-1">Quản Lý Sản Phẩm</h2>
+                                <p class="text-muted mb-0">Xem và quản lý tất cả sản phẩm hiện có</p>
+                            </div>
 
-                    <div class="card card-custom animate__animated animate__fadeInUp">
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-custom mb-0">
-                                    <thead>
+                            <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
+                                <div class="search-container d-none d-md-block">
+                                    <form action="products" method="get">
+                                        <i class="bi bi-search search-icon"></i>
+                                        <input type="text" name="search" class="search-input"
+                                               placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
+                                    </form>
+                                </div>
+                                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                                    <i class="bi bi-plus-lg me-2"></i>Thêm Mới
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card card-custom animate__animated animate__fadeInUp">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-custom mb-0">
+                                        <thead>
                                         <tr>
                                             <th class="ps-4">Sản Phẩm</th>
                                             <th>Giá Bán</th>
@@ -95,8 +111,8 @@
                                             <th>Kho</th>
                                             <th class="text-center">Hành Động</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
+                                        </thead>
+                                        <tbody>
                                         <c:forEach var="p" items="${products}">
                                             <tr>
                                                 <td class="ps-4">
@@ -104,26 +120,26 @@
                                                         <div class="position-relative">
                                                             <c:choose>
                                                                 <c:when
-                                                                    test="${p.img != null && p.img.contains('http')}">
+                                                                        test="${p.img != null && p.img.contains('http')}">
                                                                     <img src="${p.img}" class="product-img"
-                                                                        alt="${p.name}" title="Source: ${p.img}"
-                                                                        style="width: 60px; height: 60px; object-fit: cover;"
-                                                                        onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'" />
+                                                                         alt="${p.name}" title="Source: ${p.img}"
+                                                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                                                         onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'" />
                                                                 </c:when>
                                                                 <c:when
-                                                                    test="${p.img != null && (p.img.contains('/') || p.img.contains('\\\\'))}">
+                                                                        test="${p.img != null && (p.img.contains('/') || p.img.contains('\\\\'))}">
                                                                     <img src="${pageContext.request.contextPath}/${p.img}"
-                                                                        class="product-img" alt="${p.name}"
-                                                                        title="Source: ${p.img}"
-                                                                        style="width: 60px; height: 60px; object-fit: cover;"
-                                                                        onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'" />
+                                                                         class="product-img" alt="${p.name}"
+                                                                         title="Source: ${p.img}"
+                                                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                                                         onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'" />
                                                                 </c:when>
                                                                 <c:otherwise>
                                                                     <img src="${pageContext.request.contextPath}/images/product/${p.img}"
-                                                                        class="product-img" alt="${p.name}"
-                                                                        title="Source: ${p.img}"
-                                                                        style="width: 60px; height: 60px; object-fit: cover;"
-                                                                        onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'" />
+                                                                         class="product-img" alt="${p.name}"
+                                                                         title="Source: ${p.img}"
+                                                                         style="width: 60px; height: 60px; object-fit: cover;"
+                                                                         onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'" />
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
@@ -146,23 +162,23 @@
                                                         <c:otherwise>
                                                             <div class="d-flex align-items-center gap-2">
                                                                 <form action="products" method="post"
-                                                                    class="d-flex gap-1 align-items-center">
+                                                                      class="d-flex gap-1 align-items-center">
                                                                     <input type="hidden" name="action"
-                                                                        value="update_quantity">
+                                                                           value="update_quantity">
                                                                     <input type="hidden" name="id" value="${p.id}">
                                                                     <input type="number" name="quantity"
-                                                                        class="form-control form-control-sm text-center px-1"
-                                                                        style="width: 70px;" value="${p.quantity}"
-                                                                        min="0" required>
+                                                                           class="form-control form-control-sm text-center px-1"
+                                                                           style="width: 70px;" value="${p.quantity}"
+                                                                           min="0" required>
                                                                     <button type="submit"
-                                                                        class="btn btn-sm btn-outline-success border-0"
-                                                                        title="Cập nhật">
+                                                                            class="btn btn-sm btn-outline-success border-0"
+                                                                            title="Cập nhật">
                                                                         <i class="bi bi-check-lg fw-bold"></i>
                                                                     </button>
                                                                 </form>
                                                                 <c:if test="${p.quantity <= 10}">
                                                                     <i class="bi bi-exclamation-circle-fill text-warning"
-                                                                        title="Sắp hết hàng"></i>
+                                                                       title="Sắp hết hàng"></i>
                                                                 </c:if>
                                                             </div>
                                                         </c:otherwise>
@@ -176,15 +192,15 @@
                                                             <c:when test="${p.quantity == -1}">
                                                                 <input type="hidden" name="action" value="show">
                                                                 <button class="btn-action-delete text-primary"
-                                                                    title="Hiện sản phẩm"
-                                                                    onclick="return confirm('Hiện lại sản phẩm này?')">
+                                                                        title="Hiện sản phẩm"
+                                                                        onclick="return confirm('Hiện lại sản phẩm này?')">
                                                                     <i class="bi bi-eye-fill"></i>
                                                                 </button>
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <input type="hidden" name="action" value="hidden">
                                                                 <button class="btn-action-delete" title="Ẩn sản phẩm"
-                                                                    onclick="return confirm('Bạn có chắc muốn ẩn sản phẩm này?')">
+                                                                        onclick="return confirm('Bạn có chắc muốn ẩn sản phẩm này?')">
                                                                     <i class="bi bi-eye-slash"></i>
                                                                 </button>
                                                             </c:otherwise>
@@ -193,115 +209,117 @@
                                                 </td>
                                             </tr>
                                         </c:forEach>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal thêm sản phẩm -->
+                    <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content shadow-lg">
+                                <!-- Header -->
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        <i class="bi bi-box-seam-fill me-2"></i>Thêm Sản Phẩm Mới
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+
+                                <!-- Body -->
+                                <div class="modal-body">
+                                    <form method="post" action="${pageContext.request.contextPath}/add-product"
+                                          enctype="multipart/form-data">
+                                        <input type="hidden" name="action" value="add">
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Tên sản phẩm</label>
+                                                <input type="text" name="name" class="form-control"
+                                                       placeholder="Nhập tên sản phẩm..." required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Giá bán (VNĐ)</label>
+                                                <div class="input-group">
+                                                    <input type="number" name="price" class="form-control" placeholder="0"
+                                                           required>
+                                                    <span class="input-group-text bg-light">₫</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Thể tích (ml)</label>
+                                                <input type="number" name="volume" class="form-control"
+                                                       placeholder="Ví dụ: 500" required>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Số lượng nhập</label>
+                                                <input type="number" name="quantity" class="form-control" placeholder="0"
+                                                       required>
+                                            </div>
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Nhà Cung Cấp</label>
+                                                <input type="text" name="supplier_name" class="form-control"
+                                                       placeholder="Nhập tên nhà cung cấp..." required>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold text-secondary">Mô tả sản phẩm</label>
+                                            <textarea name="description" class="form-control" rows="3"
+                                                      placeholder="Nhập mô tả chi tiết sản phẩm..."></textarea>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label fw-semibold text-secondary">Link ảnh (URL)</label>
+                                            <input type="url" name="image_url" class="form-control"
+                                                   placeholder="https://example.com/image.png">
+                                            <div class="form-text">Dùng link ảnh trực tiếp (Cloudinary, Imgur...) để không
+                                                bị mất ảnh.</div>
+                                        </div>
+
+                                        <div class="text-center text-muted my-2 fw-bold">- HOẶC -</div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold text-secondary">Upload ảnh từ máy</label>
+                                            <input type="file" id="imageInput" name="images" class="form-control"
+                                                   accept="image/*">
+                                            <div class="form-text">Hỗ trợ định dạng: .jpg, .png. Kích thước tối đa 5MB.
+                                            </div>
+
+                                            <!-- Image Preview Container -->
+                                            <div class="mt-3 text-center">
+                                                <img id="previewImage" src="#" alt="Preview"
+                                                     style="display:none; max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                                            </div>
+
+                                            <c:if test="${param.error == 'no_image'}">
+                                                <div class="alert alert-danger mt-2 d-flex align-items-center">
+                                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                                    Vui lòng chọn ảnh hoặc nhập URL!
+                                                </div>
+                                            </c:if>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                                            <button type="button" class="btn btn-light px-4 border"
+                                                    data-bs-dismiss="modal">Hủy bỏ</button>
+                                            <button type="submit" class="btn btn-premium px-4" id="btnSaveProduct">
+                                                <i class="bi bi-check-lg me-1"></i> Lưu Sản Phẩm
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Modal thêm sản phẩm -->
-                <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                        <div class="modal-content shadow-lg">
-                            <!-- Header -->
-                            <div class="modal-header">
-                                <h5 class="modal-title">
-                                    <i class="bi bi-box-seam-fill me-2"></i>Thêm Sản Phẩm Mới
-                                </h5>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-
-                            <!-- Body -->
-                            <div class="modal-body">
-                                <form method="post" action="${pageContext.request.contextPath}/add-product"
-                                    enctype="multipart/form-data">
-                                    <input type="hidden" name="action" value="add">
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-semibold text-secondary">Tên sản phẩm</label>
-                                            <input type="text" name="name" class="form-control"
-                                                placeholder="Nhập tên sản phẩm..." required>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-semibold text-secondary">Giá bán (VNĐ)</label>
-                                            <div class="input-group">
-                                                <input type="number" name="price" class="form-control" placeholder="0"
-                                                    required>
-                                                <span class="input-group-text bg-light">₫</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-semibold text-secondary">Thể tích (ml)</label>
-                                            <input type="number" name="volume" class="form-control"
-                                                placeholder="Ví dụ: 500" required>
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label class="form-label fw-semibold text-secondary">Số lượng nhập</label>
-                                            <input type="number" name="quantity" class="form-control" placeholder="0"
-                                                required>
-                                        </div>
-                                        <div class="col-md-12 mb-3">
-                                            <label class="form-label fw-semibold text-secondary">Nhà Cung Cấp</label>
-                                            <input type="text" name="supplier_name" class="form-control"
-                                                placeholder="Nhập tên nhà cung cấp..." required>
-                                        </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold text-secondary">Mô tả sản phẩm</label>
-                                        <textarea name="description" class="form-control" rows="3"
-                                            placeholder="Nhập mô tả chi tiết sản phẩm..."></textarea>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold text-secondary">Link ảnh (URL)</label>
-                                        <input type="url" name="image_url" class="form-control"
-                                            placeholder="https://example.com/image.png">
-                                        <div class="form-text">Dùng link ảnh trực tiếp (Cloudinary, Imgur...) để không
-                                            bị mất ảnh.</div>
-                                    </div>
-
-                                    <div class="text-center text-muted my-2 fw-bold">- HOẶC -</div>
-
-                                    <div class="mb-4">
-                                        <label class="form-label fw-semibold text-secondary">Upload ảnh từ máy</label>
-                                        <input type="file" id="imageInput" name="images" class="form-control"
-                                            accept="image/*">
-                                        <div class="form-text">Hỗ trợ định dạng: .jpg, .png. Kích thước tối đa 5MB.
-                                        </div>
-
-                                        <!-- Image Preview Container -->
-                                        <div class="mt-3 text-center">
-                                            <img id="previewImage" src="#" alt="Preview"
-                                                style="display:none; max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                                        </div>
-
-                                        <c:if test="${param.error == 'no_image'}">
-                                            <div class="alert alert-danger mt-2 d-flex align-items-center">
-                                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                                Vui lòng chọn ảnh hoặc nhập URL!
-                                            </div>
-                                        </c:if>
-                                    </div>
-
-                                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                                        <button type="button" class="btn btn-light px-4 border"
-                                            data-bs-dismiss="modal">Hủy bỏ</button>
-                                        <button type="submit" class="btn btn-premium px-4" id="btnSaveProduct">
-                                            <i class="bi bi-check-lg me-1"></i> Lưu Sản Phẩm
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!--footer-->
                 <footer class="bg-dark text-white pt-5 pb-4">

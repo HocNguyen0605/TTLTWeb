@@ -20,144 +20,163 @@
                 <!-- HEADER -->
                 <header class="sticky-top shadow-sm">
                     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-                        <div class="container">
                             <a class="navbar-brand fw-bold text-success fs-3"
                                 href="${pageContext.request.contextPath}/admin/dashboard">
                                 <img src="${pageContext.request.contextPath}/images/logo/logo-juicy.png" height="40"
                                     class="me-2">
                                 JUICY
                             </a>
-
-                            <div class="collapse navbar-collapse show">
-                                <ul class="navbar-nav ms-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link active fw-semibold"
-                                            href="${pageContext.request.contextPath}/admin/dashboard">
-                                            Dashboard
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link fw-semibold"
-                                            href="${pageContext.request.contextPath}/admin/products">
-                                            Sản phẩm
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link fw-semibold"
-                                            href="${pageContext.request.contextPath}/admin/manage-orders">
-                                            Đơn hàng
-                                        </a>
-                                    </li>
-                                </ul>
-
-                                <a href="${pageContext.request.contextPath}/logout"
-                                    class="btn btn-outline-success rounded-pill ms-3">
-                                    Đăng xuất
-                                </a>
-                            </div>
-                        </div>
                     </nav>
                 </header>
 
                 <!-- TỔNG QUAN -->
-                <div class="container my-5">
-                    <div class="row g-4 mb-4">
-                        <div class="col-md-6">
-                            <div class="p-4 shadow rounded bg-white text-center border-start border-5 border-success">
-                                <h6 class="text-uppercase text-muted">Tổng doanh thu toàn thời gian</h6>
-                                <h2 class="text-success fw-bold display-6">
-                                    <fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="₫" />
-                                </h2>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-4 shadow rounded bg-white text-center border-start border-5 border-primary">
-                                <h6 class="text-uppercase text-muted">Tổng số đơn hàng</h6>
-                                <h2 class="text-primary fw-bold display-6">
-                                    ${totalOrders}
-                                </h2>
-                            </div>
-                        </div>
+
+
+                <div class="d-flex">
+                    <!-- Sidebar -->
+                    <div class="bg-success text-white "
+                         style="width: 250px; min-height: 100vh;">
+                        <h4>Menu</h4>
+                        <ol class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link text-white ${pageContext.request.requestURI.contains('dashboard') ? 'active' : ''} "
+                                   href="${pageContext.request.contextPath}/admin/dashboard">a. Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse" >
+                                    b. Quản lý
+                                </a>
+                                <ol class="collapse" id="menuQL">
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('products') ? 'active' : ''}"
+                                           href="${pageContext.request.contextPath}/admin/products">
+                                        Quản lý sản phẩm </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('banner') ? 'active' : ''}"
+                                         href="#">
+                                            Quản lý banner </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('#') ? 'active' : ''}"
+                                           href="#">
+                                            Quản lý CTKM </a>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('manage-orders') ? 'active' : ''}"
+                                           href="${pageContext.request.contextPath}/admin/manage-orders">
+                                            Quản lý đơn hàng </a>
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="mt-3">
+                                <a href="${pageContext.request.contextPath}/logout"
+                                   class="btn btn-danger rounded-pill ms-3">
+                                    Đăng xuất
+                                </a>
+                            </li>
+                        </ol>
                     </div>
-
-                    <div class="row g-4">
-
-                        <div class="col-md-4">
-                            <div class="p-4 shadow rounded bg-white text-center">
-                                <h6>Đơn hôm nay</h6>
-                                <h2 class="text-success fw-bold">
-                                    ${todayOrders}
-                                </h2>
+                    <div class="container my-5"style=" overflow-y: auto;">
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="p-4 shadow rounded bg-white text-center border-start border-5 border-success">
+                                    <h6 class="text-uppercase text-muted">Tổng doanh thu toàn thời gian</h6>
+                                    <h2 class="text-success fw-bold display-6">
+                                        <fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="₫" />
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-4 shadow rounded bg-white text-center border-start border-5 border-primary">
+                                    <h6 class="text-uppercase text-muted">Tổng số đơn hàng</h6>
+                                    <h2 class="text-primary fw-bold display-6">
+                                        ${totalOrders}
+                                    </h2>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="p-4 shadow rounded bg-white text-center">
-                                <h6>Đơn tuần này</h6>
-                                <h2 class="text-primary fw-bold">
-                                    ${weekOrders}
-                                </h2>
+                        <div class="row g-4">
+
+                            <div class="col-md-4">
+                                <div class="p-4 shadow rounded bg-white text-center">
+                                    <h6>Đơn hôm nay</h6>
+                                    <h2 class="text-success fw-bold">
+                                        ${todayOrders}
+                                    </h2>
+                                </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="p-4 shadow rounded bg-white text-center">
+                                    <h6>Đơn tuần này</h6>
+                                    <h2 class="text-primary fw-bold">
+                                        ${weekOrders}
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="p-4 shadow rounded bg-white text-center">
+                                    <h6>Đơn tháng này</h6>
+                                    <h2 class="text-warning fw-bold">
+                                        ${monthOrders}
+                                    </h2>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="p-4 shadow rounded bg-white text-center">
-                                <h6>Đơn tháng này</h6>
-                                <h2 class="text-warning fw-bold">
-                                    ${monthOrders}
-                                </h2>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- BIỂU ĐỒ + TOP SP -->
-                    <div class="row mt-5">
-                        <div class="col-md-8">
-                            <div class="shadow p-4 bg-white rounded">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="mb-0">Biểu đồ doanh thu</h5>
-                                    <div class="d-flex gap-2">
-                                        <select id="chartFilter" class="form-select form-select-sm"
-                                            style="width: auto;">
-                                            <option value="1day">Hôm nay</option>
-                                            <option value="7days" selected>7 ngày qua</option>
-                                            <option value="30days">30 ngày qua</option>
-                                            <option value="year">Năm nay</option>
-                                            <option value="custom">Tùy chọn...</option>
-                                        </select>
-                                        <div id="customDateRange" class="d-flex gap-2"
-                                            style="display: none !important;">
-                                            <input type="date" id="startDate" class="form-control form-control-sm">
-                                            <input type="date" id="endDate" class="form-control form-control-sm">
-                                            <button id="btnFilter" class="btn btn-sm btn-primary">Lọc</button>
+                        <!-- BIỂU ĐỒ + TOP SP -->
+                        <div class="row mt-5">
+                            <div class="col-md-8">
+                                <div class="shadow p-4 bg-white rounded">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5 class="mb-0">Biểu đồ doanh thu</h5>
+                                        <div class="d-flex gap-2">
+                                            <select id="chartFilter" class="form-select form-select-sm"
+                                                    style="width: auto;">
+                                                <option value="1day">Hôm nay</option>
+                                                <option value="7days" selected>7 ngày qua</option>
+                                                <option value="30days">30 ngày qua</option>
+                                                <option value="year">Năm nay</option>
+                                                <option value="custom">Tùy chọn...</option>
+                                            </select>
+                                            <div id="customDateRange" class="d-flex gap-2"
+                                                 style="display: none !important;">
+                                                <input type="date" id="startDate" class="form-control form-control-sm">
+                                                <input type="date" id="endDate" class="form-control form-control-sm">
+                                                <button id="btnFilter" class="btn btn-sm btn-primary">Lọc</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div style="height: 350px;">
-                                    <canvas id="revenueChart"></canvas>
+                                    <div style="height: 350px;">
+                                        <canvas id="revenueChart"></canvas>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-4">
-                            <div class="shadow p-4 bg-white rounded">
-                                <h5 class="mb-3">Sản phẩm bán chạy</h5>
+                            <div class="col-md-4">
+                                <div class="shadow p-4 bg-white rounded">
+                                    <h5 class="mb-3">Sản phẩm bán chạy</h5>
 
-                                <ul class="list-group">
-                                    <c:forEach items="${topProducts}" var="p">
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span>${p.name}</span>
-                                            <span class="fw-bold text-success">
+                                    <ul class="list-group">
+                                        <c:forEach items="${topProducts}" var="p">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>${p.name}</span>
+                                                <span class="fw-bold text-success">
                                                 ${p.sold} đã bán
                                             </span>
-                                        </li>
-                                    </c:forEach>
-                                </ul>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
 
                 <!-- FOOTER -->
                 <footer class="bg-dark text-white text-center py-3">
@@ -172,6 +191,7 @@
                     window.revenueData = ${ revenueData };
                 </script>
                 <script src="${pageContext.request.contextPath}/js/admin-chart.js"></script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
             </body>
 
             </html>

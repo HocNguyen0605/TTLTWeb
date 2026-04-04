@@ -243,4 +243,7 @@ h1, h2, h3 {
     --color-primary: #5cb85c;
     /* ... các phần còn lại giữ nguyên ... */
 }
-
+/* Menu được active */
+.nav-link.active {
+    text-decoration: underline;
+}
