@@ -5,7 +5,7 @@ import util.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class ContactDAO {
+public class  ContactDAO {
 
     // Hàm gốc: Chèn dữ liệu bằng các tham số rời
     public void insert(String name, String email, String phone,

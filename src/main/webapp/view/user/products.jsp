@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Sản phẩm" />
+    <jsp:param name="title" value="Trang Chủ" />
     <jsp:param name="activePage" value="products" />
 </jsp:include>
 <style>
@@ -94,16 +94,13 @@
                         <%-- Lọc theo Giá --%>
                         <div class="mb-4">
                             <label class="form-label fw-bold text-dark small text-uppercase">Khoảng giá</label>
-                            <div class="input-group input-group-sm mb-2">
-                                <input type="number" name="minPrice" class="form-control" placeholder="Từ"
-                                       value="${currentMinPrice}">
-                                <span class="input-group-text bg-white">₫</span>
-                            </div>
-                            <div class="input-group input-group-sm">
-                                <input type="number" name="maxPrice" class="form-control" placeholder="Đến"
-                                       value="${currentMaxPrice}">
-                                <span class="input-group-text bg-white">₫</span>
-                            </div>
+                            <select name="priceRange" class="form-select form-select-sm">
+                                <option value="">Tất cả</option>
+                                <option value="0-50000" ${currentPriceRange == '0-50000' ? 'selected' : ''}>Dưới 50.000đ</option>
+                                <option value="50000-100000" ${currentPriceRange == '50000-100000' ? 'selected' : ''}>50.000đ - 100.000đ</option>
+                                <option value="100000-200000" ${currentPriceRange == '100000-200000' ? 'selected' : ''}>100.000đ - 200.000đ</option>
+                                <option value="200000-" ${currentPriceRange == '200000-' ? 'selected' : ''}>Trên 200.000đ</option>
+                            </select>
                         </div>
 
                         <%-- Lọc theo Thể Tích --%>
@@ -112,7 +109,18 @@
                             <select name="volume" class="form-select form-select-sm">
                                 <option value="">Tất cả</option>
                                 <c:forEach items="${volumeList}" var="vol">
-                                    <option value="${vol}" ${currentVolume==vol ? 'selected': '' }>${vol} ml
+                                    <option value="${vol}" ${not empty currentVolume and currentVolume == vol ? 'selected': '' }>
+                                        <c:choose>
+                                            <c:when test="${vol >= 1000 && vol % 1000 == 0}">
+                                                <fmt:formatNumber value="${vol / 1000}" maxFractionDigits="0"/> L
+                                            </c:when>
+                                            <c:when test="${vol >= 1000 && vol % 1000 != 0}">
+                                                <fmt:formatNumber value="${vol / 1000}" maxFractionDigits="1"/> L
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${vol} ml
+                                            </c:otherwise>
+                                        </c:choose>
                                     </option>
                                 </c:forEach>
                             </select>
@@ -147,7 +155,7 @@
                             <i class="bi bi-check2-circle me-1"></i> Áp Dụng
                         </button>
                         <div class="text-center mt-3">
-                            <a href="products" class="text-secondary text-decoration-none small hover-link">
+                            <a href="products" class="btn w-100 fw-bold py-2 rounded-pill shadow-sm border border-danger text-danger" style="background: transparent; transition: 0.3s;" onmouseover="this.style.background='linear-gradient(45deg, #ff416c, #ff4b2b)'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#dc3545';">
                                 <i class="bi bi-x-circle me-1"></i> Xóa bộ lọc
                             </a>
                         </div>
@@ -197,6 +205,7 @@
                                 <h5 class="card-title fw-bold fs-6">${p.name}</h5>
                                 <p class="card-text text-danger fw-bold fs-5 my-2">
                                     <fmt:formatNumber value="${p.price}" pattern="#,### đ" />
+
                                 </p>
                                 <div class="mt-auto pt-3 position-relative" style="z-index: 2;">
                                     <a href="${pageContext.request.contextPath}/product-detail?id=${p.id}"
@@ -220,7 +229,7 @@
                     <ul class="pagination pagination-custom justify-content-center">
                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
                             <a class="page-link"
-                               href="?page=1&minPrice=${currentMinPrice}&maxPrice=${currentMaxPrice}&volume=${currentVolume}&supplier=${currentSupplier}&sort=${currentSort}"
+                               href="?page=1&priceRange=${currentPriceRange}&volume=${currentVolume}&supplier=${currentSupplier}&sort=${currentSort}"
                                title="Trang đầu">
                                 <i class="bi bi-chevron-double-left small"></i>
                             </a>
@@ -231,14 +240,14 @@
                                    var="i">
                             <li class="page-item ${currentPage == i ? 'active' : ''}">
                                 <a class="page-link"
-                                   href="?page=${i}&minPrice=${currentMinPrice}&maxPrice=${currentMaxPrice}&volume=${currentVolume}&supplier=${currentSupplier}&sort=${currentSort}">${i}</a>
+                                   href="?page=${i}&priceRange=${currentPriceRange}&volume=${currentVolume}&supplier=${currentSupplier}&sort=${currentSort}">${i}</a>
                             </li>
                         </c:forEach>
 
                         <li
                                 class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
                             <a class="page-link"
-                               href="?page=${totalPages}&minPrice=${currentMinPrice}&maxPrice=${currentMaxPrice}&volume=${currentVolume}&supplier=${currentSupplier}&sort=${currentSort}"
+                               href="?page=${totalPages}&priceRange=${currentPriceRange}&volume=${currentVolume}&supplier=${currentSupplier}&sort=${currentSort}"
                                title="Trang cuối">
                                 <i class="bi bi-chevron-double-right small"></i>
                             </a>
