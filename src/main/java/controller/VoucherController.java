@@ -5,14 +5,21 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.Voucher;
+import util.DBContext;
 
 import java.io.IOException;
+import java.sql.Connection;
+
 @WebServlet("/apply-voucher")
 public class VoucherController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        try {
+            Connection conn = DBContext.getConnection();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         String code = request.getParameter("codeVoucher");
         HttpSession session = request.getSession(false);
 

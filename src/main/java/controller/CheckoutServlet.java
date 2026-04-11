@@ -57,7 +57,7 @@ public class CheckoutServlet extends HttpServlet {
             int orderId = orderDAO.insertAndReturnId(order);
 
             // ===== 2. Tạo OrderItem =====
-            OrderItemDAO itemDAO = new OrderItemDAO();
+            OrderItemDAO itemDAO = new OrderItemDAO(conn);
 
             for (CartItem ci : cart.getAllItems()) {
                 OrderItem oi = new OrderItem();

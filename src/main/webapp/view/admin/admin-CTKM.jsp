@@ -93,8 +93,13 @@
                                                placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
                                     </form>
                                 </div>
-                                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                                    <i class="bi bi-plus-lg me-2"></i>Thêm Mới
+                                <button class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                                        data-bs-toggle="modal" data-bs-target="#addVoucherModal">
+                                    Tạo voucher mới
+                                </button>
+                                <button type="submit" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                                        data-bs-toggle="modal" data-bs-target="#addPromotionModal">
+                                   Tạo CTKM mới
                                 </button>
                             </div>
                         </div>
@@ -181,14 +186,14 @@
                         </div>
                     </div>
 
-                    <!-- Modal thêm sản phẩm -->
-                    <div class="modal fade" id="addProductModal" tabindex="-1" aria-hidden="true">
+                    <!-- Modal thêm voucher -->
+                    <div class="modal fade" id="addVoucherModal" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-lg modal-dialog-centered">
                             <div class="modal-content shadow-lg">
                                 <!-- Header -->
                                 <div class="modal-header">
                                     <h5 class="modal-title">
-                                        <i class="bi bi-box-seam-fill me-2"></i>Thêm Sản Phẩm Mới
+                                        <i class="bi bi-box-seam-fill me-2"></i>Thêm Voucher Mới
                                     </h5>
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
@@ -196,86 +201,64 @@
 
                                 <!-- Body -->
                                 <div class="modal-body">
-                                    <form method="post" action="${pageContext.request.contextPath}/add-product"
+                                    <form method="post" action="${pageContext.request.contextPath}/admin/voucher"
                                           enctype="multipart/form-data">
                                         <input type="hidden" name="action" value="add">
+                                        <div class="row">
+                                            <!-- Mã voucher -->
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Mã Voucher</label>
+                                                <input type="text" name="code" class="form-control"
+                                                       placeholder="SALE50, GIAM10..." required>
+                                            </div>
+
+                                            <!-- Loại giảm giá -->
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Loại giảm giá</label>
+                                                <select name="discountType" class="form-select" required>
+                                                    <option value="">-- Chọn loại --</option>
+                                                    <option value="PERCENT">Giảm theo %</option>
+                                                    <option value="AMOUNT">Giảm theo số tiền</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
                                         <div class="row">
+                                            <!-- Giá trị giảm -->
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Tên sản phẩm</label>
-                                                <input type="text" name="name" class="form-control"
-                                                       placeholder="Nhập tên sản phẩm..." required>
+                                                <label class="form-label fw-semibold text-secondary">Giá trị giảm</label>
+                                                <input type="number" name="discountValue" class="form-control"
+                                                       placeholder="10 hoặc 50" required>
                                             </div>
+
+                                            <!-- Số lượng -->
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Giá bán (VNĐ)</label>
-                                                <div class="input-group">
-                                                    <input type="number" name="price" class="form-control" placeholder="0"
-                                                           required>
-                                                    <span class="input-group-text bg-light">₫</span>
-                                                </div>
+                                                <label class="form-label fw-semibold text-secondary">Số lượng Voucher</label>
+                                                <input type="number" name="quanity" class="form-control"
+                                                       placeholder="100" required>
                                             </div>
                                         </div>
 
                                         <div class="row">
+                                            <!-- Ngày bắt đầu -->
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Thể tích (ml)</label>
-                                                <input type="number" name="volume" class="form-control"
-                                                       placeholder="Ví dụ: 500" required>
+                                                <label class="form-label fw-semibold text-secondary">Ngày bắt đầu</label>
+                                                <input type="datetime-local" name="startDate" class="form-control" required>
                                             </div>
+
+                                            <!-- Ngày kết thúc -->
                                             <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Số lượng nhập</label>
-                                                <input type="number" name="quantity" class="form-control" placeholder="0"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-12 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Nhà Cung Cấp</label>
-                                                <input type="text" name="supplier_name" class="form-control"
-                                                       placeholder="Nhập tên nhà cung cấp..." required>
+                                                <label class="form-label fw-semibold text-secondary">Ngày kết thúc</label>
+                                                <input type="datetime-local" name="endDate" class="form-control" required>
                                             </div>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold text-secondary">Mô tả sản phẩm</label>
-                                            <textarea name="description" class="form-control" rows="3"
-                                                      placeholder="Nhập mô tả chi tiết sản phẩm..."></textarea>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label class="form-label fw-semibold text-secondary">Link ảnh (URL)</label>
-                                            <input type="url" name="image_url" class="form-control"
-                                                   placeholder="https://example.com/image.png">
-                                            <div class="form-text">Dùng link ảnh trực tiếp (Cloudinary, Imgur...) để không
-                                                bị mất ảnh.</div>
-                                        </div>
-
-                                        <div class="text-center text-muted my-2 fw-bold">- HOẶC -</div>
-
-                                        <div class="mb-4">
-                                            <label class="form-label fw-semibold text-secondary">Upload ảnh từ máy</label>
-                                            <input type="file" id="imageInput" name="images" class="form-control"
-                                                   accept="image/*">
-                                            <div class="form-text">Hỗ trợ định dạng: .jpg, .png. Kích thước tối đa 5MB.
-                                            </div>
-
-                                            <!-- Image Preview Container -->
-                                            <div class="mt-3 text-center">
-                                                <img id="previewImage" src="#" alt="Preview"
-                                                     style="display:none; max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                                            </div>
-
-                                            <c:if test="${param.error == 'no_image'}">
-                                                <div class="alert alert-danger mt-2 d-flex align-items-center">
-                                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                                    Vui lòng chọn ảnh hoặc nhập URL!
-                                                </div>
-                                            </c:if>
-                                        </div>
-
+                                        <!-- Nút -->
                                         <div class="d-flex justify-content-end gap-2 pt-3 border-top">
                                             <button type="button" class="btn btn-light px-4 border"
                                                     data-bs-dismiss="modal">Hủy bỏ</button>
-                                            <button type="submit" class="btn btn-premium px-4" id="btnSaveProduct">
-                                                <i class="bi bi-check-lg me-1"></i> Lưu Sản Phẩm
+                                            <button type="submit" class="btn btn-premium px-4">
+                                                <i class="bi bi-check-lg me-1"></i> Lưu Voucher
                                             </button>
                                         </div>
                                     </form>

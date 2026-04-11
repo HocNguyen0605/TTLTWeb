@@ -61,7 +61,7 @@ public class OrderServlet extends HttpServlet {
             conn.setAutoCommit(false); // TRANSACTION
 
             OrderDAO orderDAO = new OrderDAO(conn);
-            OrderItemDAO orderItemDAO = new OrderItemDAO();
+            OrderItemDAO orderItemDAO = new OrderItemDAO(conn);
 
             // 5. Insert order → lấy orderId
             int orderId = orderDAO.insertAndReturnId(order);
