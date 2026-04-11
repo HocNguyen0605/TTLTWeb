@@ -1,0 +1,86 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id "org.hidetake.ssh" version "2.11.2"
+    id 'war'
+}
+
+apply plugin: 'org.hidetake.ssh'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+war {
+    archiveFileName = 'juicy.war'
+}
+
+remotes {
+    host {
+        host = '192.168.13.129'
+        user = 'tran-duc-tri'
+        password = 'tri555'
+    }
+}
+
+ssh.settings {
+    knownHosts = allowAnyHosts
+}
+
+task docker_app_start {
+    doLast {
+        println 'Dùng Docker Compose để khởi động hệ thống...'
+        ssh.run {
+            session(remotes.host) {
+                execute 'cd ~/juicy-project && docker compose up -d'
+            }
+        }
+    }
+}
+
+task docker_upload_file_to_server {
+    doLast {
+        println 'Đang tải file juicy.war lên máy ảo...'
+        ssh.run {
+            session(remotes.host) {
+                execute 'rm -f /home/tran-duc-tri/deploy/juicy.war'
+                put from: "${project.projectDir}/build/libs/juicy.war",
+                        into: "/home/tran-duc-tri/deploy/juicy.war"
+            }
+        }
+    }
+}
+
+task docker_deploy {
+    dependsOn build
+    dependsOn docker_upload_file_to_server
+    dependsOn docker_app_start
+
+    tasks.getByName('docker_app_start').mustRunAfter docker_upload_file_to_server
+    tasks.getByName('docker_upload_file_to_server').mustRunAfter build
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
+
+    implementation 'org.jdbi:jdbi3-core:3.51.0'
+
+    implementation 'com.mysql:mysql-connector-j:8.0.33'
+
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+}

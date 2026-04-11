@@ -134,8 +134,7 @@
                      style="border: 1px solid #dee2e6 !important;">
                     <h6 class="fw-bold mb-3 fs-5">Mô tả sản phẩm</h6>
                     <div class="text-muted leading-relaxed text-break">
-                        ${product.description != null ? product.description : "Chưa có mô tả cho sản
-                                phẩm này. Nước ép Juicy cam kết 100% nguyên chất, không đường hóa học."}
+                        ${product.description != null ? product.description : "Chưa có mô tả cho sản phẩm này. Nước ép Juicy cam kết 100% nguyên chất, không đường hóa học."}
                     </div>
                 </div>
             </div>
