@@ -418,7 +418,7 @@ public class ProductDAO extends BaseDao {
     public List<Product> getProductHasPromotion() {
         String sql = """
                     SELECT
-                        p.promotion
+                        *
                     FROM products p
                     WHERE p.promotion IS NOT NULL
                     GROUP BY p.id

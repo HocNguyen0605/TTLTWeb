@@ -115,7 +115,7 @@
                                         <tbody>
                                         <c:choose>
 
-                                            <c:when test="${empty sessionScope.product || empty sessionScope.product.promotion}">
+                                            <c:when test="${empty promotionProducts}">
                                                 <tr>
                                                     <td colspan="5" class="text-center text-muted py-4">
                                                         Hiện không chương trình khuyến mãi của bất kì sản phẩm nào!!!
@@ -124,14 +124,14 @@
                                             </c:when>
 
                                             <c:otherwise>
-                                                <c:forEach var="p" items="${products}">
+                                                <c:forEach var="p" items="${promotionProducts}">
                                                     <tr>
                                                         <td class="ps-4">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="position-relative">
                                                                     <c:choose>
                                                                         <c:when test="${p.img != null && p.img.contains('http')}">
-                                                                            <img src="${p.img}" style="width:60px;height:60px;object-fit:cover;">
+                                                                            <img src="${p.img}" style=" width:60px;height:60px;object-fit:cover;">
                                                                         </c:when>
                                                                         <c:when test="${p.img != null && (p.img.contains('/') || p.img.contains('\\\\'))}">
                                                                             <img src="${pageContext.request.contextPath}/${p.img}" style="width:60px;height:60px;object-fit:cover;">
