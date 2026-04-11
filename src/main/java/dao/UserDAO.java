@@ -138,5 +138,47 @@ public class UserDAO {
                 .findFirst()
                 .orElse(null));
     }
-}
 
+    public java.util.List<User> getAllUsers() {
+        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
+                "FROM account a LEFT JOIN user u ON a.id = u.id_account";
+
+        return DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
+                .map((rs, ctx) -> new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0))
+                .list());
+    }
+
+    public boolean updateUserRole(int accountId, String newRole) {
+        String query = "UPDATE account SET role = :role WHERE id = :id";
+        return DBContext.getJdbi().withHandle(handle -> handle.createUpdate(query)
+                .bind("role", newRole)
+                .bind("id", accountId)
+                .execute() > 0);
+    }
+
+    public boolean deleteAccount(int accountId) {
+        return DBContext.getJdbi().inTransaction(handle -> {
+            try {
+                handle.createUpdate("DELETE FROM user WHERE id_account = :id")
+                        .bind("id", accountId)
+                        .execute();
+
+                int rows = handle.createUpdate("DELETE FROM account WHERE id = :id")
+                        .bind("id", accountId)
+                        .execute();
+                return rows > 0;
+            } catch (Exception e) {
+                // If it fails (e.g. foreign key orders), just return false
+                return false;
+            }
+        });
+    }
+}
