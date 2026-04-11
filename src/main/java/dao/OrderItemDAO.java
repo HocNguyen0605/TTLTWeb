@@ -5,6 +5,11 @@ import util.DBContext;
 import java.sql.*;
 
 public class OrderItemDAO extends DBContext {
+    private Connection conn;
+
+    public OrderItemDAO(Connection conn) {
+        this.conn = conn;
+    }
 
     public boolean insertOrderItem(OrderItem item) {
         String sql = "INSERT INTO orderitems (id_order, id_product, quantity, price_at_time) VALUES (?, ?, ?, ?)";

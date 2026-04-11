@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoucherDAO extends DBContext {
+private Connection conn;
+
+    public VoucherDAO(Connection conn) {
+        this.conn = conn;
+    }
 
     // Lấy tất cả danh sách voucher
     public List<Voucher> getAllVouchers() {
@@ -63,5 +68,23 @@ public class VoucherDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+    public void insertVoucher(Voucher v) throws SQLException {
+        String sql = """
+        INSERT INTO voucher 
+        (code, start_date, end_date, discount_value, discount_type, quanity)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, v.getCode());
+            ps.setTimestamp(2, v.getStartDate());
+            ps.setTimestamp(3, v.getEndDate());
+            ps.setDouble(4, v.getDiscountValue());
+            ps.setString(5, v.getDiscountType());
+            ps.setInt(6, v.getQuanity());
+
+            ps.executeUpdate();
+        }
     }
 }

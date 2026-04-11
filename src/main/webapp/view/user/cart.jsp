@@ -189,8 +189,9 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
                     <c:otherwise>
                         <form action="${pageContext.request.contextPath}/order" method="post">
                             <input type="hidden" name="action" value="prepare">
-                            <button type="submit" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill">
-                                <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
+                            <button type="submit" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                                    data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                                <i class="bi bi-credit-card me-1">Thanh Toán Ngay</i>
                             </button>
                         </form>
 
@@ -199,7 +200,7 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
             </div>
         </div>
 </section>
-        <%--Modal xác nhận thông tin đặt hàng; ẩn đi, khi nào orderFlag có giá trị show sẽ được js set lại --%>
+        <%--Modal xác nhận thông tin đặt --%>
         <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered"> <div class="modal-content shadow-lg border-0">
                 <div class="modal-header bg-success text-white">
@@ -240,8 +241,5 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
             </div>
             </div>
         </div>
-        <c:if test="${sessionScope.orderFlag == 'show'}">
-        <input type="hidden" id="triggerModalFlag" value="true">
-            <c:remove var="orderFlag" scope="session" />
-        </c:if>
+
         <%@include file="/view/user/include/footer.jsp" %>l
