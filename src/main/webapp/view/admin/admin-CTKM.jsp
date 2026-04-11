@@ -131,7 +131,7 @@
                                                                 <div class="position-relative">
                                                                     <c:choose>
                                                                         <c:when test="${p.img != null && p.img.contains('http')}">
-                                                                            <img src="${p.img}" style=" width:60px;height:60px;object-fit:cover;">
+                                                                            <img src="${p.img}" style="width:60px;height:60px;object-fit:cover;">
                                                                         </c:when>
                                                                         <c:when test="${p.img != null && (p.img.contains('/') || p.img.contains('\\\\'))}">
                                                                             <img src="${pageContext.request.contextPath}/${p.img}" style="width:60px;height:60px;object-fit:cover;">
@@ -150,7 +150,7 @@
 
                                                         <td>${p.price}₫</td>
                                                         <td>${p.volume}ml</td>
-                                                        <td>${p.promotion}</td>
+                                                        <td>${p.promotionName}</td>
 
                                                         <td class="text-center">
                                                             <form method="post" action="products">
