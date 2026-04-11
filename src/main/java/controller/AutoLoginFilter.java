@@ -27,7 +27,7 @@ public class AutoLoginFilter implements Filter {
                 }
             }
 
-            // 2. Nếu tìm thấy Token, thực hiện login ngầm
+            // Nếu tìm thấy Token, thực hiện login ngầm
             if (token != null) {
                 UserDAO dao = new UserDAO();
                 User u = dao.getUserByToken(token);
