@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<form action="${pageContext.request.contextPath}/profile" method="POST">
+<form action="${pageContext.request.contextPath}/changePassword" method="POST">
     <div class="mb-3">
         <label class="form-label fw-semibold">Mật khẩu hiện tại</label>
         <div class="input-group">
@@ -36,7 +36,7 @@
             </button>
         </div>
     </div>
-    <button type="submit" name="action" value="changePassword" class="btn btn-primary-custom w-100 fw-bold py-2">
+    <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2">
         Xác nhận đổi mật khẩu
     </button>
 </form>
