@@ -9,7 +9,7 @@ public class DBContext {
             + "?useSSL=false&allowPublicKeyRetrieval=true"
             + "&serverTimezone=Asia/Ho_Chi_Minh";
     private static final String USER = "root";
-    private static final String PASSWORD = "12345";
+    private static final String PASSWORD = "";
 
     //Tao Ham rỗng
     private static Jdbi jdbi;
