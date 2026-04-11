@@ -33,8 +33,18 @@
             <div class="tab-pane fade ${activeTab == 'register' ? '' : 'show active'}" id="login"
                  role="tabpanel" aria-labelledby="login-tab">
                 <form action="${pageContext.request.contextPath}/login" id="loginForm" method="post">
-
                     <div class="mb-3">
+                        <c:if test="${mess != null}">
+                            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center"
+                                 role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <div>
+                                        ${mess}
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                            </div>
+                        </c:if>
                         <label for="loginEmail" class="form-label fw-semibold">Email hoặc Tên đăng
                             nhập</label>
                         <input type="text" class="form-control" id="loginEmail" name="email" required
