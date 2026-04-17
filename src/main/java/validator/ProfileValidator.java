@@ -7,7 +7,7 @@ import util.ValidationUtils;
 
 public class ProfileValidator {
 
-    public Map<String, String> validate(String fullName, String email, String phone) {
+    public Map<String, String> validate(String fullName, String phone) {
         Map<String, String> errors = new HashMap<>();
 
         // Validate Full Name
@@ -15,13 +15,6 @@ public class ProfileValidator {
             errors.put("fullName", "Họ và tên không được để trống.");
         } else if (!ValidationUtils.isLetterAndSpace(fullName)) {
             errors.put("fullName", "Họ và tên không được chứa số hoặc kí tự đặc biệt");
-        }
-
-        // Validate Email
-        if (!ValidationUtils.isNotEmpty(email)) {
-            errors.put("email", "Email không được để trống.");
-        } else if (!ValidationUtils.isValidEmail(email)) {
-            errors.put("email", "Email không đúng định dạng.");
         }
 
         // Validate Phone Number
@@ -54,6 +47,24 @@ public class ProfileValidator {
             errors.put("confirmPassword", "Nhập lại mật khẩu chưa chính xác");
         }
 
+        return errors;
+    }
+
+    public Map<String, String> validateEmailUpdate(String email, String userOtp, String serverOtp, Long otpTime, dao.UserDAO userDAO, String currentEmail) {
+        Map<String, String> errors = new HashMap<>();
+        if (!ValidationUtils.isNotEmpty(email)) {
+            errors.put("email", "Email không được để trống.");
+        } else if (!ValidationUtils.isValidEmail(email)) {
+            errors.put("email", "Email không đúng định dạng.");
+        } else if (!email.equals(currentEmail) && userDAO.isUserEmailExists(email)) {
+            errors.put("email", "Email đã tồn tại!");
+        }
+
+        if (serverOtp == null || !serverOtp.equals(userOtp)) {
+            errors.put("otp", "Mã OTP không chính xác hoặc chưa gửi mã!");
+        } else if (otpTime == null || (System.currentTimeMillis() - otpTime < 6000)) {
+            errors.put("otp", "Mã OTP đã hết hạn (quá 60 giây)!");
+        }
         return errors;
     }
 }
