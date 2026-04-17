@@ -86,10 +86,10 @@
 
                     <div class="mb-3">
                         <label for="regUserame" class="form-label fw-semibold">Tên người dùng *</label>
-                        <input type="text" class="form-control" maxlength="20" id="regUserame" name="username" required
+                        <input type="text" class="form-control ${not empty errors.username ? 'is-invalid' : ''}" maxlength="20" id="regUserame" name="username" required
                                placeholder="Nhập tên của bạn" value="${oldUsername}"/>
                         <c:if test="${errors.username != null}">
-                            <div class="text-danger small">
+                            <div class="invalid-feedback">
                                     ${errors.username}
                             </div>
                         </c:if>
@@ -97,10 +97,10 @@
 
                     <div class="mb-3">
                         <label for="regFullname" class="form-label fw-semibold">Họ và tên</label>
-                        <input type="text" class="form-control" maxlength="50" id="regFullname" name="fullname"
+                        <input type="text" class="form-control ${not empty errors.fullname ? 'is-invalid' : ''}" maxlength="50" id="regFullname" name="fullname"
                                placeholder="Nhập họ và tên của bạn" value="${oldFullName}">
                         <c:if test="${errors.fullname != null}">
-                            <div class="text-danger small">
+                            <div class="invalid-feedback">
                                     ${errors.fullname}
                             </div>
                         </c:if>
@@ -108,10 +108,10 @@
 
                     <div class="mb-3">
                         <label for="regEmail" class="form-label fw-semibold">Email *</label>
-                        <input type="email" class="form-control" id="regEmail" name="email" required
+                        <input type="email" class="form-control ${not empty errors.email ? 'is-invalid' : ''}" id="regEmail" name="email" required
                                placeholder="Nhập địa chỉ email" value="${oldEmail}"/>
                         <c:if test="${errors.email != null}">
-                            <div class="text-danger small">
+                            <div class="invalid-feedback">
                                     ${errors.email}
                             </div>
                         </c:if>
@@ -119,48 +119,53 @@
 
                     <div class="mb-3">
                         <label for="regPassword" class="form-label fw-semibold">Mật khẩu *</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" maxlength="20" id="regPassword"
+                        <div class="input-group has-validation">
+                            <input type="password" class="form-control ${not empty errors.password ? 'is-invalid' : ''}" maxlength="20" id="regPassword"
                                    name="password"
                                    required
                                    placeholder="Tối thiểu 8 ký tự, kí tự viết hoa và kí tự đặt biệt"/>
                             <button class="btn btn-outline-success btn-toggle-Password" type="button">
                                 <i class="bi bi-eye"></i>
                             </button>
+                            <c:if test="${errors.password != null}">
+                                <div class="invalid-feedback">
+                                        ${errors.password}
+                                </div>
+                            </c:if>
                         </div>
-                        <c:if test="${errors.password != null}">
-                            <div class="text-danger small">
-                                    ${errors.password}
-                            </div>
-                        </c:if>
                     </div>
 
                     <div class="mb-4">
                         <label for="regConfirmPassword" class="form-label fw-semibold">Xác nhận Mật khẩu *</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" maxlength="20" id="regConfirmPassword"
+                        <div class="input-group has-validation">
+                            <input type="password" class="form-control ${not empty errors.confirmPassword ? 'is-invalid' : ''}" maxlength="20" id="regConfirmPassword"
                                    name="confirmPassword"
                                    required
                                    placeholder="Nhập lại mật khẩu"/>
                             <button class="btn btn-outline-success btn-toggle-Password" type="button">
                                 <i class="bi bi-eye"></i>
                             </button>
+                            <c:if test="${errors.confirmPassword != null}">
+                                <div class="invalid-feedback">
+                                        ${errors.confirmPassword}
+                                </div>
+                            </c:if>
                         </div>
-                        <c:if test="${errors.confirmPassword != null}">
-                            <div class="text-danger small">
-                                    ${errors.confirmPassword}
-                            </div>
-                        </c:if>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Mã xác thực OTP *</label>
-                        <div class="input-group">
-                            <input type="text" name="otp" class="form-control" maxlength="6" placeholder="Nhập mã 6 số"
+                        <div class="input-group has-validation">
+                            <input type="text" name="otp" class="form-control ${not empty errors.otp ? 'is-invalid' : ''}" maxlength="6" placeholder="Nhập mã 6 số"
                                    required>
                             <button class="btn btn-outline-success" type="button" id="btnSendOTP">Gửi mã</button>
+                            <c:if test="${errors.otp != null}">
+                                <div class="invalid-feedback">
+                                        ${errors.otp}
+                                </div>
+                            </c:if>
                         </div>
-                        <small id="otpTimer" class="text-danger"></small>
+                        <small id="otpTimer" class="text-danger mt-1 d-block"></small>
                     </div>
 
                     <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2">Đăng Ký</button>

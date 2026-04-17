@@ -5,6 +5,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.User;
+
 import java.io.IOException;
 
 @WebServlet("/changePassword")
@@ -30,23 +31,25 @@ public class ChangePasswordController extends HttpServlet {
         String newPass = request.getParameter("newPassword");
         String confirmPass = request.getParameter("confirmPassword");
 
-        if (!user.getPassword().equals(oldPass)) {
-            request.setAttribute("error", "Mật khẩu hiện tại không chính xác!");
+        validator.ProfileValidator validator = new validator.ProfileValidator();
+        java.util.Map<String, String> errors = validator.validatePasswordChange(oldPass, user.getPassword(), newPass, confirmPass);
+
+        if (!errors.isEmpty()) {
+            session.setAttribute("errors", errors);
+            session.setAttribute("activeTab", "password");
+            response.sendRedirect(request.getContextPath() + "/profile");
+            return;
         }
-        else if (!newPass.equals(confirmPass)) {
-            request.setAttribute("error", "Mật khẩu xác nhận không trùng khớp!");
+
+        if (dao.updatePassword(user.getEmail(), newPass)) {
+            user.setPassword(newPass);
+            session.setAttribute("auth", user);
+            session.setAttribute("message", "Đổi mật khẩu thành công!");
+        } else {
+            session.setAttribute("error", "Lỗi khi cập nhật mật khẩu!");
         }
-        else {
-            if (dao.updatePassword(user.getEmail(), newPass)) {
-                user.setPassword(newPass);
-                session.setAttribute("auth", user);
-                request.setAttribute("message", "Đổi mật khẩu thành công!");
-            } else {
-                request.setAttribute("error", "Lỗi khi cập nhật mật khẩu!");
-            }
-        }
-        request.setAttribute("activeTab", "password");
-        
-        request.getRequestDispatcher("/view/user/profile/profile.jsp").forward(request, response);
+        session.removeAttribute("errors");
+        session.setAttribute("activeTab", "password");
+        response.sendRedirect(request.getContextPath() + "/profile");
     }
 }

@@ -11,19 +11,28 @@
         </div>
         <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">Họ và tên</label>
-            <input type="text" maxlength="50" name="fullName" class="form-control"
+            <input type="text" maxlength="50" name="fullName" class="form-control ${not empty errors['fullName'] ? 'is-invalid' : ''}"
                    value="${auth.fullName}" required>
+            <c:if test="${not empty errors['fullName']}">
+                <div class="invalid-feedback">${errors['fullName']}</div>
+            </c:if>
         </div>
     </div>
     <div class="mb-3">
         <label class="form-label fw-semibold">Email</label>
-        <input type="email" maxlength="50" name="email" class="form-control"
+        <input type="email" maxlength="50" name="email" class="form-control ${not empty errors['email'] ? 'is-invalid' : ''}"
                value="${auth.email}" required>
+        <c:if test="${not empty errors['email']}">
+            <div class="invalid-feedback">${errors['email']}</div>
+        </c:if>
     </div>
     <div class="mb-3">
         <label class="form-label fw-semibold">Số điện thoại</label>
-        <input type="text" maxlength="15" name="phone" class="form-control"
+        <input type="text" maxlength="15" name="phone" class="form-control ${not empty errors['phone'] ? 'is-invalid' : ''}"
                value="${auth.phone}" placeholder="">
+        <c:if test="${not empty errors['phone']}">
+            <div class="invalid-feedback">${errors['phone']}</div>
+        </c:if>
     </div>
     <div class="mb-3">
         <label class="form-label fw-semibold">Địa chỉ</label>

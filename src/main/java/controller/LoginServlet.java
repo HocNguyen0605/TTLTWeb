@@ -46,6 +46,14 @@ public class LoginServlet extends HttpServlet {
                 return;
             }
         }
+
+        String[] flashAttributes = {"errors", "oldUsername", "oldFullName", "oldEmail", "activeTab", "error", "mess"};
+        for (String attr : flashAttributes) {
+            if (session.getAttribute(attr) != null) {
+                request.setAttribute(attr, session.getAttribute(attr));
+                session.removeAttribute(attr);
+            }
+        }
         request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
     }
 
