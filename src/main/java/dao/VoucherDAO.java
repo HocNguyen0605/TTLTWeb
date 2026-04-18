@@ -1,6 +1,6 @@
 package dao;
 
-import util.DBContext; // Giả sử bạn dùng lớp DBContext để kết nối
+import util.DBContext;
 import model.Voucher;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ private Connection conn;
     public List<Voucher> getAllVouchers() {
         List<Voucher> list = new ArrayList<>();
         String sql = "SELECT * FROM vouchers";
-        try (Connection conn = getConnection();
+        try (
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
@@ -28,6 +28,7 @@ private Connection conn;
                 v.setPromotionId(rs.getInt("promotion_id"));
                 v.setStartDate(rs.getTimestamp("start_date"));
                 v.setEndDate(rs.getTimestamp("end_date"));
+                v.setStatus(rs.getString("status"));
                 list.add(v);
             }
         } catch (Exception e) {
@@ -57,10 +58,6 @@ private Connection conn;
                     v.setCode(rs.getString("code"));
                     v.setPromotionId(rs.getInt("promotion_id"));
 
-                    // Lấy giá trị giảm giá từ bảng promotion
-                    v.setDiscountValue(rs.getDouble("discount_value"));
-                    v.setDiscountType(rs.getString("discount_type"));
-
                     return v;
                 }
             }
@@ -71,18 +68,18 @@ private Connection conn;
     }
     public void insertVoucher(Voucher v) throws SQLException {
         String sql = """
-        INSERT INTO voucher 
-        (code, start_date, end_date, discount_value, discount_type, quanity)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """;
+    INSERT INTO voucher 
+    (code, promotion_id, start_date, end_date, quanity, status)
+    VALUES (?, ?, ?, ?, ?, ?)
+""";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, v.getCode());
-            ps.setTimestamp(2, v.getStartDate());
-            ps.setTimestamp(3, v.getEndDate());
-            ps.setDouble(4, v.getDiscountValue());
-            ps.setString(5, v.getDiscountType());
-            ps.setInt(6, v.getQuanity());
+            ps.setInt(2, v.getPromotionId());
+            ps.setTimestamp(3, v.getStartDate());
+            ps.setTimestamp(4, v.getEndDate());
+            ps.setInt(5, v.getQuanity());
+            ps.setString(6, v.getStatus());
 
             ps.executeUpdate();
         }

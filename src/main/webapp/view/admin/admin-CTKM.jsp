@@ -198,13 +198,21 @@
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
-
                                 <!-- Body -->
                                 <div class="modal-body">
                                     <form method="post" action="${pageContext.request.contextPath}/admin/voucher"
                                           enctype="multipart/form-data">
                                         <input type="hidden" name="action" value="add">
+                                        <input type="hidden" name="type" value="voucher">
+                                        <input type="hidden" name="status" value="active">
                                         <div class="row">
+                                            <!-- Tên voucher -->
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label fw-semibold text-secondary">Tên Voucher</label>
+                                                <input type="text" name="name" class="form-control"
+                                                       placeholder="SALE50, GIAM10..." required>
+                                            </div>
+
                                             <!-- Mã voucher -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-semibold text-secondary">Mã Voucher</label>
@@ -215,10 +223,10 @@
                                             <!-- Loại giảm giá -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-semibold text-secondary">Loại giảm giá</label>
-                                                <select name="discountType" class="form-select" required>
+                                                <select name="type" class="form-select" required>
                                                     <option value="">-- Chọn loại --</option>
-                                                    <option value="PERCENT">Giảm theo %</option>
-                                                    <option value="AMOUNT">Giảm theo số tiền</option>
+                                                    <option value="percent">Giảm theo %</option>
+                                                    <option value="amount">Giảm theo số tiền</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -227,14 +235,14 @@
                                             <!-- Giá trị giảm -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-semibold text-secondary">Giá trị giảm</label>
-                                                <input type="number" name="discountValue" class="form-control"
+                                                <input type="number" name="discount_value" class="form-control"
                                                        placeholder="10 hoặc 50" required>
                                             </div>
 
                                             <!-- Số lượng -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-semibold text-secondary">Số lượng Voucher</label>
-                                                <input type="number" name="quanity" class="form-control"
+                                                <input type="number" name="quantity" class="form-control"
                                                        placeholder="100" required>
                                             </div>
                                         </div>
@@ -243,13 +251,13 @@
                                             <!-- Ngày bắt đầu -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-semibold text-secondary">Ngày bắt đầu</label>
-                                                <input type="datetime-local" name="startDate" class="form-control" required>
+                                                <input type="datetime-local" name="start_date" class="form-control" required>
                                             </div>
 
                                             <!-- Ngày kết thúc -->
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label fw-semibold text-secondary">Ngày kết thúc</label>
-                                                <input type="datetime-local" name="endDate" class="form-control" required>
+                                                <input type="datetime-local" name="end_date" class="form-control" required>
                                             </div>
                                         </div>
 

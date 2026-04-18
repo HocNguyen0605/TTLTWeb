@@ -8,8 +8,7 @@ public class Voucher {
     private int promotionId;
     private Timestamp startDate;
     private Timestamp endDate;
-    private double discountValue;
-    private String discountType;
+    private String status;
     private int quanity;
     public Voucher() {}
 
@@ -28,11 +27,14 @@ public class Voucher {
 
     public Timestamp getEndDate() { return endDate; }
     public void setEndDate(Timestamp endDate) { this.endDate = endDate; }
-    public double getDiscountValue() { return discountValue; }
-    public void setDiscountValue(double discountValue) { this.discountValue = discountValue; }
 
-    public String getDiscountType() { return discountType; }
-    public void setDiscountType(String discountType) { this.discountType = discountType; }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public int getQuanity() {
         return quanity;
