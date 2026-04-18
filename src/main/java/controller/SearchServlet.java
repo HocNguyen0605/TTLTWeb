@@ -21,9 +21,8 @@ public class SearchServlet extends HttpServlet {
         List<Product> list = service.searchByName(keyword);
 
         request.setAttribute("productList", list);
-        request.setAttribute("lastSearch", keyword); // Gửi lại từ khóa
+        request.setAttribute("lastSearch", keyword);
 
-        // Forward về trang products.jsp chuẩn
         request.getRequestDispatcher("/view/user/products.jsp").forward(request, response);
     }
 }

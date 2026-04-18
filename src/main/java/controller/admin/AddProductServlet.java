@@ -52,12 +52,6 @@ public class AddProductServlet extends HttpServlet {
             return;
         }
 
-        // 2. Prepare upload logic
-        String uploadPath = getServletContext().getRealPath("/images/product");
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists())
-            uploadDir.mkdirs();
-
         java.util.List<String> savedFileNames = new java.util.ArrayList<>();
 
         // Loop through all parts to find multiple "images"
@@ -68,29 +62,16 @@ public class AddProductServlet extends HttpServlet {
                     if (fileName == null || fileName.isEmpty())
                         continue;
 
-                    String savedFileName = System.currentTimeMillis() + "_" + fileName;
+                    // Bơm Part vào byte stream và xả thẳng lên Cloudinary
+                    try (java.io.InputStream is = part.getInputStream()) {
+                        byte[] fileBytes = is.readAllBytes();
+                        service.CloudinaryService cloudinaryService = new service.CloudinaryService();
+                        String secureUrl = cloudinaryService.uploadImage(fileBytes, fileName);
 
-                    // 1. Save to Runtime Directory (Immediate View)
-                    part.write(uploadPath + File.separator + savedFileName);
-
-                    // 2. Save to Source Directory (Best Effort Persistence)
-                    String sourcePath = "D:\\antigravity_wnhom9\\mới\\web_nhom9\\src\\main\\webapp\\images\\product";
-                    File sourceDir = new File(sourcePath);
-
-                    if (!sourceDir.exists())
-                        sourceDir.mkdirs();
-
-                    if (sourceDir.exists()) {
-                        try {
-                            Path sourceFile = Paths.get(sourcePath, savedFileName);
-                            Path runtimeFile = Paths.get(uploadPath, savedFileName);
-                            Files.copy(runtimeFile, sourceFile, StandardCopyOption.REPLACE_EXISTING);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        savedFileNames.add(secureUrl);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                    savedFileNames.add(savedFileName);
                 }
             }
         } catch (Exception e) {
