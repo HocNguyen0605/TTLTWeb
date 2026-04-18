@@ -13,9 +13,13 @@ function setupOTPSender(btnId, emailInputSelector, noticeId, contextPath) {
     btn.addEventListener('click', function () {
         const emailInput = document.querySelector(emailInputSelector);
         const notice = document.getElementById(noticeId);
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailInput || !emailInput.value) {
             notice.innerHTML = "Vui lòng nhập email trước";
+            return;
+        } else if (!emailRegex.test(emailInput)) {
+            notice.innerHTML = "Vui lòng nhập email đúng định dạng";
             return;
         }
 
