@@ -47,7 +47,7 @@ private Connection conn;
                 "WHERE v.code = ? " +
                 "AND NOW() BETWEEN v.start_date AND v.end_date";
 
-        try (Connection conn = getConnection();
+        try (
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, code);
@@ -68,8 +68,8 @@ private Connection conn;
     }
     public void insertVoucher(Voucher v) throws SQLException {
         String sql = """
-    INSERT INTO voucher 
-    (code, promotion_id, start_date, end_date, quanity, status)
+    INSERT INTO vouchers 
+    (code, promotion_id, start_date, end_date, status,quantity)
     VALUES (?, ?, ?, ?, ?, ?)
 """;
 
@@ -78,8 +78,8 @@ private Connection conn;
             ps.setInt(2, v.getPromotionId());
             ps.setTimestamp(3, v.getStartDate());
             ps.setTimestamp(4, v.getEndDate());
-            ps.setInt(5, v.getQuanity());
-            ps.setString(6, v.getStatus());
+            ps.setString(5, v.getStatus());
+            ps.setInt(6, v.getQuantity());
 
             ps.executeUpdate();
         }

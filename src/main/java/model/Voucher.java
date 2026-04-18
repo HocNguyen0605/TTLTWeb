@@ -9,7 +9,7 @@ public class Voucher {
     private Timestamp startDate;
     private Timestamp endDate;
     private String status;
-    private int quanity;
+    private int quantity;
     public Voucher() {}
 
     // Getters và Setters
@@ -36,10 +36,10 @@ public class Voucher {
         this.status = status;
     }
 
-    public int getQuanity() {
-        return quanity;
+    public int getQuantity() {
+        return quantity;
     }
     public void setQuanity(int quanity) {
-        this.quanity = quanity;
+        this.quantity = quanity;
     }
 }

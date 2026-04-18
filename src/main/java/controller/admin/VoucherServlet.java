@@ -18,20 +18,25 @@ import util.DBContext;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @WebServlet(name = "VoucherServlet", value = "/admin/voucher")
 public class VoucherServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/view/admin/admin-CTKM.jsp").forward(request, response);
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         String action = request.getParameter("action");
         String name = request.getParameter("name");
         String type = request.getParameter("type");
         String discount_type = request.getParameter("discount_type");
         int discount_value = Integer.parseInt(request.getParameter("discount_value")) ;
-        Timestamp start_date = Timestamp.valueOf(request.getParameter("start_date"));
-        Timestamp end_date = Timestamp.valueOf(request.getParameter("end_date"));
-        String status = request.getParameter("status");
+        Timestamp start_date = Timestamp.valueOf(LocalDateTime.parse(request.getParameter("start_date")));
+        Timestamp end_date = Timestamp.valueOf(LocalDateTime.parse(request.getParameter("end_date")));        String status = request.getParameter("status");
         String code = request.getParameter("code");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
 
@@ -51,7 +56,6 @@ public class VoucherServlet extends HttpServlet {
                 promotion.setStatus(status);
 
                 promotionDAO.insertPromotion(promotion);
-
                 // Lưu voucher mới
                 Voucher voucher = new Voucher();
                 voucher.setCode(code);
@@ -75,8 +79,4 @@ public class VoucherServlet extends HttpServlet {
                 .forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }

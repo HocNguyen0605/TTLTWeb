@@ -17,7 +17,7 @@ public class PromotionDAO {
     public List<Promotion> getAllPromotion (){
         List<Promotion> list = new ArrayList<>();
         String sql=" SELECT * FROM promotions";
-        try(Connection conn = getConnection();
+        try(
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs= ps.executeQuery())   {
             while(rs.next()){
@@ -32,13 +32,15 @@ public class PromotionDAO {
                 promotion.setStatus(rs.getString("status"));
                 list.add(promotion);
             }
-        }catch (Exception e){}
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return list;
     }
     //Thêm thoong tin vào promotion
     public void insertPromotion(Promotion promotion) throws SQLException {
         String sql = """ 
-               INSERT INTO promotions 
+               INSERT INTO promotion 
                (name, type, discount_type, discount_value, start_date, end_date, status)
                VALUES (?,?,?,?,?,?,?)
                """;
@@ -52,10 +54,15 @@ public class PromotionDAO {
             ps.setString(7,promotion.getStatus());
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
+           try( ResultSet rs = ps.getGeneratedKeys()){
             if (rs.next()) {
                promotion.setId( rs.getInt(1));
+            }}catch (Exception e){
+               e.printStackTrace();
             }
-        }catch (Exception e){}
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
