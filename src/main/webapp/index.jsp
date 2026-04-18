@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Trang Chủ" />
-    <jsp:param name="activePage" value="home" />
+    <jsp:param name="title" value="Trang Chủ"/>
+    <jsp:param name="activePage" value="home"/>
 </jsp:include>
 
 <!--SEARCH BAR-->
@@ -28,6 +28,11 @@
     <div class="container text-center">
         <section id="hero-carousel" class="carousel slide" data-bs-ride="carousel"
                  data-bs-interval="3000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="0" aria-label="Slide-1"></button>
+                <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="1" class="active" aria-current="true" aria-label="Slide-2"></button>
+                <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="2"  aria-label="Slide-3"></button>
+            </div>
             <div class="carousel-inner">
                 <div class="carousel-item">
                     <img src="images/banner/orangejuice.jpg" class="d-block w-100" alt="Nước Ép Cam">
@@ -93,7 +98,8 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
             <c:forEach items="${featuredList}" var="p">
                 <div class="col">
-                    <div class="card product-card h-100 text-center" style="cursor: pointer;" onclick="if(!event.target.closest('.btn')) window.location.href='${pageContext.request.contextPath}/product-detail?id=${p.id}'">
+                    <div class="card product-card h-100 text-center" style="cursor: pointer;"
+                         onclick="if(!event.target.closest('.btn')) window.location.href='${pageContext.request.contextPath}/product-detail?id=${p.id}'">
                         <img src="${p.img}" class="card-img-top" alt="${p.name}"
                              onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'"/>
 
@@ -198,9 +204,10 @@
             </div>
         </div>
     </div>
-    <c:if test="${not empty sessionScope.orderSuccess}">
+</section>
+<c:if test="${not empty sessionScope.orderSuccess}">
     <script>
-        window.onload = function() {
+        window.onload = function () {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     title: 'Đặt hàng thành công!',
@@ -213,6 +220,6 @@
             }
         };
     </script>
-        <c:remove var="orderSuccess" scope="session" />
-    </c:if>
-    <%@include file="/view/user/include/footer.jsp" %>
+    <c:remove var="orderSuccess" scope="session"/>
+</c:if>
+<%@include file="/view/user/include/footer.jsp" %>

@@ -7,8 +7,8 @@ import jakarta.servlet.annotation.*;
 import model.User;
 import java.io.IOException;
 
-@WebServlet("/updateProfile")
-public class UpdateProfileController extends HttpServlet {
+@WebServlet("/updateEmail")
+public class UpdateEmailController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -24,13 +24,17 @@ public class UpdateProfileController extends HttpServlet {
             return;
         }
 
-        String fullName = request.getParameter("fullName");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
+        String email = request.getParameter("email");
+        String userOtp = request.getParameter("otp");
+
+        String serverOtp = (String) session.getAttribute("otpCode");
+        Long otpTime = (Long) session.getAttribute("otpTime");
+
+        UserDAO dao = new UserDAO();
 
         // Validate
         validator.ProfileValidator validator = new validator.ProfileValidator();
-        java.util.Map<String, String> errors = validator.validate(fullName, phone);
+        java.util.Map<String, String> errors = validator.validateEmailUpdate(email, userOtp, serverOtp, otpTime, dao, user.getEmail());
 
         if (!errors.isEmpty()) {
             session.setAttribute("errors", errors);
@@ -38,21 +42,17 @@ public class UpdateProfileController extends HttpServlet {
             return;
         }
 
-        UserDAO dao = new UserDAO();
-
-        user.setUsername(request.getParameter("username"));
-        user.setFullName(fullName);
-        user.setPhone(phone != null && phone.trim().isEmpty() ? null : phone.trim());
-
-        user.setAddress(address != null && address.trim().isEmpty() ? null : address.trim());
+        user.setEmail(email);
 
         session.removeAttribute("errors");
+        session.removeAttribute("otpCode");
+        session.removeAttribute("otpTime");
 
         if (dao.updateProfile(user)) {
             session.setAttribute("auth", user);
-            session.setAttribute("message", "Cập nhật thông tin thành công!");
+            session.setAttribute("message", "Cập nhật Email thành công!");
         } else {
-            session.setAttribute("error", "Cập nhật thất bại!");
+            session.setAttribute("error", "Cập nhật Email thất bại!");
         }
 
         response.sendRedirect(request.getContextPath() + "/profile");
