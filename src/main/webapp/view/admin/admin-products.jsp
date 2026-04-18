@@ -43,7 +43,7 @@
                    href="${pageContext.request.contextPath}/admin/dashboard">a. Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse" >
+                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse">
                     b. Quản lý
                 </a>
                 <ol class="collapse" id="menuQL">
@@ -91,14 +91,16 @@
             </div>
 
             <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
-                <div class="search-container d-none d-md-block">
+                <div class="search-container d-none d-md-block position-relative">
                     <form action="products" method="get">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" class="search-input"
-                               placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
+                        <i class="bi bi-search search-icon" style="position: absolute; left: 10px; top: 10px; z-index: 10;"></i>
+                        <input id="adminSearchInput" type="text" name="search" class="search-input form-control w-100 ps-5"
+                               placeholder="Tìm kiếm sản phẩm..." value="${param.search}" autocomplete="off">
+                        <div id="adminSearchSuggestions" class="list-group position-absolute w-100 shadow mt-1" style="z-index: 1050; max-height: 300px; overflow-y: auto; display: none; left: 0;"></div>
                     </form>
                 </div>
-                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <button class="btn btn-premium" data-bs-toggle="modal"
+                        data-bs-target="#addProductModal">
                     <i class="bi bi-plus-lg me-2"></i>Thêm Mới
                 </button>
             </div>
@@ -155,24 +157,31 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <form action="products" method="post" class="d-flex gap-1 align-items-center">
+                                    <form action="products" method="post"
+                                          class="d-flex gap-1 align-items-center">
                                         <input type="hidden" name="action" value="update_price">
                                         <input type="hidden" name="id" value="${p.id}">
-                                        <input type="number" name="price" step="0.01" class="form-control form-control-sm text-end px-1 fw-semibold text-success" style="width: 100px;" value="${p.price}" min="0" required>
+                                        <input type="number" name="price" step="0.01"
+                                               class="form-control form-control-sm text-end px-1 fw-semibold text-success"
+                                               style="width: 100px;" value="${p.price}" min="0"
+                                               required>
                                         <span class="fw-semibold text-success fs-6 mt-1">₫</span>
-                                        <button type="submit" class="btn btn-sm btn-outline-success border-0" title="Cập nhật giá">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-success border-0"
+                                                title="Cập nhật giá">
                                             <i class="bi bi-check-lg fw-bold"></i>
                                         </button>
                                     </form>
                                 </td>
-                                <td><span class="badge bg-light text-dark border">${p.volume}ml</span>
+                                <td><span
+                                        class="badge bg-light text-dark border">${p.volume}ml</span>
                                 </td>
                                 <td>
                                     <c:choose>
                                         <c:when test="${p.quantity == -1}">
-                                                            <span class="badge bg-secondary rounded-pill px-3 mb-2">
-                                                                <i class="bi bi-eye-slash-fill me-1"></i> Đã ẩn
-                                                            </span>
+                                                                <span class="badge bg-secondary rounded-pill px-3 mb-2">
+                                                                    <i class="bi bi-eye-slash-fill me-1"></i> Đã ẩn
+                                                                </span>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="d-flex align-items-center gap-2">
@@ -214,7 +223,8 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <input type="hidden" name="action" value="hidden">
-                                                <button class="btn-action-delete" title="Ẩn sản phẩm"
+                                                <button class="btn-action-delete"
+                                                        title="Ẩn sản phẩm"
                                                         onclick="return confirm('Bạn có chắc muốn ẩn sản phẩm này?')">
                                                     <i class="bi bi-eye-slash"></i>
                                                 </button>
@@ -388,7 +398,6 @@
     // 1. Preview Image Logic
     const input = document.getElementById("imageInput");
     const preview = document.getElementById("previewImage");
-
     if (input) {
         input.addEventListener("change", () => {
             const file = input.files[0];
@@ -405,6 +414,71 @@
             reader.readAsDataURL(file);
         });
     }
+
+    // JS cho Auto-complete Admin Search
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById('adminSearchInput');
+        const searchSuggestions = document.getElementById('adminSearchSuggestions');
+        let timeout = null;
+
+        if(!searchInput || !searchSuggestions) return;
+
+        searchInput.addEventListener('input', function () {
+            clearTimeout(timeout);
+            const query = this.value.trim();
+
+            if (query.length < 1) {
+                searchSuggestions.style.display = 'none';
+                return;
+            }
+
+            timeout = setTimeout(() => {
+                // Gọi API chung chuẩn chỉ
+                fetch('${pageContext.request.contextPath}/search-suggest?query=' + encodeURIComponent(query))
+                    .then(response => response.json())
+                    .then(data => {
+                        searchSuggestions.innerHTML = '';
+
+                        if (data.length > 0) {
+                            const shopItem = document.createElement('a');
+                            shopItem.href = '${pageContext.request.contextPath}/admin/products?search=' + encodeURIComponent(query);
+                            shopItem.className = 'list-group-item list-group-item-action border-0 py-2 px-3 text-dark';
+                            shopItem.innerHTML = `<i class="bi bi-search text-danger me-2"></i>Tìm "${query}"`;
+                            searchSuggestions.appendChild(shopItem);
+
+                            data.forEach(product => {
+                                const item = document.createElement('a');
+                                // Khi click vào gợi ý, filter trên UI bảng admin thay vì sang detail
+                                item.href = '${pageContext.request.contextPath}/admin/products?search=' + encodeURIComponent(product.name);
+                                item.className = 'list-group-item list-group-item-action border-0 py-2 px-3 text-dark';
+                                item.innerText = product.name;
+                                searchSuggestions.appendChild(item);
+                            });
+                            searchSuggestions.style.display = 'block';
+                        } else {
+                            const emptyMsg = document.createElement('div');
+                            emptyMsg.className = 'list-group-item border-0 py-2 px-3 text-muted';
+                            emptyMsg.innerText = 'Không tìm thấy sản phẩm';
+                            searchSuggestions.appendChild(emptyMsg);
+                            searchSuggestions.style.display = 'block';
+                        }
+                    })
+                    .catch(error => console.error('Lỗi gợi ý:', error));
+            }, 300);
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
+                searchSuggestions.style.display = 'none';
+            }
+        });
+
+        searchInput.addEventListener('focus', function () {
+            if (this.value.trim().length >= 1 && searchSuggestions.children.length > 0) {
+                searchSuggestions.style.display = 'block';
+            }
+        });
+    });
 </script>
 </body>
 

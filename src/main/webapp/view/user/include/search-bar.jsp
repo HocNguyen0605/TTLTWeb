@@ -48,7 +48,7 @@
             }
 
             timeout = setTimeout(() => {
-                fetch('${pageContext.request.contextPath}/search?ajax=true&query=' + encodeURIComponent(query))
+                fetch('${pageContext.request.contextPath}/search-suggest?query=' + encodeURIComponent(query))
                     .then(response => response.json())
                     .then(data => {
                         searchSuggestions.innerHTML = '';
