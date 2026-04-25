@@ -137,18 +137,11 @@
                                                     <tr>
                                                         <td class="ps-4">
                                                             <div class="d-flex align-items-center">
-                                                                <div class="position-relative">
-                                                                    <c:choose>
-                                                                        <c:when test="${p.img != null && p.img.contains('http')}">
-                                                                            <img src="${p.img}" style="width:60px;height:60px;object-fit:cover;">
-                                                                        </c:when>
-                                                                        <c:when test="${p.img != null && (p.img.contains('/') || p.img.contains('\\\\'))}">
-                                                                            <img src="${pageContext.request.contextPath}/${p.img}" style="width:60px;height:60px;object-fit:cover;">
-                                                                        </c:when>
-                                                                        <c:otherwise>
-                                                                            <img src="${pageContext.request.contextPath}/images/product/${p.img}" style="width:60px;height:60px;object-fit:cover;">
-                                                                        </c:otherwise>
-                                                                    </c:choose>
+                                                                    <div class="d-flex align-items-center">
+                                                                        <img src="${item.product.img}"
+                                                                             width="60"
+                                                                             class="rounded me-3"
+                                                                             alt="${item.product.name}">
                                                                 </div>
                                                                 <div class="ms-3">
                                                                     <h6>${p.name}</h6>

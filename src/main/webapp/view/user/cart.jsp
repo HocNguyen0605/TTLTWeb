@@ -109,7 +109,7 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
             </div>
         </div>
 
-        <c:set var="shippingFee" value="15000"/>
+
 
         <div class="col-lg-4">
             <div class="shadow rounded bg-white p-4">
@@ -119,7 +119,7 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
                 <div class="d-flex justify-content-between mb-2">
                     <span>Tạm tính:</span>
                     <span>
-                <fmt:formatNumber value="${sessionScope.cart.totalPrice}"
+                <fmt:formatNumber value="${totalPrice}"
                                   pattern="#,### đ" />
             </span>
                 </div>
@@ -136,25 +136,16 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>Giảm Giá:</span>
                     <span class="text-danger"> <fmt:formatNumber
-                            value="${not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0}"
+                            value="${totalDiscount}"
                             pattern="#,### đ" />
     </span>
                 </div>
 
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
-                    <span>Tổng Đơn:</span>
-                    <span class="text-success ">
-        <fmt:formatNumber
-                value="${sessionScope.cart.totalPrice + shippingFee }"
-                pattern="#,### đ" />
-    </span>
-                </div>
-                <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>TỔNG CỘNG:</span>
                     <span class="text-success fs-5">
                 <fmt:formatNumber
-                        value="${(sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0)) < 0 ? 0
-                          : (sessionScope.cart.totalPrice + shippingFee - (not empty sessionScope.voucher ? sessionScope.voucher.discountValue : 0))}"                        type="currency"
+                        value="${total}"
                         pattern="#,### đ" />
             </span>
                 </div>
@@ -199,6 +190,7 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
                 </c:choose>
             </div>
         </div>
+    </div>
 </section>
         <%--Modal xác nhận thông tin đặt --%>
         <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">

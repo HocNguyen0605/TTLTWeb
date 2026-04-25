@@ -1,7 +1,9 @@
 package controller.admin;
 
+import dao.ProductDAO;
 import dao.PromotionComboItemDAO;
 import dao.PromotionDAO;
+import model.Product;
 import model.Promotion;
 import model.PromotionComboItem;
 import util.DBContext;
@@ -36,6 +38,7 @@ public class AddCTKMServlet extends HttpServlet {
             try {
                 PromotionDAO promotionDAO = new PromotionDAO(conn);
                 PromotionComboItemDAO promotionComboItemDAO = new PromotionComboItemDAO(conn);
+                ProductDAO productDAO = new ProductDAO(conn);
                 Promotion promotion = new Promotion();
                 promotion.setName(name);
                 promotion.setType(type);
@@ -53,8 +56,9 @@ public class AddCTKMServlet extends HttpServlet {
                     comboItem1.setComboId(promotion.getId());
                     comboItem1.setProductId(p1);
                     comboItem1.setQuantity(q1);
-
                     promotionComboItemDAO.insert(comboItem1);
+
+                    productDAO.updatePromotionById(p1, promotion.getId());
                 }
 
                 // Lưu sản phẩm 2
@@ -65,6 +69,8 @@ public class AddCTKMServlet extends HttpServlet {
                     comboItem2.setQuantity(q2);
 
                     promotionComboItemDAO.insert(comboItem2);
+                    productDAO.updatePromotionById(p2, promotion.getId());
+
                 }
 
                 conn.commit();

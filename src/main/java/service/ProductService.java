@@ -9,12 +9,9 @@ import java.util.List;
 public class ProductService {
 
     private final ProductDAO pdao = new ProductDAO();
-    private final ProductDAO productDAO = new ProductDAO();
-
     // Lấy danh sách sản phẩm
     public List<Product> getListProduct() {
         List<Product> list = pdao.getAll();
-
         for (Product p : list) {
             handleImage(p);
         }
@@ -24,16 +21,6 @@ public class ProductService {
     // Lấy sản phẩm theo ID (dùng chung)
     public Product getProductById(int id) {
         Product p = pdao.findById(id);
-        if (p != null) {
-            handleImage(p);
-        }
-        return p;
-    }
-
-    // Giữ nguyên logic chi tiết sản phẩm
-    public Product getProductDetail(int id) {
-        Product p = pdao.findById(id);
-
         if (p != null) {
             handleImage(p);
         }
@@ -68,10 +55,6 @@ public class ProductService {
     }
 
     public void showProduct(int id) {
-        // 0: Default In-Stock status (or should we restore actual quantity?
-        // For now resetting to 0 (contact for stock) or just >0 is safer than random
-        // number.
-        // Let's set to 0. Admin can update real quantity later.
         pdao.updateStatus(id, 0);
     }
 
@@ -84,24 +67,10 @@ public class ProductService {
         pdao.updatePrice(id, price);
     }
 
-    //
-    // // Thêm sản phẩm (CHUYỂN QUA DAO)
-    // public void add(Product p) {
-    // pdao.insert(p);
-    // }
-    //
-    // // Xóa sản phẩm (CHUYỂN QUA DAO)
-    // public void delete(int id) {
-    // pdao.delete(id);
-    // }
     private void handleImage(Product p) {
         if (p.getImg() == null || p.getImg().isEmpty() || p.getImg().equals("linkanh")) {
             p.setImg("images/default-product.png");
         }
-        // }
-        // public List<Product> getTop3BestSeller() {
-        // return productDAO.getTop3BestSeller();
-        // }
     }
 
     // --- PHÂN TRANG ---

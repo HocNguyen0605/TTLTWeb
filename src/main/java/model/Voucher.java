@@ -10,6 +10,8 @@ public class Voucher {
     private Timestamp endDate;
     private String status;
     private int quantity;
+    private String discountType;
+    private int discountValue;
     public Voucher() {}
 
     // Getters và Setters
@@ -39,7 +41,23 @@ public class Voucher {
     public int getQuantity() {
         return quantity;
     }
-    public void setQuanity(int quanity) {
-        this.quantity = quanity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
+    }
+
+    public int getDiscountValue() {
+        return discountValue;
+    }
+
+    public void setDiscountValue(int discountValue) {
+        this.discountValue = discountValue;
     }
 }

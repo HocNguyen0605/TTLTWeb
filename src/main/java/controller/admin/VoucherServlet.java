@@ -63,7 +63,7 @@ public class VoucherServlet extends HttpServlet {
                 voucher.setStartDate(start_date);
                 voucher.setEndDate(end_date);
                 voucher.setStatus(status);
-                voucher.setQuanity(quantity);
+                voucher.setQuantity(quantity);
 
                 voucherDAO.insertVoucher(voucher);
                 conn.commit();

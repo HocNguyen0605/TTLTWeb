@@ -1,5 +1,6 @@
 package dao;
 import model.Promotion;
+import util.DBContext;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -64,5 +65,26 @@ public class PromotionDAO {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public Promotion getById(int promoId) {
+        String sql = "SELECT * FROM promotion WHERE id = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, promoId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Promotion p = new Promotion();
+                p.setId(rs.getInt("id"));
+                p.setDiscount_type(rs.getString("discount_type"));
+                p.setDiscount_value(rs.getInt("discount_value"));
+                p.setStatus(rs.getString("status"));
+                return p;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

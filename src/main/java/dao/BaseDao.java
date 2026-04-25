@@ -111,7 +111,6 @@ public class BaseDao {
     protected Jdbi jdbi;
 
     public BaseDao() {
-        // Gán trực tiếp bằng hàm getJdbi() đã có trong DBContext của bạn
         this.jdbi = DBContext.getJdbi();
     }
 

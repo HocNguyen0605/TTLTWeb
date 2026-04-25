@@ -57,6 +57,8 @@ private Connection conn;
                     v.setId(rs.getInt("id"));
                     v.setCode(rs.getString("code"));
                     v.setPromotionId(rs.getInt("promotion_id"));
+                    v.setDiscountType(rs.getString("discount_type"));
+                    v.setDiscountValue(rs.getInt("discount_value"));
 
                     return v;
                 }

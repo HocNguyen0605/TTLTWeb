@@ -39,7 +39,6 @@ public class CartItem implements Serializable {
             this.quantity += 1; // Mặc định tăng 1 nếu có lỗi truyền số lượng
         }
     }
-    public double getTotalPrice() {
-        return this.price * this.quantity;
-    }
+
+
 }

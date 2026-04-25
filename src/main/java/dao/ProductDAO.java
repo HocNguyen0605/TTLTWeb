@@ -2,9 +2,20 @@ package dao;
 
 import model.Product;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ProductDAO extends BaseDao {
+    private Connection conn;
+
+    public ProductDAO(Connection conn) {
+        this.conn = conn;
+    }
+
+    public ProductDAO() {
+    }
 
     // Lấy tất cả sản phẩm (cho trang Products)
     public List<Product> getAll() {
@@ -377,6 +388,14 @@ public class ProductDAO extends BaseDao {
                 .bind("id", id)
                 .bind("price", price)
                 .execute());
+    }
+    public void updatePromotionById(int productId, int promotionId) throws SQLException {
+        String sql = "UPDATE products SET promotion = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, promotionId);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+        }
     }
 
     // --- PHÂN TRANG ---

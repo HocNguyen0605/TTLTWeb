@@ -60,4 +60,8 @@ public class Cart implements Serializable {
         }
         return total;
     }
+    public CartItem findItemByProductId(int productId) {
+        if (data == null) return null;
+        return data.get(productId);
+    }
 }
