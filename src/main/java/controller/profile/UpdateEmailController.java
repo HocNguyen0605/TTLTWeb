@@ -25,6 +25,11 @@ public class UpdateEmailController extends HttpServlet {
         }
 
         String email = request.getParameter("email");
+
+        if(user.isGoogleAccount() && !email.equals(user.getEmail())){
+            response.sendRedirect("profile?error=khong_the_thay_doi_google_email");
+        }
+
         String userOtp = request.getParameter("otp");
 
         String serverOtp = (String) session.getAttribute("otpCode");

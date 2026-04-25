@@ -3,14 +3,13 @@ package util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import model.GooglePojo;
-// ĐÂY LÀ 2 DÒNG ĐỂ HẾT ĐỎ .Post() VÀ .form()
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 public class GoogleUtils {
-    public static String CLIENT_ID = "428843252318-uhjd24qp528ml144m0llip2721h8ite9.apps.googleusercontent.com";
-    public static String CLIENT_SECRET = "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";
-    public static String REDIRECT_URI = "http://localhost:8080/juicy_war/login-google";
+    public static String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
+    public static String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
+    public static String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.url");
     public static String LINK_GET_TOKEN = "https://taccounts.google.com/o/oauth2/token";
     public static String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 

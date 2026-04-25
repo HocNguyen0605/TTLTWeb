@@ -56,9 +56,13 @@
     <div class="mb-3">
         <label class="form-label fw-semibold">Email mới</label>
         <input type="email" maxlength="50" name="email" id="profileEmail"
-               class="form-control ${not empty errors['email'] ? 'is-invalid' : ''}" value="${auth.email}">
+               class="form-control ${not empty errors['email'] ? 'is-invalid' : ''}" value="${auth.email}"
+                ${auth.isGoogleAccount ? 'readonly' : ''}>
         <c:if test="${not empty errors['email']}">
             <div class="invalid-feedback d-block">${errors['email']}</div>
+        </c:if>
+        <c:if test="${auth.isGoogleAccount}">
+            <small class="text-muted">Tài khoản Google không thể đổi email.</small>
         </c:if>
     </div>
     <div class="mb-3">
