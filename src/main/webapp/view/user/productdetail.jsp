@@ -148,16 +148,18 @@
             <div class="col-md-5">
                 <div class="card border-0 shadow-sm p-4 h-100" style="border: 1px solid #dee2e6 !important;">
                     <h6 class="fw-bold mb-3">Gửi đánh giá của bạn</h6>
-                    <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Tính năng đang được phát triển!');">
+                    <form id="reviewForm" action="${pageContext.request.contextPath}/submit-review" method="POST">
+                        <input type="hidden" name="productId" value="${product.id}">
+                        <input type="hidden" name="rating" id="ratingValue" value="5">
                         <div class="mb-3 text-warning fs-4 d-flex gap-1" id="starRating">
-                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
-                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
-                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
-                            <i class="bi bi-star-fill text-warning" style="cursor: pointer;"></i>
-                            <i class="bi bi-star text-warning" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill" data-value="1" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill" data-value="2" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill" data-value="3" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill" data-value="4" style="cursor: pointer;"></i>
+                            <i class="bi bi-star-fill" data-value="5" style="cursor: pointer;"></i>
                         </div>
                         <div class="mb-3">
-                            <textarea class="form-control" rows="4" placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..." required></textarea>
+                            <textarea id="reviewContent" name="content" class="form-control" rows="4" placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-success fw-bold px-4 rounded-pill">Gửi Đánh Giá</button>
                     </form>
@@ -165,10 +167,31 @@
             </div>
             <div class="col-md-7 mt-4 mt-md-0">
                 <div class="card border-0 shadow-sm p-4 h-100" style="border: 1px solid #dee2e6 !important;">
-                    <h6 class="fw-bold mb-4">Các lượt đánh giá (0)</h6>
-                    <div class="text-center py-5">
-                        <i class="bi bi-chat-square-text text-muted" style="font-size: 3rem;"></i>
-                        <p class="text-muted mt-3 mb-0">Chưa có đánh giá nào cho sản phẩm này.</p>
+                    <h6 class="fw-bold mb-4">Các lượt đánh giá (${reviews != null ? reviews.size() : 0})</h6>
+                    <div class="review-list" style="max-height: 400px; overflow-y: auto;">
+                        <c:forEach var="r" items="${reviews}">
+                            <div class="review-item mb-4 pb-3 border-bottom">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-dark">${r.userName}</span>
+                                    <small class="text-muted"><fmt:formatDate value="${r.createdAt}" pattern="dd/MM/yyyy HH:mm"/></small>
+                                </div>
+                                <div class="text-warning mb-2">
+                                    <c:forEach begin="1" end="${r.rating}">
+                                        <i class="bi bi-star-fill"></i>
+                                    </c:forEach>
+                                    <c:forEach begin="${r.rating + 1}" end="5">
+                                        <i class="bi bi-star"></i>
+                                    </c:forEach>
+                                </div>
+                                <p class="text-muted mb-0">${r.content}</p>
+                            </div>
+                        </c:forEach>
+                        <c:if test="${empty reviews}">
+                            <div class="text-center py-5">
+                                <i class="bi bi-chat-square-text text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3 mb-0">Chưa có đánh giá nào cho sản phẩm này.</p>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
             </div>
@@ -232,16 +255,21 @@
     </div>
 
 </main>
-<%@include file="/view/user/include/footer.jsp" %>
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="${pageContext.request.contextPath}/js/init.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const stars = document.querySelectorAll('#starRating i');
+        const ratingInput = document.getElementById('ratingValue');
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewContent = document.getElementById('reviewContent');
+        const productId = "${product.id}";
+
+        // 1. Logic chọn sao
         stars.forEach((star, index) => {
             star.addEventListener('click', () => {
+                const val = star.getAttribute('data-value');
+                ratingInput.value = val;
+
                 stars.forEach((s, i) => {
                     if (i <= index) {
                         s.classList.remove('bi-star');
@@ -253,8 +281,50 @@
                 });
             });
         });
+
+        // 2. Kiểm tra xem có review đang chờ từ localStorage không
+        const pendingReview = JSON.parse(localStorage.getItem('pendingReview'));
+        if (pendingReview && pendingReview.productId === productId) {
+            reviewContent.value = pendingReview.content;
+            ratingInput.value = pendingReview.rating;
+            // Cập nhật giao diện sao
+            stars.forEach((s, i) => {
+                if (i < pendingReview.rating) {
+                    s.classList.remove('bi-star');
+                    s.classList.add('bi-star-fill');
+                } else {
+                    s.classList.remove('bi-star-fill');
+                    s.classList.add('bi-star');
+                }
+            });
+            localStorage.removeItem('pendingReview');
+
+            // Nếu đã đăng nhập thì tự động submit luôn
+            <c:if test="${not empty auth}">
+            reviewForm.submit();
+            </c:if>
+        }
+
+        // 3. Xử lý khi nhấn Gửi Đánh Giá
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', function(e) {
+                <c:if test="${empty auth}">
+                e.preventDefault();
+                // Lưu vào localStorage
+                const data = {
+                    productId: productId,
+                    rating: ratingInput.value,
+                    content: reviewContent.value
+                };
+                localStorage.setItem('pendingReview', JSON.stringify(data));
+
+                // Chuyển hướng đến trang login với returnUrl
+                const currentUrl = window.location.href;
+                window.location.href = "${pageContext.request.contextPath}/login?returnUrl=" + encodeURIComponent(currentUrl);
+                </c:if>
+            });
+        }
     });
 </script>
-</body>
 
-</html>
+<%@include file="/view/user/include/footer.jsp" %>

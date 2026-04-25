@@ -1,7 +1,9 @@
 package controller;
 
 import dao.ProductDAO;
+import dao.ReviewDAO;
 import model.Product;
+import model.Review;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -31,6 +33,11 @@ public class  ProductDetailController extends HttpServlet {
                     // 4. Lấy danh sách sản phẩm liên quan
                     List<Product> relatedProducts = dao.getRelatedProducts(id);
                     request.setAttribute("relatedProducts", relatedProducts);
+
+                    // 5. Lấy danh sách đánh giá
+                    ReviewDAO reviewDAO = new ReviewDAO();
+                    List<Review> reviews = reviewDAO.getByProductId(id);
+                    request.setAttribute("reviews", reviews);
 
                     request.getRequestDispatcher("/view/user/productdetail.jsp").forward(request, response);
                     return;
