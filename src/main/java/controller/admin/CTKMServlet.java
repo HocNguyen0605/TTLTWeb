@@ -15,7 +15,9 @@ public class CTKMServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ProductDAO productDAO = new ProductDAO();
         List<Product> promotionProducts = productDAO.getProductHasPromotion();
+        List<Product> productList = productDAO.getAll();
         request.setAttribute("promotionProducts", promotionProducts);
+        request.setAttribute("productList", productList);
         request.getRequestDispatcher("/view/admin/admin-CTKM.jsp")
                 .forward(request, response);
     }
