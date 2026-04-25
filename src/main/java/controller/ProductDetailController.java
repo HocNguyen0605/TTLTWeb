@@ -34,10 +34,31 @@ public class  ProductDetailController extends HttpServlet {
                     List<Product> relatedProducts = dao.getRelatedProducts(id);
                     request.setAttribute("relatedProducts", relatedProducts);
 
-                    // 5. Lấy danh sách đánh giá
+                    // 5. Lấy danh sách đánh giá & tính toán thống kê
                     ReviewDAO reviewDAO = new ReviewDAO();
                     List<Review> reviews = reviewDAO.getByProductId(id);
                     request.setAttribute("reviews", reviews);
+
+                    // Tính toán thống kê đánh giá
+                    double avgRating = 0;
+                    int[] starCounts = new int[6];
+                    int commentCount = 0;
+                    if (reviews != null && !reviews.isEmpty()) {
+                        int sum = 0;
+                        for (Review r : reviews) {
+                            sum += r.getRating();
+                            if (r.getRating() >= 1 && r.getRating() <= 5) {
+                                starCounts[r.getRating()]++;
+                            }
+                            if (r.getContent() != null && !r.getContent().trim().isEmpty()) {
+                                commentCount++;
+                            }
+                        }
+                        avgRating = (double) sum / reviews.size();
+                    }
+                    request.setAttribute("avgRating", avgRating);
+                    request.setAttribute("starCounts", starCounts);
+                    request.setAttribute("commentCount", commentCount);
 
                     request.getRequestDispatcher("/view/user/productdetail.jsp").forward(request, response);
                     return;
