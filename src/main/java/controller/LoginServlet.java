@@ -16,12 +16,26 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(true);
+       //dành cho đánh giá sản phẩm
+        String returnUrl = request.getParameter("returnUrl");
+        if (returnUrl != null) {
+            session.setAttribute("returnUrl", returnUrl);
+        }
+        //
         if (session != null && session.getAttribute("auth") != null) {
             User u = (User) session.getAttribute("auth");
             if (u.getRole() == 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            //dánh giá
             } else {
-                response.sendRedirect(request.getContextPath() + "/products");
+                String target = (String) session.getAttribute("returnUrl");
+                if (target != null) {
+                    session.removeAttribute("returnUrl");
+                    response.sendRedirect(target);
+                    //
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/products");
+                }
             }
             return;
         }
@@ -85,8 +99,16 @@ public class LoginServlet extends HttpServlet {
 
             if (u.getRole() == 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            //đánh giá
             } else {
-                response.sendRedirect(request.getContextPath() + "/products");
+                String returnUrl = (String) session.getAttribute("returnUrl");
+                if (returnUrl != null) {
+                    session.removeAttribute("returnUrl");
+                    response.sendRedirect(returnUrl);
+                    //
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/products");
+                }
             }
             return;
         } else {

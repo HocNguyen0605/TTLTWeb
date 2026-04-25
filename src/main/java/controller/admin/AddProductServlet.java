@@ -15,7 +15,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @WebServlet("/add-product")
-@MultipartConfig(maxFileSize = 5 * 1024 * 1024, maxRequestSize = 10 * 1024 * 1024)
+@MultipartConfig(
+        //danhf cho add file ảnh vào đams mây
+        maxFileSize = 50 * 1024 * 1024,      // 50MB
+        maxRequestSize = 100 * 1024 * 1024   // 100MB
+)
 public class AddProductServlet extends HttpServlet {
 
     @Override
