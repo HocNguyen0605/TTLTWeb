@@ -111,24 +111,27 @@
     <div class="container text-center">
         <h2 class="fw-bold text-success mb-4">Khách Hàng Nói Gì?</h2>
         <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm p-3">
-                    <p>"Nước ép Juicy luôn tươi ngon, mỗi sáng là động lực tuyệt vời cho cả ngày!"</p>
-                    <h6 class="fw-bold mb-0">Nguyễn Thị Lan</h6>
+            <c:forEach var="t" items="${testimonials}">
+                <div class="col-md-4 animate__animated animate__fadeInUp">
+                    <div class="card border-0 shadow-sm p-4 h-100 rounded-4">
+                        <div class="text-warning mb-3">
+                            <c:forEach begin="1" end="${t.rating}"><i class="bi bi-star-fill"></i></c:forEach>
+                        </div>
+                        <p class="fst-italic text-muted flex-grow-1">"${t.content}"</p>
+                        <hr class="opacity-10 my-3">
+                        <h6 class="fw-bold mb-0 text-success">${t.userName}</h6>
+                        <small class="text-muted" style="font-size: 0.7rem;">
+                            Khách hàng đã trải nghiệm
+                        </small>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm p-3">
-                    <p>"Mình rất thích cam kết không chất bảo quản, yên tâm dùng mỗi ngày."</p>
-                    <h6 class="fw-bold mb-0">Trần Văn Hưng</h6>
+            </c:forEach>
+
+            <c:if test="${empty testimonials}">
+                <div class="col-12">
+                    <p class="text-muted"></p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm p-3">
-                    <p>"Giao hàng nhanh, đóng gói cẩn thận. Juicy xứng đáng 5 sao!"</p>
-                    <h6 class="fw-bold mb-0">Lê Thị Minh</h6>
-                </div>
-            </div>
+            </c:if>
         </div>
     </div>
 </section>
