@@ -30,6 +30,33 @@
         color: white;
         border: none;
     }
+
+    /* Custom Scrollbar for Review List */
+    .review-list {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 15px;
+        scrollbar-width: thin;
+        scrollbar-color: #28a745 transparent;
+    }
+
+    .review-list::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .review-list::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 10px;
+    }
+
+    .review-list::-webkit-scrollbar-thumb {
+        background: #28a745;
+        border-radius: 10px;
+    }
+
+    .review-list::-webkit-scrollbar-thumb:hover {
+        background: #218838;
+    }
 </style>
 <jsp:include page="/view/user/include/search-bar.jsp" />
 
@@ -144,9 +171,9 @@
     <%-- SECTION ĐÁNH GIÁ SẢN PHẨM --%>
     <div class="mt-5 mb-5 border-top pt-5">
         <h5 class="fw-bold text-success text-uppercase mb-4">Đánh giá sản phẩm</h5>
-        <div class="row h-100">
+        <div class="row">
             <div class="col-md-5">
-                <div class="card border-0 shadow-sm p-4 h-100" style="border: 1px solid #dee2e6 !important;">
+                <div class="card border-0 shadow-sm p-4" style="border: 1px solid #dee2e6 !important;">
                     <h6 class="fw-bold mb-3">Gửi đánh giá của bạn</h6>
                     <form id="reviewForm" action="${pageContext.request.contextPath}/submit-review" method="POST">
                         <input type="hidden" name="productId" value="${product.id}">
@@ -166,9 +193,9 @@
                 </div>
             </div>
             <div class="col-md-7 mt-4 mt-md-0">
-                <div class="card border-0 shadow-sm p-4 h-100" style="border: 1px solid #dee2e6 !important;">
+                <div class="card border-0 shadow-sm p-4" style="border: 1px solid #dee2e6 !important;">
                     <h6 class="fw-bold mb-4">Các lượt đánh giá (${reviews != null ? reviews.size() : 0})</h6>
-                    <div class="review-list" style="max-height: 400px; overflow-y: auto;">
+                    <div class="review-list">
                         <c:forEach var="r" items="${reviews}">
                             <div class="review-item mb-4 pb-3 border-bottom">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -299,18 +326,21 @@
             });
             localStorage.removeItem('pendingReview');
 
-            // Nếu đã đăng nhập thì tự động submit luôn
+            // Nếu đã đăng nhập thì tự động kích hoạt submit
             <c:if test="${not empty auth}">
-            reviewForm.submit();
+            setTimeout(() => {
+                reviewForm.querySelector('button[type="submit"]').click();
+            }, 500);
             </c:if>
         }
 
         // 3. Xử lý khi nhấn Gửi Đánh Giá
         if (reviewForm) {
             reviewForm.addEventListener('submit', function(e) {
-                <c:if test="${empty auth}">
                 e.preventDefault();
-                // Lưu vào localStorage
+
+                <c:if test="${empty auth}">
+                // Lưu vào localStorage nếu chưa đăng nhập
                 const data = {
                     productId: productId,
                     rating: ratingInput.value,
@@ -321,7 +351,92 @@
                 // Chuyển hướng đến trang login với returnUrl
                 const currentUrl = window.location.href;
                 window.location.href = "${pageContext.request.contextPath}/login?returnUrl=" + encodeURIComponent(currentUrl);
+                return;
                 </c:if>
+
+                // Nếu đã đăng nhập, gửi AJAX
+                const formData = new FormData(reviewForm);
+                const searchParams = new URLSearchParams(formData);
+
+                fetch("${pageContext.request.contextPath}/submit-review", {
+                    method: 'POST',
+                    body: searchParams,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Thông báo thành công bằng SweetAlert2
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công!',
+                                text: data.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            // Thêm đánh giá mới vào UI mà không reload
+                            const reviewList = document.querySelector('.review-list');
+                            const emptyMsg = reviewList.querySelector('.text-center.py-5');
+                            if (emptyMsg) emptyMsg.remove();
+
+                            const r = data.review;
+                            const dateStr = new Date(r.createdAt).toLocaleString('vi-VN', {
+                                day: '2-digit', month: '2-digit', year: 'numeric',
+                                hour: '2-digit', minute: '2-digit'
+                            }).replace(',', '');
+
+                            let starsHtml = '';
+                            for (let i = 1; i <= 5; i++) {
+                                starsHtml += `<i class="bi bi-star${i <= r.rating ? '-fill' : ''}"></i> `;
+                            }
+
+                            const newReviewHtml = `
+                            <div class="review-item mb-4 pb-3 border-bottom animate__animated animate__fadeIn">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-dark">${r.userName}</span>
+                                    <small class="text-muted">${dateStr}</small>
+                                </div>
+                                <div class="text-warning mb-2">${starsHtml}</div>
+                                <p class="text-muted mb-0">${r.content}</p>
+                            </div>
+                        `;
+
+                            reviewList.insertAdjacentHTML('afterbegin', newReviewHtml);
+                            reviewForm.reset();
+                            ratingInput.value = 5;
+                            stars.forEach(s => {
+                                s.classList.remove('bi-star');
+                                s.classList.add('bi-star-fill');
+                            });
+
+                            // Cập nhật số lượng đánh giá trên UI
+                            const countEl = document.querySelector('h6.mb-4');
+                            if (countEl) {
+                                const match = countEl.innerText.match(/\((\d+)\)/);
+                                if (match) {
+                                    const newCount = parseInt(match[1]) + 1;
+                                    countEl.innerText = `Các lượt đánh giá (${newCount})`;
+                                }
+                            }
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi!',
+                                text: data.message
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi!',
+                            text: 'Đã xảy ra lỗi khi gửi đánh giá.'
+                        });
+                    });
             });
         }
     });

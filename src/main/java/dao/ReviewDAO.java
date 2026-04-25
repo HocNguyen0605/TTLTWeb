@@ -9,11 +9,11 @@ import java.util.List;
 public class ReviewDAO extends BaseDao {
 
     public List<Review> getByProductId(int productId) {
-        //getByProductId(int productId): Lấy danh sách đánh giá của một sản phẩm (JOIN với bảng user) (Trí & Học nhớ check).
         String sql = """
-                SELECT r.id, r.product_id as productId, r.user_id as userId, r.rating, r.content, r.created_at as createdAt, u.name as userName
+                SELECT r.id, r.product_id as productId, r.user_id as userId, r.rating, r.content, r.created_at as createdAt, 
+                       COALESCE(u.name, 'Người dùng Juicy') as userName
                 FROM reviews r
-                JOIN user u ON r.user_id = u.id_account
+                LEFT JOIN user u ON r.user_id = u.id_account
                 WHERE r.product_id = :productId
                 ORDER BY r.created_at DESC
                 """;
@@ -24,7 +24,6 @@ public class ReviewDAO extends BaseDao {
     }
 
     public void insert(Review review) {
-        //insert(Review review): Thêm đánh giá mới.
         String sql = """
                 INSERT INTO reviews (product_id, user_id, rating, content)
                 VALUES (:productId, :userId, :rating, :content)
