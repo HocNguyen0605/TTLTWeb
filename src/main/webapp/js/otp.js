@@ -13,17 +13,17 @@ function setupOTPSender(btnId, emailInputSelector, noticeId, contextPath) {
     btn.addEventListener('click', function () {
         const emailInput = document.querySelector(emailInputSelector);
         const notice = document.getElementById(noticeId);
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const emailRegex = /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,20}$/;
+        const emailValue = emailInput.value.trim();
 
-        if (!emailInput || !emailInput.value) {
+        if (!emailValue) {
             notice.innerHTML = "Vui lòng nhập email trước";
             return;
-        } else if (!emailRegex.test(emailInput)) {
+        } else if (!emailRegex.test(emailValue)) {
             notice.innerHTML = "Vui lòng nhập email đúng định dạng";
             return;
         }
 
-        const email = emailInput.value;
         let interval;
         let timeLeft = 60;
 
@@ -44,17 +44,23 @@ function setupOTPSender(btnId, emailInputSelector, noticeId, contextPath) {
         updateTimer();
         interval = setInterval(updateTimer, 1000);
 
-        fetch(contextPath + '/send-otp?email=' + encodeURIComponent(email))
-            .then(res => res.text())
+        fetch(contextPath + '/send-otp?email=' + encodeURIComponent(emailValue))
+            .then(res => res.json())
             .then(data => {
-                if (data !== 'success') {
-                    throw new Error('Failed');
+                if (data.status === 'success') {
+                    notice.innerHTML = data.message;
+                    notice.style.color = "green";
+                } else {
+                    clearInterval(interval);
+                    btn.disabled = false;
+                    notice.innerHTML = data.message;
+                    notice.style.color = "red";
                 }
             })
             .catch(err => {
-                notice.innerHTML = "Lỗi gửi mã, thử lại sau.";
-                btn.disabled = false;
                 clearInterval(interval);
+                btn.disabled = false;
+                notice.innerHTML = "Lỗi kết nối máy chủ.";
             });
     });
 }

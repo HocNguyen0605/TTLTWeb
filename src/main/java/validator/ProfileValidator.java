@@ -37,6 +37,8 @@ public class ProfileValidator {
 
         if (!ValidationUtils.isNotEmpty(newPass)) {
             errors.put("newPassword", "Mật khẩu mới không được để trống.");
+        } else if (ValidationUtils.isNotEmpty(newPass) && newPass.equals(oldPass)) {
+            errors.put("newPassword", "Mật khẩu mới không được giống mật khẩu cũ!");
         } else if (!ValidationUtils.isStrongPassword(newPass)) {
             errors.put("newPassword", "Mật khẩu ≥ 8 ký tự, có chữ hoa, số và ký tự đặc biệt");
         }

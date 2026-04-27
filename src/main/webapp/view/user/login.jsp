@@ -72,6 +72,20 @@
                     </div>
                     <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2">Đăng Nhập</button>
                 </form>
+
+                <div class="text-center my-3 text-muted">Hoặc</div>
+
+                <div class="d-grid gap-2 mt-3">
+                    <a href="${googleLoginUrl}"
+                       class="btn btn-light d-flex align-items-center justify-content-center py-2 shadow-sm border fw-medium text-dark">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg"
+                             alt="Google"
+                             class="me-2"
+                             width="18">
+                        Tiếp tục với Google
+                    </a>
+                </div>
+
                 <div class="text-center mt-3">
                     <p>Chưa có tài khoản?
                         <a href="#" class="text-success fw-bold text-decoration-none"
@@ -178,6 +192,20 @@
 
                     <button type="submit" class="btn btn-primary-custom w-100 fw-bold py-2">Đăng Ký</button>
                 </form>
+
+                <div class="text-center my-3 text-muted">Hoặc</div>
+
+                <div class="d-grid gap-2 mt-3">
+                    <a href="${googleLoginUrl}"
+                       class="btn btn-light d-flex align-items-center justify-content-center py-2 shadow-sm border fw-medium text-dark">
+                        <img src="https://www.svgrepo.com/show/475656/google-color.svg"
+                             alt="Google"
+                             class="me-2"
+                             width="18">
+                        Tiếp tục với Google
+                    </a>
+                </div>
+
                 <div class="text-center mt-3">
                     <p>Đã có tài khoản? <a href="#" class="text-success fw-bold text-decoration-none"
                                            onclick="document.getElementById('login-tab').click(); return false;">Đăng

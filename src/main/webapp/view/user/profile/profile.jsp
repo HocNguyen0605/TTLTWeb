@@ -42,8 +42,8 @@
                                     type="button" role="tab">
                                 <i class="bi bi-shield-lock-fill me-2"></i>Đổi mật khẩu
                             </button>
-                            <a href="${pageContext.request.contextPath}/logout"
-                               onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')"
+                            <a href="javascript:void(0)"
+                               id="btnLogout"
                                class="nav-link text-decoration-none text-start text-danger text-wrap mt-3 fw-bold border-0">
                                 <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
                             </a>
@@ -66,7 +66,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

@@ -137,8 +137,7 @@ public class ProductDAO extends BaseDao {
                         COALESCE(pi.image_URL, p.image) AS img,
                         p.description
                     FROM products p
-                    LEFT JOIN product_images pi ON p.image = pi.id
-                    WHERE p.quantity >= 0
+                    LEFT JOIN product_images pi ON p.image = p.id WHERE p.quantity >= 0
                     ORDER BY RAND()
                     LIMIT 8
                 """;
