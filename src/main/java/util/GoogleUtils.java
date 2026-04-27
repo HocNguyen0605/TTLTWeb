@@ -9,8 +9,8 @@ import org.apache.http.client.fluent.Request;
 public class GoogleUtils {
     public static String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
     public static String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
-    public static String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.url");
-    public static String LINK_GET_TOKEN = "https://taccounts.google.com/o/oauth2/token";
+    public static String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.uri");
+    public static String LINK_GET_TOKEN = "https://oauth2.googleapis.com/token";
     public static String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
     public static String getToken(final String code) throws Exception {
@@ -25,7 +25,6 @@ public class GoogleUtils {
         return jobj.get("access_token").toString().replaceAll("\"", "");
     }
 
-    // Bước 2: Lấy thông tin User (Email, Name...)
     public static GooglePojo getUserInfo(final String accessToken) throws Exception {
         String link = LINK_GET_USER_INFO + accessToken;
         String response = Request.Get(link).execute().returnContent().asString();

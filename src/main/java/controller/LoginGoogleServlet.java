@@ -8,19 +8,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.GooglePojo;
-import model.User;
 import util.GoogleUtils;
 
 import java.io.IOException;
 
-@WebServlet("login-google")
+@WebServlet("/login-google")
 public class LoginGoogleServlet extends HttpServlet {
     protected void doGet(HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException {
 
         String code = request.getParameter("code");
         String returnState = request.getParameter("state");
         String sessionState = (String) request.getSession().getAttribute("google_state");
-
         if (returnState == null || !returnState.equals(sessionState)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Yêu cầu giả mạo bị từ chối!");
             return;
@@ -33,19 +31,18 @@ public class LoginGoogleServlet extends HttpServlet {
                 GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
 
                 UserDAO dao = new UserDAO();
-
-                User user = dao.processGoogleLogin(googlePojo);
+                model.User user = dao.processGoogleLogin(googlePojo);
 
                 if (user != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("auth", user);
-                    response.sendRedirect("products");
+                    response.sendRedirect(request.getContextPath() + "/products");
                 } else {
-                    response.sendRedirect("login?error=db_error");
+                    response.sendRedirect("login?error=auth_failed");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                response.sendRedirect("login_error=auth_failed");
+                response.sendRedirect("login?error=auth_failed");
             }
         }
     }
