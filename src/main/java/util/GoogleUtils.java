@@ -7,8 +7,8 @@ import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
 public class GoogleUtils {
-    public static String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
-    public static String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
+    public static String CLIENT_ID = "";
+    public static String CLIENT_SECRET = "";
     public static String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.uri");
     public static String LINK_GET_TOKEN = "https://oauth2.googleapis.com/token";
     public static String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
