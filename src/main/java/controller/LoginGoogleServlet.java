@@ -14,10 +14,11 @@ import java.io.IOException;
 
 @WebServlet("/login-google")
 public class LoginGoogleServlet extends HttpServlet {
-    protected void doGet(HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException {
+    protected void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String code = request.getParameter("code");
         String returnState = request.getParameter("state");
+        HttpSession session = request.getSession();
         String sessionState = (String) request.getSession().getAttribute("google_state");
         if (returnState == null || !returnState.equals(sessionState)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Yêu cầu giả mạo bị từ chối!");
@@ -34,7 +35,6 @@ public class LoginGoogleServlet extends HttpServlet {
                 model.User user = dao.processGoogleLogin(googlePojo);
 
                 if (user != null) {
-                    HttpSession session = request.getSession();
                     session.setAttribute("auth", user);
                     response.sendRedirect(request.getContextPath() + "/products");
                 } else {
@@ -45,5 +45,10 @@ public class LoginGoogleServlet extends HttpServlet {
                 response.sendRedirect("login?error=auth_failed");
             }
         }
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 }
