@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
         String googleLoginUrl = GoogleUtils.buildGoogleLoginUrl(request.getSession());
         request.setAttribute("googleLoginUrl", googleLoginUrl);
 
-       //dành cho đánh giá sản phẩm
+        //dành cho đánh giá sản phẩm
         String returnUrl = request.getParameter("returnUrl");
         if (returnUrl != null) {
             session.setAttribute("returnUrl", returnUrl);
@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
             User u = (User) session.getAttribute("auth");
             if (u.getRole() == 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-            //dánh giá
+                //dánh giá
             } else {
                 String target = (String) session.getAttribute("returnUrl");
                 if (target != null) {
@@ -87,6 +87,8 @@ public class LoginServlet extends HttpServlet {
         UserDAO dao = new UserDAO();
         User u = dao.login(user, pass);
 
+        boolean isApi = request.getHeader("Accept") != null && request.getHeader("Accept").contains("application/json");
+
         if (u != null) {
             HttpSession session = request.getSession();
             session.setAttribute("auth", u);
@@ -104,24 +106,45 @@ public class LoginServlet extends HttpServlet {
                 response.addCookie(tokenCookie);
             }
 
+            String redirectUrl;
             if (u.getRole() == 1) {
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-            //đánh giá
+                redirectUrl = request.getContextPath() + "/admin/dashboard";
+                //đánh giá
             } else {
                 String returnUrl = (String) session.getAttribute("returnUrl");
                 if (returnUrl != null) {
                     session.removeAttribute("returnUrl");
-                    response.sendRedirect(returnUrl);
+                    redirectUrl = returnUrl;
                     //
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/products");
+                    redirectUrl = request.getContextPath() + "/products";
                 }
+            }
+
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                java.util.Map<String, String> result = new java.util.HashMap<>();
+                result.put("status", "success");
+                result.put("redirect", redirectUrl);
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                response.sendRedirect(redirectUrl);
             }
             return;
         } else {
-            request.setAttribute("mess", "Sai tài khoản hoặc mật khẩu!");
-            request.setAttribute("loginEmail", user);
-            doGet(request, response);
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                java.util.Map<String, String> result = new java.util.HashMap<>();
+                result.put("status", "error");
+                result.put("message", "Sai tài khoản hoặc mật khẩu!");
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                request.setAttribute("mess", "Sai tài khoản hoặc mật khẩu!");
+                request.setAttribute("loginEmail", user);
+                doGet(request, response);
+            }
         }
     }
 }
