@@ -19,8 +19,20 @@ public class UpdateProfileController extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("auth");
 
+        boolean isApi = request.getHeader("Accept") != null && request.getHeader("Accept").contains("application/json");
+
         if (user == null) {
-            response.sendRedirect("login");
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                java.util.Map<String, String> result = new java.util.HashMap<>();
+                result.put("status", "error");
+                result.put("message", "Vui lòng đăng nhập lại.");
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                response.sendRedirect("login");
+            }
             return;
         }
 
@@ -33,8 +45,17 @@ public class UpdateProfileController extends HttpServlet {
         java.util.Map<String, String> errors = validator.validate(fullName, phone);
 
         if (!errors.isEmpty()) {
-            session.setAttribute("errors", errors);
-            response.sendRedirect(request.getContextPath() + "/profile");
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                java.util.Map<String, Object> result = new java.util.HashMap<>();
+                result.put("status", "error");
+                result.put("errors", errors);
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                session.setAttribute("errors", errors);
+                response.sendRedirect(request.getContextPath() + "/profile");
+            }
             return;
         }
 
@@ -50,11 +71,29 @@ public class UpdateProfileController extends HttpServlet {
 
         if (dao.updateProfile(user)) {
             session.setAttribute("auth", user);
-            session.setAttribute("message", "Cập nhật thông tin thành công!");
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                java.util.Map<String, String> result = new java.util.HashMap<>();
+                result.put("status", "success");
+                result.put("message", "Cập nhật thông tin thành công!");
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                session.setAttribute("message", "Cập nhật thông tin thành công!");
+                response.sendRedirect(request.getContextPath() + "/profile");
+            }
         } else {
-            session.setAttribute("error", "Cập nhật thất bại!");
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                java.util.Map<String, String> result = new java.util.HashMap<>();
+                result.put("status", "error");
+                result.put("message", "Cập nhật thất bại!");
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                session.setAttribute("error", "Cập nhật thất bại!");
+                response.sendRedirect(request.getContextPath() + "/profile");
+            }
         }
-
-        response.sendRedirect(request.getContextPath() + "/profile");
     }
 }
