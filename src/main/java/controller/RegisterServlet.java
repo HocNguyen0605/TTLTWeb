@@ -40,14 +40,25 @@ public class RegisterServlet extends HttpServlet {
         validator.AuthValidator validator = new validator.AuthValidator(userDAO);
         Map<String, String> errors = validator.validateRegister(username, fullName, email, password, confirmPassword, userOtp, serverOtp, otpTime);
 
+        boolean isApi = request.getHeader("Accept") != null && request.getHeader("Accept").contains("application/json");
+
         // trả về nếu có lỗi trong fields
         if (!errors.isEmpty()) {
-            session.setAttribute("errors", errors);
-            session.setAttribute("oldUsername", username);
-            session.setAttribute("oldFullName", fullName);
-            session.setAttribute("oldEmail", email);
-            session.setAttribute("activeTab", "register");
-            response.sendRedirect(request.getContextPath() + "/login");
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                Map<String, Object> result = new java.util.HashMap<>();
+                result.put("status", "error");
+                result.put("errors", errors);
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                session.setAttribute("errors", errors);
+                session.setAttribute("oldUsername", username);
+                session.setAttribute("oldFullName", fullName);
+                session.setAttribute("oldEmail", email);
+                session.setAttribute("activeTab", "register");
+                response.sendRedirect(request.getContextPath() + "/login");
+            }
             return;
         }
 
@@ -68,15 +79,35 @@ public class RegisterServlet extends HttpServlet {
             session.setAttribute("auth", newUser);
             session.setAttribute("role", "user");
 
-            response.sendRedirect(request.getContextPath() + "/product");
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                Map<String, String> result = new java.util.HashMap<>();
+                result.put("status", "success");
+                result.put("redirect", request.getContextPath() + "/products");
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                response.sendRedirect(request.getContextPath() + "/products");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("error", "Lỗi hệ thống: " + e.getMessage());
-            session.setAttribute("oldUsername", username);
-            session.setAttribute("oldFullName", fullName);
-            session.setAttribute("oldEmail", email);
-            session.setAttribute("activeTab", "register");
-            response.sendRedirect(request.getContextPath() + "/login");
+            if (isApi) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                Map<String, Object> result = new java.util.HashMap<>();
+                result.put("status", "error");
+                Map<String, String> errMap = new java.util.HashMap<>();
+                errMap.put("system", "Lỗi hệ thống: " + e.getMessage());
+                result.put("errors", errMap);
+                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            } else {
+                session.setAttribute("error", "Lỗi hệ thống: " + e.getMessage());
+                session.setAttribute("oldUsername", username);
+                session.setAttribute("oldFullName", fullName);
+                session.setAttribute("oldEmail", email);
+                session.setAttribute("activeTab", "register");
+                response.sendRedirect(request.getContextPath() + "/login");
+            }
         }
     }
 }
