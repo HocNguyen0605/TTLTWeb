@@ -22,7 +22,10 @@ public class ForgotPasswordServlet extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         UserDAO dao = new UserDAO();
-        response.setContentType("text/plain");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        java.util.Map<String, String> result = new java.util.HashMap<>();
 
         if (dao.isUserEmailExists(email)) {
             // Tạo mật khẩu mới ngẫu nhiên (8 ký tự)
@@ -43,15 +46,20 @@ public class ForgotPasswordServlet extends HttpServlet {
                 boolean mailSent = MailUtil.sendMail(email, subject, htmlContent);
 
                 if (mailSent) {
-                    response.getWriter().write("success");
+                    result.put("status", "success");
+                    result.put("message", "Mật khẩu mới đã được gửi vào Email của bạn!");
                 } else {
-                    response.getWriter().write("error_mail");
+                    result.put("status", "error");
+                    result.put("message", "Không thể gửi email, vui lòng thử lại sau.");
                 }
             } else {
-                response.getWriter().write("error_db");
+                result.put("status", "error");
+                result.put("message", "Lỗi cập nhật CSDL.");
             }
         } else {
-            response.getWriter().write("not_found");
+            result.put("status", "error");
+            result.put("message", "Email này không tồn tại trong hệ thống!");
         }
+        response.getWriter().write(new com.google.gson.Gson().toJson(result));
     }
 }

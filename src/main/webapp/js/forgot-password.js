@@ -23,21 +23,27 @@ function setupForgotPasswordLogic(formId, emailInputId, msgDivId, btnId, context
 
         fetch(contextPath + '/forgot-password', {
             method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'
+            },
             body: 'email=' + encodeURIComponent(email)
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                if (data === "success") {
+                if (data.status === "success") {
                     msgDiv.className = "mt-2 small text-success";
-                    msgDiv.innerHTML = "Mật khẩu mới đã được gửi vào Email của bạn!";
-                } else if (data === "not_found") {
-                    msgDiv.className = "mt-2 small text-danger";
-                    msgDiv.innerHTML = "Email này không tồn tại trong hệ thống!";
+                    msgDiv.innerHTML = data.message;
                 } else {
                     msgDiv.className = "mt-2 small text-danger";
-                    msgDiv.innerHTML = "Có lỗi xảy ra, vui lòng thử lại!";
+                    msgDiv.innerHTML = data.message || "Có lỗi xảy ra, vui lòng thử lại!";
                 }
+                btn.disabled = false;
+            })
+            .catch(err => {
+                console.error(err);
+                msgDiv.className = "mt-2 small text-danger";
+                msgDiv.innerHTML = "Lỗi kết nối, vui lòng thử lại sau.";
                 btn.disabled = false;
             });
     });
