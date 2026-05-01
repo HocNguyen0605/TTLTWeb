@@ -219,7 +219,7 @@ public class UserDAO {
             int userId = createGoogleUser(googlePojo);
             return getUserById(userId);
         } else {
-            // 3. Nếu đã có: Cập nhật googleId (nếu chưa có) và trả về user
+            // Nếu đã có: Cập nhật googleId (nếu chưa có) và trả về user
             if (user.getGoogleId() == null || user.getGoogleId().isEmpty()) {
                 updateGoogleId(user.getId(), googlePojo.getId());
                 user.setGoogleId(googlePojo.getId());

@@ -5,6 +5,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.User;
+import util.GoogleUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,6 +17,8 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendRedirect("login");
+        String googleLoginUrl = GoogleUtils.buildGoogleLoginUrl(request.getSession());
+        request.setAttribute("googleLoginUrl", googleLoginUrl);
     }
 
     @Override

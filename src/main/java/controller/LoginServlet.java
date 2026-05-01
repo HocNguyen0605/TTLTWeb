@@ -6,6 +6,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import util.ConfigLoader;
+import util.GoogleUtils;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -19,19 +20,7 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession(true);
 
-        String state = UUID.randomUUID().toString();
-        session.setAttribute("google_state", state);
-
-        String clientId = ConfigLoader.getProperty("google.client.id");
-        String redirectUri = ConfigLoader.getProperty("google.redirect.uri");
-
-        String googleLoginUrl = "https://accounts.google.com/o/oauth2/auth?"
-                + "scope=email%20profile"
-                + "&redirect_uri=" + redirectUri
-                + "&client_id=" + clientId
-                + "&response_type=code"
-                + "&state=" + state;
-
+        String googleLoginUrl = GoogleUtils.buildGoogleLoginUrl(request.getSession());
         request.setAttribute("googleLoginUrl", googleLoginUrl);
 
        //dành cho đánh giá sản phẩm
