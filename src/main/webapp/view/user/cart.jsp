@@ -6,6 +6,12 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 </jsp:include>
 
 <!-- GIỎ HÀNG -->
+<%-- Hiển thông báo thêm vượt số tồn  --%>
+<c:if test="${not empty messageCart}">
+    <div class="alert alert-warning">
+            ${messageCart}
+    </div>
+</c:if>
 <section class="container my-5">
     <h2 class="text-center text-success fw-bold mb-4">Giỏ Hàng Của Bạn</h2>
 
@@ -108,8 +114,6 @@ F<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
                 </table>
             </div>
         </div>
-
-
 
         <div class="col-lg-4">
             <div class="shadow rounded bg-white p-4">

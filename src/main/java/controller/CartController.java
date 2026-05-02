@@ -33,31 +33,34 @@ public class CartController extends HttpServlet {
         if (cart == null) {
             cart = new Cart();
         }
-
         String action = request.getParameter("action");
         int productId = Integer.parseInt(request.getParameter("productId"));
         String quantityRaw = request.getParameter("quantity");
         try(Connection conn = DBContext.getConnection()) {
             ProductDAO productDAO = new ProductDAO(conn);
+            int stock = productDAO.getMaxQuantityById(productId);
             if ("add".equals(action)) {
                 // Nếu có truyền quantity thì lấy,
                 // nếu không (từ trang list) thì mặc định là 1
                 int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
                 int countProduct = cart.getTotalQuantityByID(productId);
-                int stock = productDAO.getMaxQuantityById(productId);
                 if (countProduct+quantity<=stock) {
                     Product product = productDAO.findById(productId);
                     if (product != null) {
                         cart.addProduct(product, quantity);
                     }
-                }
+                } else session.setAttribute("messageCart","Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
 
             } else if ("remove".equals(action)) {
                 cart.deleteProduct(productId);
 
             } else if ("update".equals(action)) {
                 int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
-                cart.update(productId, quantity);
+                if (quantity <= stock) {
+                    cart.update(productId, quantity);
+                } else {
+                    session.setAttribute("messageCart", "Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
+                    cart.update(productId, stock);}
             }
 
         } catch (NumberFormatException e) {
@@ -84,6 +87,14 @@ public class CartController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
+        //Xử lý thông báo về giỏ hàng > tồn
+        if (session != null) {
+            String message = (String) session.getAttribute("messageCart");
+            if (message != null) {
+                request.setAttribute("messageCart", message);
+                session.removeAttribute("messageCart");
+            }
+        }
         Cart cart = (Cart) session.getAttribute("cart");
         Voucher voucher = (Voucher) session.getAttribute("voucher");
         double totalPrice= 0;

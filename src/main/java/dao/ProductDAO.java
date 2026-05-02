@@ -466,4 +466,37 @@ public class ProductDAO extends BaseDao {
         }catch(SQLException e){ e.printStackTrace();}
         return maxQuantity;
     }
+    // Trong lớp ProductDAO.java
+    public Product getProductForUpdate(int productId) throws SQLException {
+        String sql = "SELECT id, name, quantity, version FROM products WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    product.setVersion(rs.getInt("version"));
+                    return product;
+                }
+            }
+        }
+        return null;
+    }
+    //Update lại số lượng tồn với trường hợp 2 người cùng mua 1 thời điểm cho 1 sản phẩm
+    public boolean updateProductQuantity(int productId, int quantityToSubtract, int oldVersion) throws SQLException {
+        String sql = "UPDATE products SET quantity = quantity - ?, version = version + 1 " +
+                "WHERE id = ? AND version = ? AND quantity >= ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantityToSubtract);
+            ps.setInt(2, productId);
+            ps.setInt(3, oldVersion);
+            ps.setInt(4, quantityToSubtract);
+
+            int rowsAffected = ps.executeUpdate();
+
+            return rowsAffected > 0;
+        }
+    }
 }

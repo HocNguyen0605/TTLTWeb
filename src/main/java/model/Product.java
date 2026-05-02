@@ -13,7 +13,7 @@ public class Product implements Serializable {
     private String description;
     private int promotion;
     private String promotionName;
-
+    private int version;
     public Product() {} // Cần thiết cho Jdbi
 
     // --- BỔ SUNG ĐẦY ĐỦ SETTER ---
@@ -41,4 +41,11 @@ public class Product implements Serializable {
     public int getPromotion() { return promotion; }
     public String getPromotionName() {return promotionName;}
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }
