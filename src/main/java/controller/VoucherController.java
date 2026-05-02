@@ -17,13 +17,11 @@ public class VoucherController extends HttpServlet {
             throws ServletException, IOException {
         try {
             Connection conn = DBContext.getConnection();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
         String code = request.getParameter("codeVoucher");
         HttpSession session = request.getSession(false);
 
-        VoucherDAO vDAO = new VoucherDAO();
+        VoucherDAO vDAO = new VoucherDAO(conn);
         Voucher v = vDAO.getVoucherWithDiscount(code);
         if(code==null || code.trim().isEmpty()){
             session.removeAttribute("voucher");
@@ -37,5 +35,9 @@ public class VoucherController extends HttpServlet {
             session.setAttribute("voucherError", "*Mã giảm giá không hợp lệ hoặc đã hết hạn!");
         }
         response.sendRedirect(request.getContextPath() + "/cart");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

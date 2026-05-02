@@ -60,7 +60,7 @@
                     </li>
                     <li>
                         <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('#') ? 'active' : ''}"
-                           href="#">
+                           href="${pageContext.request.contextPath}/admin/CTKM">
                             Quản lý CTKM </a>
                     </li>
                     <li>
