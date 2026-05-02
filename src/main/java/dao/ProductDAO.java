@@ -4,6 +4,7 @@ import model.Product;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -449,5 +450,20 @@ public class ProductDAO extends BaseDao {
                 .mapToBean(Product.class)
                 .list());
     }
+    public int getMaxQuantityById(int idProduct){
+        int maxQuantity = 0;
+        String sql = """
+                SELECT p.quantity FROM products p WHERE p.id = ?
+                """;
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, idProduct);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    maxQuantity=rs.getInt("quantity");
+                }
+            } catch(SQLException e){e.printStackTrace();}
 
+        }catch(SQLException e){ e.printStackTrace();}
+        return maxQuantity;
+    }
 }

@@ -32,12 +32,11 @@ public class Cart implements Serializable {
         }
         return total;
     }
-    public int getTotalQuantity() {
-        int totalQuantity = 0;
-        for (CartItem item : data.values()) {
-            totalQuantity += item.getQuantity();
+    public int getTotalQuantityByID(int productId) {
+        if (data.containsKey(productId)) {
+            return data.get(productId).getQuantity();
         }
-        return totalQuantity;
+        return 0;
     }
     public boolean update(int id, int q){
         if (!data.containsKey(id)) return false;
@@ -63,5 +62,15 @@ public class Cart implements Serializable {
     public CartItem findItemByProductId(int productId) {
         if (data == null) return null;
         return data.get(productId);
+    }
+    public Set<Integer> getPromotionIdsFromCart(List<CartItem> cartItems) {
+        Set<Integer> promoIdSet = new HashSet<>();
+        for (CartItem item : cartItems) {
+            int promoId = item.getProduct().getPromotion();
+            if (promoId > 0) {
+                promoIdSet.add(promoId);
+            }
+        }
+        return promoIdSet;
     }
 }

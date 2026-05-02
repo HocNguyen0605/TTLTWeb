@@ -11,7 +11,9 @@ import util.DBContext;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet("/cart")
 public class CartController extends HttpServlet {
@@ -27,7 +29,6 @@ public class CartController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null) {
             cart = new Cart();
@@ -36,16 +37,21 @@ public class CartController extends HttpServlet {
         String action = request.getParameter("action");
         int productId = Integer.parseInt(request.getParameter("productId"));
         String quantityRaw = request.getParameter("quantity");
-        try {
+        try(Connection conn = DBContext.getConnection()) {
+            ProductDAO productDAO = new ProductDAO(conn);
             if ("add".equals(action)) {
                 // Nếu có truyền quantity thì lấy,
                 // nếu không (từ trang list) thì mặc định là 1
                 int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
-
-                Product product = productDAO.findById(productId);
-                if (product != null) {
-                    cart.addProduct(product, quantity);
+                int countProduct = cart.getTotalQuantityByID(productId);
+                int stock = productDAO.getMaxQuantityById(productId);
+                if (countProduct+quantity<=stock) {
+                    Product product = productDAO.findById(productId);
+                    if (product != null) {
+                        cart.addProduct(product, quantity);
+                    }
                 }
+
             } else if ("remove".equals(action)) {
                 cart.deleteProduct(productId);
 
@@ -56,6 +62,10 @@ public class CartController extends HttpServlet {
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         session.setAttribute("cart", cart);
@@ -82,63 +92,50 @@ public class CartController extends HttpServlet {
         double totalDiscount = 0;
         double total=0;
         double shippingFee=15000;
-        //Tính số tiền giảm cho combo
-        if (cart == null) return;
-        try(Connection conn = DBContext.getConnection()){
-            PromotionDAO promoDAO = new PromotionDAO(conn);
-            PromotionComboItemDAO pciDAO = new PromotionComboItemDAO(conn);
-            for (CartItem item : cart.getAllItems()) {
-                int promoId = item.getProduct().getPromotion();
-                if (promoId <= 0) continue;
-                try {
-                    Promotion promo = promoDAO.getById(promoId);
-                    int productCountInCombo = pciDAO.countProductNeed(promoId);
-                    //Nếu sản phẩm có nhiều hơn 1 sp tham gia
-                    if (productCountInCombo > 1) {
-                        List<PromotionComboItem> requiredItems = pciDAO.getItemsByComboId(promoId);
-                        boolean isComboSatisfied = true;
-                        int maxCombo = Integer.MAX_VALUE;
-
-                        // Kiểm tra xem giỏ hàng có đủ các món trong list requiredItems không
-                        for (PromotionComboItem req : requiredItems) {
-                            CartItem cartItem = cart.findItemByProductId(req.getProductId());
-                            if (cartItem == null || cartItem.getQuantity() < req.getQuantity()) {
-                                isComboSatisfied = false;
-                                break;
-                            }
-                            // Tính số combo
-                            int comboCount= cartItem.getQuantity() / req.getQuantity();
-                            if (comboCount < maxCombo) maxCombo = maxCombo;
-                        }
-
-                        if (isComboSatisfied) {
-                            //tính số tiền
-                            if ("percent".equals(promo.getDiscount_type())) {
-                                discountPromotion += (item.getProduct().getPrice()* maxCombo* promo.getDiscount_value() *0.01);
-                            } else {
-                                discountPromotion += (promo.getDiscount_value() * maxCombo);
-                            }
-                        }
-                        //Nếu chỉ có 1 sản phẩm cho chương trình
-                    } else if (productCountInCombo == 1) {
-                        List<PromotionComboItem> reqCombo = pciDAO.getItemsByComboId(promoId);
-                        if (!reqCombo.isEmpty()) {
-                            PromotionComboItem req = reqCombo.get(0);
-                            if (item.getQuantity() >= req.getQuantity()) {
-                                int maxCombo = item.getQuantity() / req.getQuantity();
-                                if ("percent".equals(promo.getDiscount_type())) {
-                                    discountPromotion += (item.getProduct().getPrice()* maxCombo* promo.getDiscount_value() *0.01);
-                                } else {
-                                    discountPromotion += (promo.getDiscount_value() * maxCombo);
-                                }
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+        //Tinh so tien san pham
+        if (cart != null && cart.getAllItems() != null && !cart.getAllItems().isEmpty()) {
+            for (CartItem p : cart.getAllItems()) {
+                totalPrice += p.getTotalPrice();
             }
-        }catch (Exception e){}
+
+            Set<Integer> promoIds = cart.getPromotionIdsFromCart(cart.getAllItems());
+            //Tính số tiền giảm cho combo
+            if (cart == null) return;
+            try (Connection conn = DBContext.getConnection()) {
+                PromotionDAO promoDAO = new PromotionDAO(conn);
+                PromotionComboItemDAO pciDAO = new PromotionComboItemDAO(conn);
+                for (int id : promoIds) {
+                    double priceProductCombo = 0.0;
+                    if (id <= 0) continue;
+                    Promotion promotion = promoDAO.getById(id);
+                    List<PromotionComboItem> pciList = pciDAO.getItemsByComboId(id);
+                    boolean isComboSatisfied = true;
+                    int countCombo = 0;
+                    int maxCombo = Integer.MAX_VALUE;
+                    for (PromotionComboItem pci : pciList) {
+                        CartItem item = cart.findItemByProductId(pci.getProductId());
+                        if (item == null || item.getQuantity() < pci.getQuantity()) {
+                            isComboSatisfied = false;
+                            break;
+                        }
+                        countCombo = item.getQuantity() / pci.getQuantity();
+                        maxCombo = Math.min(maxCombo, countCombo);
+                    }
+                    for (PromotionComboItem pci : pciList) {
+                        CartItem item = cart.findItemByProductId(pci.getProductId());
+                        priceProductCombo += item.getPrice() * maxCombo;
+                    }
+                    if (isComboSatisfied) {
+                        if (promotion.getDiscount_type().equals("percent")) {
+                            discountPromotion = priceProductCombo * promotion.getDiscount_value() * 0.01;
+                        } else discountPromotion = (promotion.getDiscount_value() * maxCombo);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         //Tính giảm giá voucher
         if (voucher != null) {
             if (voucher.getDiscountType().equals("percent")) {
