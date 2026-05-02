@@ -5,8 +5,10 @@ import model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import util.ConfigLoader;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -16,12 +18,42 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(true);
+
+        String state = UUID.randomUUID().toString();
+        session.setAttribute("google_state", state);
+
+        String clientId = ConfigLoader.getProperty("google.client.id");
+        String redirectUri = ConfigLoader.getProperty("google.redirect.uri");
+
+        String googleLoginUrl = "https://accounts.google.com/o/oauth2/auth?"
+                + "scope=email%20profile"
+                + "&redirect_uri=" + redirectUri
+                + "&client_id=" + clientId
+                + "&response_type=code"
+                + "&state=" + state;
+
+        request.setAttribute("googleLoginUrl", googleLoginUrl);
+
+       //dành cho đánh giá sản phẩm
+        String returnUrl = request.getParameter("returnUrl");
+        if (returnUrl != null) {
+            session.setAttribute("returnUrl", returnUrl);
+        }
+        //
         if (session != null && session.getAttribute("auth") != null) {
             User u = (User) session.getAttribute("auth");
             if (u.getRole() == 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            //dánh giá
             } else {
-                response.sendRedirect(request.getContextPath() + "/products");
+                String target = (String) session.getAttribute("returnUrl");
+                if (target != null) {
+                    session.removeAttribute("returnUrl");
+                    response.sendRedirect(target);
+                    //
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/products");
+                }
             }
             return;
         }
@@ -44,6 +76,14 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/products");
                 }
                 return;
+            }
+        }
+
+        String[] flashAttributes = {"errors", "oldUsername", "oldFullName", "oldEmail", "activeTab", "error", "mess"};
+        for (String attr : flashAttributes) {
+            if (session.getAttribute(attr) != null) {
+                request.setAttribute(attr, session.getAttribute(attr));
+                session.removeAttribute(attr);
             }
         }
         request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
@@ -77,14 +117,22 @@ public class LoginServlet extends HttpServlet {
 
             if (u.getRole() == 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+            //đánh giá
             } else {
-                response.sendRedirect(request.getContextPath() + "/products");
+                String returnUrl = (String) session.getAttribute("returnUrl");
+                if (returnUrl != null) {
+                    session.removeAttribute("returnUrl");
+                    response.sendRedirect(returnUrl);
+                    //
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/products");
+                }
             }
             return;
         } else {
             request.setAttribute("mess", "Sai tài khoản hoặc mật khẩu!");
             request.setAttribute("loginEmail", user);
-            request.getRequestDispatcher("/view/user/login.jsp").forward(request, response);
+            doGet(request, response);
         }
     }
 }

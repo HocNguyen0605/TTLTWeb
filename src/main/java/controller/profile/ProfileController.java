@@ -18,6 +18,19 @@ public class ProfileController extends HttpServlet {
             return;
         }
 
+        if (session.getAttribute("errors") != null) {
+            request.setAttribute("errors", session.getAttribute("errors"));
+            session.removeAttribute("errors");
+        }
+        if (session.getAttribute("message") != null) {
+            request.setAttribute("message", session.getAttribute("message"));
+            session.removeAttribute("message");
+        }
+        if (session.getAttribute("error") != null) {
+            request.setAttribute("error", session.getAttribute("error"));
+            session.removeAttribute("error");
+        }
+
         request.getRequestDispatcher("/view/user/profile/profile.jsp").forward(request, response);
     }
 }

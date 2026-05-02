@@ -13,6 +13,10 @@ private Connection conn;
         this.conn = conn;
     }
 
+    public VoucherDAO() {
+
+    }
+
     // Lấy tất cả danh sách voucher
     public List<Voucher> getAllVouchers() {
         List<Voucher> list = new ArrayList<>();

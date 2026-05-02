@@ -1,5 +1,6 @@
 package dao;
 
+import model.GooglePojo;
 import model.User;
 import util.DBContext;
 
@@ -20,9 +21,11 @@ public class UserDAO {
                         rs.getString("password"),
                         rs.getString("name"),
                         rs.getString("email"),
-                        rs.getString("phone"),    // Thêm phone vào đây
-                        rs.getString("address"),  // Thêm address vào đây
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0))
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        null,
+                        "LOCAL"))
                 .findFirst()
                 .orElse(null));
     }
@@ -134,7 +137,9 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0))
+                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        null,
+                        "LOCAL"))
                 .findFirst()
                 .orElse(null));
     }
@@ -152,7 +157,9 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0))
+                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        null,
+                        "LOCAL"))
                 .list());
     }
 
@@ -180,5 +187,99 @@ public class UserDAO {
                 return false;
             }
         });
+    }
+
+    public User getUserByEmail(String email) {
+        String query = "SELECT a.id, a.username, a.password, a.role, a.googleId, a.authProvider, " +
+                "u.name, u.email, u.phone, u.address " +
+                "FROM account a JOIN user u ON a.id = u.id_account " +
+                "WHERE u.email = :email";
+
+        return DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
+                .bind("email", email)
+                .map((rs, ctx) -> new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        rs.getString("googleId"),
+                        rs.getString("authProvider")))
+                .findFirst()
+                .orElse(null));
+    }
+
+    public User processGoogleLogin(GooglePojo googlePojo) {
+        User user = getUserByEmail(googlePojo.getEmail());
+
+        if (user == null) {
+            int userId = createGoogleUser(googlePojo);
+            return getUserById(userId);
+        } else {
+            // 3. Nếu đã có: Cập nhật googleId (nếu chưa có) và trả về user
+            if (user.getGoogleId() == null || user.getGoogleId().isEmpty()) {
+                updateGoogleId(user.getId(), googlePojo.getId());
+                user.setGoogleId(googlePojo.getId());
+            }
+            return user;
+        }
+    }
+
+    public int createGoogleUser(GooglePojo googlePojo) {
+        return DBContext.getJdbi().inTransaction(handle -> {
+            int accountId = handle.createUpdate(
+                            "INSERT INTO account (username, password, role, googleId, authProvider) " +
+                                    "VALUES (:username, :password, :role, :gid, :provider)")
+                    .bind("username", googlePojo.getEmail()) // Dùng email làm username tạm
+                    .bind("password", (String) null)         // Không có mật khẩu
+                    .bind("role", "user")
+                    .bind("gid", googlePojo.getId())
+                    .bind("provider", "GOOGLE")
+                    .executeAndReturnGeneratedKeys("id")
+                    .mapTo(Integer.class)
+                    .one();
+
+            handle.createUpdate("INSERT INTO user (id_account, name, email) VALUES (:aid, :name, :email)")
+                    .bind("aid", accountId)
+                    .bind("name", googlePojo.getName())
+                    .bind("email", googlePojo.getEmail())
+                    .execute();
+
+            return accountId;
+        });
+    }
+
+    public User getUserById(int id) {
+        String query = "SELECT a.id, a.username, a.password, a.role, a.googleId, a.authProvider, " +
+                "u.name, u.email, u.phone, u.address " +
+                "FROM account a JOIN user u ON a.id = u.id_account " +
+                "WHERE a.id = :id";
+
+        return DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
+                .bind("id", id)
+                .map((rs, ctx) -> new User(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        rs.getString("googleId"),
+                        rs.getString("authProvider")))
+                .findFirst()
+                .orElse(null));
+    }
+
+    public void updateGoogleId(int accountId, String googleId) {
+        String query = "UPDATE account SET googleId = :gid, authProvider = 'GOOGLE' WHERE id = :id";
+        DBContext.getJdbi().useHandle(handle -> handle.createUpdate(query)
+                .bind("gid", googleId)
+                .bind("id", accountId)
+                .execute());
     }
 }
