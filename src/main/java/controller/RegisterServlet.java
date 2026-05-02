@@ -64,9 +64,10 @@ public class RegisterServlet extends HttpServlet {
 
         // bắt đầu điền vào db
         try {
+            String hashedPassword = org.mindrot.jbcrypt.BCrypt.hashpw(password, org.mindrot.jbcrypt.BCrypt.gensalt());
             User newUser = new User();
             newUser.setUsername(username);
-            newUser.setPassword(password);
+            newUser.setPassword(hashedPassword);
             newUser.setFullName(fullName);
             newUser.setEmail(email);
             newUser.setRole(0);

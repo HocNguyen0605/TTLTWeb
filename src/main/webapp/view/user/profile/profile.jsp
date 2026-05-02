@@ -36,12 +36,14 @@
                                     role="tab">
                                 <i class="bi bi-person-lines-fill me-2"></i>Thông tin cá nhân
                             </button>
-                            <button
-                                    class="nav-link text-decoration-none text-start rounded text-wrap ${activeTab == 'password' ? 'active' : ''}"
-                                    id="password-tab" data-bs-toggle="tab" data-bs-target="#password-pane"
-                                    type="button" role="tab">
-                                <i class="bi bi-shield-lock-fill me-2"></i>Đổi mật khẩu
-                            </button>
+                            <c:if test="${not (auth.googleAccount and empty auth.password)}">
+                                <button
+                                        class="nav-link text-decoration-none text-start rounded text-wrap ${activeTab == 'password' ? 'active' : ''}"
+                                        id="password-tab" data-bs-toggle="tab" data-bs-target="#password-pane"
+                                        type="button" role="tab">
+                                    <i class="bi bi-shield-lock-fill me-2"></i>Đổi mật khẩu
+                                </button>
+                            </c:if>
                             <a href="javascript:void(0)"
                                id="btnLogout"
                                class="nav-link text-decoration-none text-start text-danger text-wrap mt-3 fw-bold border-0">
@@ -58,11 +60,13 @@
                                 <jsp:include page="/view/user/profile/info.jsp"/>
                             </div>
 
-                            <div class="tab-pane fade ${activeTab == 'password' ? 'show active' : ''}"
-                                 id="password-pane" role="tabpanel">
-                                <h5 class="fw-bold mb-4">Đổi mật khẩu</h5>
-                                <jsp:include page="/view/user/profile/changepass.jsp"/>
-                            </div>
+                            <c:if test="${not (auth.googleAccount and empty auth.password)}">
+                                <div class="tab-pane fade ${activeTab == 'password' ? 'show active' : ''}"
+                                     id="password-pane" role="tabpanel">
+                                    <h5 class="fw-bold mb-4">Đổi mật khẩu</h5>
+                                    <jsp:include page="/view/user/profile/changepass.jsp"/>
+                                </div>
+                            </c:if>
                         </div>
                     </div>
                 </div>

@@ -31,6 +31,14 @@ public class ChangePasswordController extends HttpServlet {
             return;
         }
 
+        if (user.isGoogleAccount() && (user.getPassword() == null || user.getPassword().isEmpty())) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            result.put("status", "error");
+            result.put("message", "Not found");
+            response.getWriter().write(new com.google.gson.Gson().toJson(result));
+            return;
+        }
+
         String oldPass = request.getParameter("oldPassword");
         String newPass = request.getParameter("newPassword");
         String confirmPass = request.getParameter("confirmPassword");
@@ -39,13 +47,14 @@ public class ChangePasswordController extends HttpServlet {
         java.util.Map<String, String> errors = validator.validatePasswordChange(oldPass, user.getPassword(), newPass, confirmPass);
 
         if (!errors.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Mã 400 cho lỗi validation
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             result.put("status", "error");
             result.put("errors", errors);
         } else {
             UserDAO dao = new UserDAO();
-            if (dao.updatePassword(user.getEmail(), newPass)) {
-                user.setPassword(newPass);
+            String hashedNewPassword = org.mindrot.jbcrypt.BCrypt.hashpw(newPass, org.mindrot.jbcrypt.BCrypt.gensalt());
+            if (dao.updatePassword(user.getEmail(), hashedNewPassword)) {
+                user.setPassword(hashedNewPassword);
                 session.setAttribute("auth", user);
                 result.put("status", "success");
                 result.put("message", "Đổi mật khẩu thành công!");

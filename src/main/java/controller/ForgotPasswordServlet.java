@@ -28,15 +28,14 @@ public class ForgotPasswordServlet extends HttpServlet {
         java.util.Map<String, String> result = new java.util.HashMap<>();
 
         if (dao.isUserEmailExists(email)) {
-            // Tạo mật khẩu mới ngẫu nhiên (8 ký tự)
+            // Tạo mật khẩu mới ngẫu nhiên
             String newPassword = java.util.UUID.randomUUID().toString().substring(0, 8);
+            String hashedNewPassword = org.mindrot.jbcrypt.BCrypt.hashpw(newPassword, org.mindrot.jbcrypt.BCrypt.gensalt());
 
             // Cập nhật vào Database
-            boolean isUpdated = dao.updatePassword(email, newPassword);
+            boolean isUpdated = dao.updatePassword(email, hashedNewPassword);
 
             if (isUpdated) {
-                // Gửi email thực tế dùng MailUtil đã hoàn thiện ở bước trước
-                // Thay vì MailUtil.sendForgotPasswordMail(email, newPassword);
                 String subject = "Khôi phục mật khẩu tài khoản JUICY";
                 String htmlContent = "<h2>Yêu cầu cấp lại mật khẩu</h2>"
                         + "<p>Chào bạn,</p>"

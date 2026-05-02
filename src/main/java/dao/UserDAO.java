@@ -10,11 +10,10 @@ public class UserDAO {
         // 1. Cập nhật Query: Lấy thêm u.phone và u.address
         String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
                 "FROM account a LEFT JOIN user u ON a.id = u.id_account " +
-                "WHERE (a.username = :user OR u.email = :user) AND a.password = :pass";
+                "WHERE (a.username = :user OR u.email = :user)";
 
-        return DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
+        User user = DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
                 .bind("user", emailOrUsername)
-                .bind("pass", password)
                 .map((rs, ctx) -> new User(
                         rs.getInt("id"),
                         rs.getString("username"),
@@ -28,6 +27,11 @@ public class UserDAO {
                         "LOCAL"))
                 .findFirst()
                 .orElse(null));
+
+        if (user != null && user.getPassword() != null && org.mindrot.jbcrypt.BCrypt.checkpw(password, user.getPassword())) {
+            return user;
+        }
+        return null;
     }
 
     public boolean isUserEmailExists(String email) {
