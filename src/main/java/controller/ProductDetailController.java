@@ -36,7 +36,14 @@ public class  ProductDetailController extends HttpServlet {
 
                     // 5. Lấy danh sách đánh giá & tính toán thống kê
                     ReviewDAO reviewDAO = new ReviewDAO();
-                    List<Review> reviews = reviewDAO.getByProductId(id);
+
+                    int currentUserId = -1;
+                    model.User auth = (model.User) request.getSession().getAttribute("auth");
+                    if (auth != null) {
+                        currentUserId = auth.getId();
+                    }
+
+                    List<Review> reviews = reviewDAO.getByProductId(id, currentUserId);
                     request.setAttribute("reviews", reviews);
 
                     // Tính toán thống kê đánh giá

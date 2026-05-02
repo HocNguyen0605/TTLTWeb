@@ -105,6 +105,54 @@
         color: #ee4d2d;
         background: #fff;
     }
+
+    .seller-reply-box {
+        background-color: #f8f9fa;
+        border-left: 3px solid #ee4d2d;
+        padding: 12px 15px;
+        margin-top: 10px;
+        border-radius: 4px;
+    }
+    .seller-reply-box .title {
+        font-weight: bold;
+        color: #ee4d2d;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+
+    .like-btn {
+        background: none;
+        border: none;
+        color: #888;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: color 0.2s;
+        padding: 0;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .like-btn:hover {
+        color: #0d6efd;
+    }
+    .like-btn.liked {
+        color: #0d6efd;
+    }
+
+    .admin-reply-btn {
+        font-size: 0.85rem;
+        color: #28a745;
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 15px;
+        margin-top: 10px;
+        text-decoration: underline;
+    }
+    .admin-reply-btn:hover {
+        color: #218838;
+    }
 </style>
 <jsp:include page="/view/user/include/search-bar.jsp" />
 
@@ -294,6 +342,32 @@
                                     </c:forEach>
                                 </div>
                                 <p class="text-muted mb-0">${r.content}</p>
+
+                                <c:if test="${not empty r.sellerReply}">
+                                    <div class="seller-reply-box">
+                                        <div class="title">Phản hồi từ Người bán</div>
+                                        <div class="text-dark" style="font-size: 0.95rem;">${r.sellerReply}</div>
+                                    </div>
+                                </c:if>
+
+                                <div class="d-flex align-items-center mt-2">
+                                    <button class="like-btn ${r.hasLiked ? 'liked' : ''}" data-review-id="${r.id}" onclick="toggleLike(this, ${r.id})">
+                                        <i class="bi bi-hand-thumbs-up${r.hasLiked ? '-fill' : ''}"></i>
+                                        <span>Hữu ích (<span class="like-count">${r.likes}</span>)</span>
+                                    </button>
+
+                                    <c:if test="${not empty auth && auth.role == 1 && empty r.sellerReply}">
+                                        <button class="admin-reply-btn" onclick="showReplyForm(${r.id})">Trả lời bình luận này</button>
+                                    </c:if>
+                                </div>
+
+                                <c:if test="${not empty auth && auth.role == 1}">
+                                    <div id="reply-form-${r.id}" class="mt-3 d-none">
+                                        <textarea class="form-control mb-2" id="reply-content-${r.id}" rows="2" placeholder="Nhập phản hồi của bạn..."></textarea>
+                                        <button class="btn btn-sm btn-success" onclick="submitReply(${r.id})">Gửi phản hồi</button>
+                                        <button class="btn btn-sm btn-secondary" onclick="hideReplyForm(${r.id})">Hủy</button>
+                                    </div>
+                                </c:if>
                             </div>
                         </c:forEach>
                         <c:if test="${empty reviews}">
@@ -548,6 +622,86 @@
             });
         });
     });
+
+    // 5. Logic Like Đánh Giá
+    function toggleLike(btn, reviewId) {
+        <c:if test="${empty auth}">
+        Swal.fire({
+            icon: 'info',
+            title: 'Yêu cầu đăng nhập',
+            text: 'Bạn cần đăng nhập để thả lượt thích bình luận này!',
+            confirmButtonText: 'Đăng nhập ngay',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const currentUrl = window.location.href;
+                window.location.href = "${pageContext.request.contextPath}/login?returnUrl=" + encodeURIComponent(currentUrl);
+            }
+        });
+        return;
+        </c:if>
+
+        fetch("${pageContext.request.contextPath}/like-review", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ 'reviewId': reviewId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const icon = btn.querySelector('i');
+                    const countSpan = btn.querySelector('.like-count');
+                    let count = parseInt(countSpan.innerText);
+
+                    if (data.liked) {
+                        btn.classList.add('liked');
+                        icon.classList.remove('bi-hand-thumbs-up');
+                        icon.classList.add('bi-hand-thumbs-up-fill');
+                        countSpan.innerText = count + 1;
+                    } else {
+                        btn.classList.remove('liked');
+                        icon.classList.remove('bi-hand-thumbs-up-fill');
+                        icon.classList.add('bi-hand-thumbs-up');
+                        countSpan.innerText = count - 1;
+                    }
+                } else {
+                    Swal.fire('Lỗi', data.message, 'error');
+                }
+            });
+    }
+
+    // 6. Logic Admin Reply
+    function showReplyForm(reviewId) {
+        document.getElementById('reply-form-' + reviewId).classList.remove('d-none');
+    }
+
+    function hideReplyForm(reviewId) {
+        document.getElementById('reply-form-' + reviewId).classList.add('d-none');
+    }
+
+    function submitReply(reviewId) {
+        const content = document.getElementById('reply-content-' + reviewId).value;
+        if (!content.trim()) {
+            Swal.fire('Lỗi', 'Vui lòng nhập nội dung phản hồi.', 'warning');
+            return;
+        }
+
+        fetch("${pageContext.request.contextPath}/reply-review", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ 'reviewId': reviewId, 'reply': content })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire('Thành công', 'Đã thêm phản hồi', 'success');
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    Swal.fire('Lỗi', data.message, 'error');
+                }
+            });
+    }
 </script>
 
 <%@include file="/view/user/include/footer.jsp" %>
