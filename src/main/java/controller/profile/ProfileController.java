@@ -5,7 +5,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet("/profile")
+@WebServlet({"/profile", "/profile/*"})
 public class ProfileController extends HttpServlet {
 
     @Override
@@ -17,6 +17,25 @@ public class ProfileController extends HttpServlet {
             response.sendRedirect("login");
             return;
         }
+
+        String pathInfo = request.getPathInfo(); // null, "/info", "/password", "/orders", ...
+        String activeTab = "info";
+        if (pathInfo != null && !pathInfo.isBlank()) {
+            String normalized = pathInfo.trim().toLowerCase();
+            if (normalized.startsWith("/")) normalized = normalized.substring(1);
+            int slashIdx = normalized.indexOf('/');
+            if (slashIdx >= 0) normalized = normalized.substring(0, slashIdx);
+
+            if (normalized.equals("password")) activeTab = "password";
+            else if (normalized.equals("orders")) activeTab = "orders";
+            else if (normalized.equals("info") || normalized.isEmpty()) activeTab = "info";
+            else {
+                // Unknown subpath -> canonical default
+                response.sendRedirect(request.getContextPath() + "/profile/info");
+                return;
+            }
+        }
+        request.setAttribute("activeTab", activeTab);
 
         if (session.getAttribute("errors") != null) {
             request.setAttribute("errors", session.getAttribute("errors"));
