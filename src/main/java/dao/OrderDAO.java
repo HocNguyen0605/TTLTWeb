@@ -29,7 +29,7 @@ public class OrderDAO {
                     COALESCE(s.receiver_name, u.name) AS customer_name
                 FROM orders o
                 LEFT JOIN shippinginfo s ON o.id = s.id_order
-                LEFT JOIN user u ON o.id_user = u.id
+                LEFT JOIN `user` u ON o.id_user = u.id
                 ORDER BY o.date DESC
                 """;
 
@@ -53,20 +53,6 @@ public class OrderDAO {
         return list;
     }
 
-    // Thêm đơn hàng
-    public void insertOrder(Order order) {
-        String sql = "INSERT INTO orders( total_price, status_order, order_date) VALUES(?,?,?,?)";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(2, order.getTotalPrice());
-            ps.setString(3, order.getStatus());
-            ps.setDate(4, new java.sql.Date(order.getOrderDate().getTime()));
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     // Cập nhật trạng thái đơn hàng
     public void updateStatus(int orderId, String status) {
         String sql = "UPDATE orders SET status_order=? WHERE id=?";
@@ -76,19 +62,6 @@ public class OrderDAO {
             ps.setInt(2, orderId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addOrder(Order order) {
-        String sql = "INSERT INTO orders(total_price, status_order, order_date) VALUES (?,?,?,?)";
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(2, order.getTotalPrice());
-            ps.setString(3, order.getStatus());
-            ps.setDate(4, new java.sql.Date(order.getOrderDate().getTime()));
-            ps.executeUpdate();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -121,8 +94,11 @@ public class OrderDAO {
         ps.setDouble(1, order.getTotalPrice());
         ps.setString(2, order.getStatus());
         ps.setTimestamp(3, new java.sql.Timestamp(order.getOrderDate().getTime()));
-        ps.setInt(4, order.getUserId());
-
+        if (order.getUserId() > 0) {
+            ps.setInt(4, order.getUserId());
+        } else {
+            ps.setNull(4, java.sql.Types.INTEGER);
+        }
         ps.executeUpdate();
 
         ResultSet rs = ps.getGeneratedKeys();

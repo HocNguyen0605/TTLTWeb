@@ -93,9 +93,9 @@ public class OrderServlet extends HttpServlet {
             shippingDAO.insert(shippingInfo);
             conn.commit(); // Thành công
             session.removeAttribute("cart");
-            response.sendRedirect("/view/index.jsp");
-
+            response.sendRedirect(request.getContextPath() + "/home");
         } catch (Exception e) {
+            e.printStackTrace();
             if (conn != null) {
                 try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             }
@@ -103,7 +103,7 @@ public class OrderServlet extends HttpServlet {
             request.getRequestDispatcher("/view/user/cart.jsp").forward(request, response);
         } finally {
             if (conn != null) {
-                try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try {  conn.setAutoCommit(true);  conn.close(); } catch (SQLException e) { e.printStackTrace(); }
             }
         }
 
