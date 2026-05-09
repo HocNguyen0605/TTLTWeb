@@ -89,20 +89,40 @@
     </div>
     <div class="container my-5"style=" overflow-y: auto;">
         <div class="row g-4 mb-4">
-            <div class="col-md-6">
-                <div class="p-4 shadow rounded bg-white text-center border-start border-5 border-success">
-                    <h6 class="text-uppercase text-muted">Tổng doanh thu toàn thời gian</h6>
-                    <h2 class="text-success fw-bold display-6">
+            <!-- Tổng doanh thu -->
+            <div class="col-md-3">
+                <div class="p-3 shadow rounded bg-white text-center border-bottom border-5 border-success h-100">
+                    <h6 class="text-uppercase text-muted small">Tổng doanh thu</h6>
+                    <h4 class="text-success fw-bold">
                         <fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="₫" />
-                    </h2>
+                    </h4>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="p-4 shadow rounded bg-white text-center border-start border-5 border-primary">
-                    <h6 class="text-uppercase text-muted">Tổng số đơn hàng</h6>
-                    <h2 class="text-primary fw-bold display-6">
+            <!-- Tổng số đơn hàng -->
+            <div class="col-md-3">
+                <div class="p-3 shadow rounded bg-white text-center border-bottom border-5 border-primary h-100">
+                    <h6 class="text-uppercase text-muted small">Tổng đơn hàng</h6>
+                    <h4 class="text-primary fw-bold">
                         ${totalOrders}
-                    </h2>
+                    </h4>
+                </div>
+            </div>
+            <!-- Tổng số khách hàng -->
+            <div class="col-md-3">
+                <div class="p-3 shadow rounded bg-white text-center border-bottom border-5 border-info h-100">
+                    <h6 class="text-uppercase text-muted small">Khách hàng</h6>
+                    <h4 class="text-info fw-bold">
+                        ${totalUsers}
+                    </h4>
+                </div>
+            </div>
+            <!-- Sản phẩm sắp hết hàng -->
+            <div class="col-md-3">
+                <div class="p-3 shadow rounded bg-white text-center border-bottom border-5 border-danger h-100">
+                    <h6 class="text-uppercase text-muted small">Sắp hết hàng</h6>
+                    <h4 class="text-danger fw-bold">
+                        ${lowStockProducts}
+                    </h4>
                 </div>
             </div>
         </div>
