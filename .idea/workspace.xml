@@ -11,8 +11,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0a4e50b-df5d-44e4-9c90-42d29545fbf4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/controller/admin/BannerServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dao/BannerDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/Banner.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/js/banner_admin.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-banner.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/md5-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
@@ -20,60 +24,34 @@
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/configuration-cache.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/configuration-cache/configuration-cache.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_j_9_5_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/juicy.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/CartController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/OrderServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/OrderServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ProductController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ProductDetailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ProductDetailController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ReviewController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/VoucherController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/VoucherController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/CTKMServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/CTKMServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/VoucherServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/VoucherServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/BaseDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/BaseDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/OrderDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/OrderDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/OrderItemDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/OrderItemDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/ProductDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/ProductDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/ReviewDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/ReviewDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/UserDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/VoucherDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/VoucherDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Cart.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Cart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Review.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Review.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Voucher.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Voucher.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/service/ProductService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/service/ProductService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/util/DBContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/util/DBContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/12fabuzuyaouk4maxh2b9r4vw/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/1nzd1id1by5yf7uazu46fcv3a/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/1v66ay4gfd4517mrfccbjari1/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/27mcid6fmmfu9i9vcq8mm7z41/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/72xa9ialvioq437s7jt8qmsi9/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/74j76tu3tkof3rp6n9lpjsfjb/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/8z7t6l04cpictg0b8jxsq74x2/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/94vly715gb2sak36hi74h2dfg/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/dqadh2huknvy0tmzxkmbk1bii/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/eab8a1x5us0miwfq1zag5kirc/1a73yyuoq3r8tqgebjq8494ys/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/eab8a1x5us0miwfq1zag5kirc/688jyoyp33buv31c84w7kc1ej/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/HomeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddProductServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/service/CloudinaryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/service/CloudinaryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/HomeController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddProductServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/service/CloudinaryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/service/CloudinaryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-CTKM.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-CTKM.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-accounts.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-accounts.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-review.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-review.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/juicy.war" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/juicy.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/OrderServlet.class.uniqueId0" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controller/OrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/OrderServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderItemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/OrderItemDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/ProductDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/ProductDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/DBContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/DBContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/user/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/user/cart.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/admin/AddProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/admin/AddProductServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/service/CloudinaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/CloudinaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-CTKM.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-CTKM.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-accounts.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-accounts.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-review.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-review.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,6 +97,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Jsp File" />
         <option value="Servlet" />
         <option value="JavaScript File" />
         <option value="Class" />
@@ -151,6 +130,9 @@
   &quot;associatedIndex&quot;: 0
 }</component>
   <component name="ProjectId" id="3CVlsGbpkYTsn6prqby95opTMbl" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -158,6 +140,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Gradle.Build TTLTWeb.executor": "Run",
+    "Gradle.Download Sources.executor": "Run",
     "Gradle.TTLTWeb [build].executor": "Run",
     "Gradle.TTLTWeb [clean].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
@@ -370,7 +353,7 @@
       <workItem from="1777688616041" duration="25031000" />
       <workItem from="1777977885249" duration="107000" />
       <workItem from="1778294340088" duration="2461000" />
-      <workItem from="1778298806461" duration="5487000" />
+      <workItem from="1778298806461" duration="19361000" />
     </task>
     <servers />
   </component>

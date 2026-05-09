@@ -54,11 +54,11 @@
                             Quản lý sản phẩm </a>
                     </li>
                     <li>
-                        <a class="nav-link text-white ms-3" href="#">
+                        <a class="nav-link text-white ms-3" href="${pageContext.request.contextPath}/admin/banner">
                             Quản lý banner </a>
                     </li>
                     <li>
-                        <a class="nav-link text-white ms-3" href="#">
+                        <a class="nav-link text-white ms-3" href="${pageContext.request.contextPath}/admin/CTKM">
                             Quản lý CTKM </a>
                     </li>
                     <li>
