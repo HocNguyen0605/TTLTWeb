@@ -11,9 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0a4e50b-df5d-44e4-9c90-42d29545fbf4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/md5-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/sha1-checksums.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/juicy.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -21,59 +19,91 @@
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/configuration-cache.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/configuration-cache/configuration-cache.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/.globals.work.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/.strings.work.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/_.work.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/build.work.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/buildfingerprint.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/classloaderscopes.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/entry.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/projectfingerprint.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/0c818a03-f417-4cc3-bed3-bde2b26f2c8f/work.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/candidates.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/candidates.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/mysql_connector_j_9_5_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/juicy.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/CartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/CartController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/CheckoutServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/CheckoutServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ForgotPasswordServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ForgotPasswordServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/LoginGoogleServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/LoginGoogleServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/LoginServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/LoginServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/LogoutServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/LogoutServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/OrderServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/OrderServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ProductController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ProductDetailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ProductDetailController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ProductServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/RegisterServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/ReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/ReviewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/SendOTPServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/SendOTPServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/VoucherController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/VoucherController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/CTKMServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/CTKMServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AccountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddCTKMServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddCTKMServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddProductServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AdminFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AdminFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AdminReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AdminReviewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/ChartDataServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/ChartDataServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/OrderController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/VoucherServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/VoucherServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/BaseDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/BaseDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/OrderDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/OrderDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/OrderItemDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/OrderItemDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/momo/MomoPaymentServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/momo/MomoPaymentServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/profile/UpdateEmailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/profile/UpdateEmailController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/profile/UpdateProfileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/profile/UpdateProfileController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/AdminDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/AdminDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/ProductDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/ProductDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/ReviewDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/ReviewDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/UserDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/VoucherDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/VoucherDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Cart.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Cart.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Review.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Review.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Voucher.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Voucher.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/service/ProductService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/service/ProductService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/util/DBContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/util/DBContext.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/12fabuzuyaouk4maxh2b9r4vw/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/1nzd1id1by5yf7uazu46fcv3a/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/1v66ay4gfd4517mrfccbjari1/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/27mcid6fmmfu9i9vcq8mm7z41/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/72xa9ialvioq437s7jt8qmsi9/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/74j76tu3tkof3rp6n9lpjsfjb/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/8z7t6l04cpictg0b8jxsq74x2/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/94vly715gb2sak36hi74h2dfg/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/7ko6nvsyx9b8of28iklwnco8g/dqadh2huknvy0tmzxkmbk1bii/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/eab8a1x5us0miwfq1zag5kirc/1a73yyuoq3r8tqgebjq8494ys/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/eab8a1x5us0miwfq1zag5kirc/688jyoyp33buv31c84w7kc1ej/configuration-cache-report.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/problems/problems-report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/GooglePojo.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/GooglePojo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/service/CloudinaryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/service/CloudinaryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/util/GoogleUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/util/GoogleUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/util/MailUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/util/MailUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/CheckoutServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/CheckoutServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/ForgotPasswordServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/ForgotPasswordServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/LoginGoogleServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/LoginGoogleServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/LoginServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/LoginServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/LogoutServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/LogoutServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/OrderServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/OrderServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/ProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/ProductServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/RegisterServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/ReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/ReviewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/SendOTPServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/SendOTPServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/VoucherController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/VoucherController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AccountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddCTKMServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddCTKMServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddProductServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AdminFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AdminFilter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AdminReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AdminReviewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/ChartDataServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/ChartDataServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/OrderController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/VoucherServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/VoucherServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/momo/MomoPaymentServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/momo/MomoPaymentServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/profile/UpdateEmailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/profile/UpdateEmailController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/profile/UpdateProfileController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/profile/UpdateProfileController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/AdminDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/AdminDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/ProductDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/ProductDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/ReviewDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/ReviewDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/UserDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/model/GooglePojo.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/model/GooglePojo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/service/CloudinaryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/service/CloudinaryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/util/DBContext.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/util/DBContext.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/util/GoogleUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/util/GoogleUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/util/MailUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/util/MailUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/juicy.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/juicy.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/juicy.war" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/juicy.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/3kfgv64wjmyz5xp0miy61118s/5a3yhxpx227rrck5xrgdu003g/configuration-cache-report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/4s7eiqcbtpqkzyazzmzkhmsbw/b9djnx035ixvqz1jgh6y1qhwy/configuration-cache-report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/79nqeh7hh8g6a277355rylt02/1hnbuiknv1r8ojmao7zzavyr7/configuration-cache-report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/configuration-cache/eliviyqrf3oxltn4zq9qastyf/696vdfvv20fdle2m7gt56ys9j/configuration-cache-report.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/OrderServlet.class.uniqueId0" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controller/OrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/OrderServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderItemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/OrderItemDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/ProductDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/ProductDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/AdminDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/AdminDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/ReviewDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/ReviewDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/util/DBContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/DBContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/user/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/user/cart.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,18 +164,26 @@
     &quot;assignee&quot;: &quot;HocNguyen0605&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/HocNguyen0605/TTLTWeb.git&quot;,
-    &quot;accountId&quot;: &quot;55f308b9-2469-471f-92a0-b1de231c50b4&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/HocNguyen0605/TTLTWeb.git",
+    "accountId": "9a90e7d5-644a-4e5c-9aeb-edb5a51ee364"
   }
-}</component>
+}]]></component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
     <option name="FILTER_INFO" value="true" />
     <option name="FILTER_DEBUG" value="true" />
     <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -158,23 +196,34 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Gradle.Build TTLTWeb.executor": "Run",
+    "Gradle.Build TTLapTrinhWeb.executor": "Run",
     "Gradle.TTLTWeb [build].executor": "Run",
     "Gradle.TTLTWeb [clean].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Tomcat Server.Tomcat 11.0.15.executor": "Run",
-    "git-widget-placeholder": "Hoc",
+    "Tomcat Server.Tomcat 11.0.18.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/TTLTWeb",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
+    "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -184,14 +233,14 @@
         <entry key="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
           <value>
             <map>
-              <entry key="Tomcat 11.0.15" value="STOPPED" />
+              <entry key="Tomcat 11.0.18" value="FAILED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="Tomcat Server.Tomcat 11.0.15">
+  <component name="RunManager" selected="Tomcat Server.Tomcat 11.0.18">
     <configuration name="TTLTWeb [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -242,7 +291,7 @@
       <GradleCoverageDisabled>false</GradleCoverageDisabled>
       <method v="2" />
     </configuration>
-    <configuration name="Tomcat 11.0.15" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 11.0.15" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+    <configuration name="Tomcat 11.0.18" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 11.0.18" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="21 (2)" nameIsGenerated="true">
       <option name="UPDATING_POLICY" value="restart-server" />
       <deployment>
         <artifact name="Gradle : juicy.war">
@@ -257,7 +306,7 @@
         </artifact>
       </deployment>
       <server-settings>
-        <option name="BASE_DIRECTORY_NAME" value="57204510-c3f8-4f12-8845-f53f8b2232cf" />
+        <option name="BASE_DIRECTORY_NAME" value="b05a83fa-24f5-4657-9814-66fc0fcf7dc2" />
       </server-settings>
       <predefined_log_file enabled="true" id="Tomcat" />
       <predefined_log_file enabled="true" id="Tomcat Catalina" />
@@ -265,7 +314,7 @@
       <predefined_log_file id="Tomcat Host Manager" />
       <predefined_log_file id="Tomcat Localhost Access" />
       <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="50764" />
+        <option name="DEBUG_PORT" value="59492" />
       </RunnerSettings>
       <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
         <option name="USE_ENV_VARIABLES" value="true" />
@@ -338,7 +387,7 @@
     <list>
       <item itemvalue="Gradle.TTLTWeb [build]" />
       <item itemvalue="Gradle.TTLTWeb [clean]" />
-      <item itemvalue="Tomcat Server.Tomcat 11.0.15" />
+      <item itemvalue="Tomcat Server.Tomcat 11.0.18" />
     </list>
     <recent_temporary>
       <list>
@@ -350,8 +399,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.29346.138" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
       </set>
     </attachedChunks>
   </component>
@@ -371,6 +420,7 @@
       <workItem from="1777977885249" duration="107000" />
       <workItem from="1778294340088" duration="2461000" />
       <workItem from="1778298806461" duration="5487000" />
+      <workItem from="1778322510958" duration="3647000" />
     </task>
     <servers />
   </component>
