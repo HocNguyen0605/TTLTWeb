@@ -11,7 +11,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0a4e50b-df5d-44e4-9c90-42d29545fbf4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/ReplyReviewServlet.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/classes/java/main/model/Review$ReviewComment.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/ReplyReviewServlet.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/model/Review$ReviewComment.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/AboutController.class.uniqueId5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/AdminReviewController.class.uniqueId4" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ProductDetailController.class.uniqueId6" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReplyReviewServlet.class.uniqueId1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Review.class.uniqueId3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReviewController.class.uniqueId0" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ReviewDAO.class.uniqueId2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controller/admin/ReplyReviewServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AdminReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AdminReviewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/ReviewDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/ReviewDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/model/Review.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/model/Review.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AdminReviewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AdminReviewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/ReviewDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/ReviewDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/model/Review.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/model/Review.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-review.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-review.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/user/productdetail.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/user/productdetail.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/juicy.war" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/juicy.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/AdminDAO.class.uniqueId1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ChartDataServlet$ChartResponse.class.uniqueId3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/ChartDataServlet.class.uniqueId2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/DashboardServlet.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/admin/AdminReviewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/admin/AdminReviewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/ReviewDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/ReviewDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Review.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Review.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-review.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-review.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/user/productdetail.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/user/productdetail.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +179,7 @@
         <entry key="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
           <value>
             <map>
-              <entry key="Tomcat 11.0.18" value="FAILED" />
+              <entry key="Tomcat 11.0.18" value="STOPPED" />
             </map>
           </value>
         </entry>

@@ -17,7 +17,7 @@ public class AdminReviewController extends HttpServlet {
         List<Review> reviews = reviewDAO.getAllReviews();
 
         request.setAttribute("reviews", reviews);
-        request.getRequestDispatcher("/view/admin/admin-reviews.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/admin/admin-review.jsp").forward(request, response);
     }
 
     @Override

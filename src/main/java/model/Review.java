@@ -1,7 +1,7 @@
 package model;
-//DÙng để ghi láij nội dung đsanh giá của khsach hàng
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Review {
     private int id;
@@ -16,6 +16,7 @@ public class Review {
     private String sellerReply;
     private int likes;
     private boolean hasLiked;
+    private List<ReviewComment> comments;
 
     public Review() {}
 
@@ -26,80 +27,131 @@ public class Review {
         this.content = content;
     }
 
+    //
+    public static class ReviewComment {
+        private int id;
+        private int reviewId;
+        private int userId;
+        private String userName;
+        private String content;
+        private Timestamp createdAt;
+
+        public ReviewComment() {}
+        public ReviewComment(int reviewId, int userId, String content) {
+            this.reviewId = reviewId;
+            this.userId = userId;
+            this.content = content;
+        }
+
+        public int getId() {
+            return id;
+        }
+        public void setId(int id) {
+            this.id = id;
+        }
+        public int getReviewId() {
+            return reviewId;
+        }
+        public void setReviewId(int reviewId) {
+            this.reviewId = reviewId;
+        }
+        public int getUserId() {
+            return userId;
+        }
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
+        public String getUserName() {
+            return userName;
+        }
+        public void setUserName(String userName) {
+            this.userName = userName;
+        }
+        public String getContent() {
+            return content;
+        }
+        public void setContent(String content) {
+            this.content = content;
+        }
+        public Timestamp getCreatedAt() {
+            return createdAt;
+        }
+        public void setCreatedAt(Timestamp createdAt) {
+            this.createdAt = createdAt;
+        }
+    }
+
+    // Get và set
     public int getId() {
         return id;
     }
-    public void setId(int id)    {
+    public void setId(int id) {
         this.id = id;
     }
-
     public int getProductId() {
         return productId;
     }
     public void setProductId(int productId) {
         this.productId = productId;
     }
-
     public int getUserId() {
         return userId;
     }
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
     public int getRating() {
         return rating;
     }
     public void setRating(int rating) {
         this.rating = rating;
     }
-
     public String getContent() {
         return content;
     }
     public void setContent(String content) {
         this.content = content;
     }
-
     public Timestamp getCreatedAt() {
         return createdAt;
     }
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
-
     public String getUserName() {
         return userName;
     }
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
     public String getProductName() {
         return productName;
     }
     public void setProductName(String productName) {
         this.productName = productName;
     }
-
     public String getSellerReply() {
         return sellerReply;
     }
     public void setSellerReply(String sellerReply) {
         this.sellerReply = sellerReply;
     }
-
     public int getLikes() {
         return likes;
     }
     public void setLikes(int likes) {
         this.likes = likes;
     }
-
     public boolean isHasLiked() {
         return hasLiked;
     }
     public void setHasLiked(boolean hasLiked) {
         this.hasLiked = hasLiked;
+    }
+    public List<ReviewComment> getComments() {
+        return comments;
+    }
+    public void setComments(List<ReviewComment> comments) {
+        this.comments = comments;
     }
 }
