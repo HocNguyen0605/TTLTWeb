@@ -87,16 +87,47 @@ public class BannerDAO {
         return false;
     }
 
-    // Xóa banner
-    public boolean deleteBanner(int id) {
-        String sql = "DELETE FROM banners WHERE id = ?";
+    // update banner
+    public boolean updateBanner(Banner b) {
+        String sql = "UPDATE banners SET title = ?, image_url = ?, link_url = ?, priority = ?, is_active = ? WHERE id = ?";
         try (Connection conn = DBContext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setString(1, b.getTitle());
+            ps.setString(2, b.getImageUrl());
+            ps.setString(3, b.getLinkUrl());
+            ps.setInt(4, b.getPriority());
+            ps.setBoolean(5, b.isIsActive());
+            ps.setInt(6, b.getId());
+
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // lấy ảnh cũ nếu người dùng không upload ảnh mới
+    public Banner getBannerById(int id) {
+        String sql = "SELECT * FROM banners WHERE id = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Banner(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("image_url"),
+                            rs.getString("link_url"),
+                            rs.getInt("priority"),
+                            rs.getBoolean("is_active"),
+                            rs.getTimestamp("created_at")
+                    );
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

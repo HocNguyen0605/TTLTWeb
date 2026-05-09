@@ -11,47 +11,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0a4e50b-df5d-44e4-9c90-42d29545fbf4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/controller/admin/BannerServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dao/BannerDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Banner.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/js/banner_admin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-banner.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/HomeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/AddProductServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/service/CloudinaryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/service/CloudinaryService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/HomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/HomeController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/AddProductServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/service/CloudinaryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/service/CloudinaryService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-CTKM.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-CTKM.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-accounts.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-accounts.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-dashboard.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-orders.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-products.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-review.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-review.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/BannerServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/BannerServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/BannerDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/BannerDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/BannerServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/BannerServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/BannerDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/BannerDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/js/banner_admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/js/banner_admin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-banner.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-banner.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/libs/juicy.war" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/juicy.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/OrderServlet.class.uniqueId0" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BannerServlet.class.uniqueId0" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BannerServlet.class.uniqueId0" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controller/admin/AddProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/admin/AddProductServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/service/CloudinaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/service/CloudinaryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-CTKM.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-CTKM.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-accounts.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-accounts.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-dashboard.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-orders.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-products.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-review.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-review.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controller/admin/BannerServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/admin/BannerServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/BannerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/BannerDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/js/banner_admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/js/banner_admin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-banner.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-banner.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -353,7 +332,7 @@
       <workItem from="1777688616041" duration="25031000" />
       <workItem from="1777977885249" duration="107000" />
       <workItem from="1778294340088" duration="2461000" />
-      <workItem from="1778298806461" duration="19361000" />
+      <workItem from="1778298806461" duration="21449000" />
     </task>
     <servers />
   </component>

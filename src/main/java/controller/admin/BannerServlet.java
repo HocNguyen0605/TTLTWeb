@@ -25,39 +25,51 @@ public class BannerServlet extends HttpServlet {
         String linkUrl = request.getParameter("link_url");
         int priority = Integer.parseInt(request.getParameter("priority"));
 
-        if ("add".equals(action)) {
+        BannerDAO dao = new BannerDAO();
+        CloudinaryService cloudinaryService = new CloudinaryService();
             try {
-                Part filePart = request.getPart("bannerImage"); // Trùng với name="bannerImage" trong HTML
-                if (filePart != null && filePart.getSize() > 0) {
-                    // Đọc file thành mảng byte
-                    byte[] fileBytes = filePart.getInputStream().readAllBytes();
-                    String fileName = filePart.getSubmittedFileName();
+                if ("add".equals(action)) {
+                    Part filePart = request.getPart("bannerImage");
+                    if (filePart != null && filePart.getSize() > 0) {
+                        byte[] fileBytes = filePart.getInputStream().readAllBytes();
+                        String secureUrl = cloudinaryService.uploadImage(fileBytes, filePart.getSubmittedFileName(), "banners");
 
-                    CloudinaryService cloudinaryService = new CloudinaryService();
-                    String secureUrl = cloudinaryService.uploadImage(fileBytes, fileName, "banners");
+                        Banner banner = new Banner();
+                        banner.setTitle(title);
+                        banner.setImageUrl(secureUrl);
+                        banner.setLinkUrl(linkUrl);
+                        banner.setPriority(priority);
+                        banner.setIsActive(true);
 
-                    Banner banner = new Banner();
-                    banner.setTitle(title);
-                    banner.setImageUrl(secureUrl);
-                    banner.setLinkUrl(linkUrl);
-                    banner.setPriority(priority);
-                    banner.setIsActive(true);
-
-                    BannerDAO dao = new BannerDAO();
-                    boolean isSuccess = dao.insertBanner(banner);
-
-                    if (isSuccess) {
-                        response.sendRedirect(request.getContextPath() + "/admin/banner");
-                    } else {
-                        response.sendRedirect(request.getContextPath() + "/admin/banner");
+                        dao.insertBanner(banner);
                     }
+                }
+                else if ("update".equals(action)) {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    boolean isActive = Boolean.parseBoolean(request.getParameter("is_active"));
+
+                    Part filePart = request.getPart("bannerImage");
+                    String finalImageUrl;
+
+                    if (filePart != null && filePart.getSize() > 0) {
+                        // Có ảnh mới thì upload
+                        byte[] fileBytes = filePart.getInputStream().readAllBytes();
+                        finalImageUrl = cloudinaryService.uploadImage(fileBytes, filePart.getSubmittedFileName(), "banners");
+                    } else {
+                        // Không chọn ảnh mới thì lấy lại link ảnh cũ từ DB
+                        Banner oldBanner = dao.getBannerById(id);
+                        finalImageUrl = (oldBanner != null) ? oldBanner.getImageUrl() : "";
+                    }
+
+                    Banner updatedBanner = new Banner(id, title, finalImageUrl, linkUrl, priority, isActive, null);
+                    dao.updateBanner(updatedBanner);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                response.sendRedirect(request.getContextPath() + "/admin/banner");
             }
+
+            response.sendRedirect(request.getContextPath() + "/admin/banner");
         }
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

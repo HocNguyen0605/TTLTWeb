@@ -160,9 +160,10 @@
                                             </c:choose>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-success w-30 "
-                                                    data-bs-toggle="modal" data-bs-target="#updateBannerModal">
-                                                <i class="bi bi-credit-card me-1"></i> Chỉnh sửa
+                                            <button type="button" class="btn btn-sm btn-warning"
+                                                    data-bs-toggle="modal" data-bs-target="#updateBannerModal"
+                                                    onclick="openEditModal('${b.id}', '${b.title}', '${b.imageUrl}', '${b.linkUrl}', '${b.priority}', '${b.isActive}')">
+                                                Sửa
                                             </button>
                                         </td>
                                     </tr>
@@ -239,101 +240,67 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal thêm CTKM -->
+    <!-- Modal chỉnh sửa banner -->
     <div class="modal fade" id="updateBannerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content shadow-lg">
-                <!-- Header -->
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">
-                        <i class="bi bi-box-seam-fill me-2"></i>Thêm CTKM Mới
+                        <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa Banner
                     </h5>
-                    <p class="text-muted small">Áp dụng tối đa cho 2 sản phẩm khác nhau</p>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    <hr>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <!-- Body -->
                 <div class="modal-body">
-                    <form method="post" action="${pageContext.request.contextPath}/admin/addCTKM">
-                        <input type="hidden" name="action" value="add">
-                        <input type="hidden" name="type" value="combo">
-                        <input type="hidden" name="status" value="active">
+                    <form method="post" action="${pageContext.request.contextPath}/admin/banner" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="id" id="edit_id">
                         <div class="row">
+                            <!-- Tiêu đề -->
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Tiêu đề Banner</label>
+                                <input type="text" name="title" id="edit_title" class="form-control" required>
+                            </div>
+
+                            <!-- Ảnh hiện tại, Chọn ảnh mới -->
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Hình ảnh Banner</label>
+                                <div class="mb-2">
+                                    <small class="text-muted">Ảnh hiện tại:</small><br>
+                                    <img src="" id="edit_preview_old" class="rounded border" style="max-height: 100px;">
+                                </div>
+                                <input type="file" name="bannerImage" class="form-control" accept="image/*" onchange="previewImageUpdate(this)">
+                                <div class="form-text">Để trống nếu không muốn thay đổi ảnh.</div>
+                                <div id="imagePreviewUpdate" class="mt-2 d-none">
+                                    <small class="text-success">Ảnh mới chọn:</small><br>
+                                    <img src="" class="img-thumbnail" style="max-height: 100px;">
+                                </div>
+                            </div>
+
+                            <!-- Link URL -->
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Đường dẫn liên kết (URL)</label>
+                                <input type="text" name="link_url" id="edit_link_url" class="form-control">
+                            </div>
+
+                            <!-- Độ ưu tiên -->
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Tên Chương trình</label>
-                                <input type="text" name="name" class="form-control"
-                                       placeholder="Khuyến mãi mùa hè..." required>
+                                <label class="form-label fw-semibold text-secondary">Thứ tự hiển thị</label>
+                                <input type="number" name="priority" id="edit_priority" class="form-control" min="1" required>
+                            </div>
+
+                            <!-- Trạng thái -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Trạng thái</label>
+                                <select name="is_active" id="edit_is_active" class="form-select">
+                                    <option value="true">Hiển thị</option>
+                                    <option value="false">Ẩn</option>
+                                </select>
                             </div>
                         </div>
 
-                        <hr class="m-3 text-secondary">
-                        <h6 class="mb-3 fw-bold text-primary"><i class="bi bi-box-seam me-2"></i>Sản phẩm áp dụng</h6>
-
-                        <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Sản phẩm 1 (Bắt buộc)</label>
-                                <select name="product_id_1" class="form-select select2-enable" required>
-                                    <option value="">-- Nhập tên sản phẩm chính --</option>
-                                    <c:forEach items="${productList}" var="p">
-                                        <option value="${p.id}">${p.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Số lượng</label>
-                                <input type="number" name="quantity_1" class="form-control" value="1" min="1">
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Sản phẩm 2 (Tùy chọn)</label>
-                                <select name="product_id_2" class="form-select">
-                                    <option value="0">-- Không chọn thêm sản phẩm --</option>
-                                    <c:forEach items="${productList}" var="p">
-                                        <option value="${p.id}">${p.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Số lượng</label>
-                                <input type="number" name="quantity_2" class="form-control" value="1" min="1">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Loại giảm giá</label>
-                                <select name="discount_type" class="form-select" required>
-                                    <option value="">-- Chọn loại --</option>
-                                    <option value="percent">Giảm theo %</option>
-                                    <option value="amount">Giảm theo số tiền</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Giá trị giảm</label>
-                                <input type="number" name="discount_value" class="form-control"
-                                       placeholder="Ví dụ: 10 hoặc 50000" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Ngày bắt đầu</label>
-                                <input type="datetime-local" name="start_date" class="form-control" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold text-secondary">Ngày kết thúc</label>
-                                <input type="datetime-local" name="end_date" class="form-control" required>
-                            </div>
-                        </div>
-                        <!-- Nút -->
                         <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                            <button type="button" class="btn btn-light px-4 border"
-                                    data-bs-dismiss="modal">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-premium px-4">
-                                <i class="bi bi-check-lg me-1"></i> Lưu
-                            </button>
+                            <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-primary px-4">Cập nhật Banner</button>
                         </div>
                     </form>
                 </div>
