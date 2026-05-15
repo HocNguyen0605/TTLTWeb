@@ -2,9 +2,21 @@ package dao;
 
 import model.Product;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ProductDAO extends BaseDao {
+    private Connection conn;
+
+    public ProductDAO(Connection conn) {
+        this.conn = conn;
+    }
+
+    public ProductDAO() {
+    }
 
     // Lấy tất cả sản phẩm (cho trang Products)
     public List<Product> getAll() {
@@ -377,6 +389,14 @@ public class ProductDAO extends BaseDao {
                 .bind("price", price)
                 .execute());
     }
+    public void updatePromotionById(int productId, int promotionId) throws SQLException {
+        String sql = "UPDATE products SET promotion = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, promotionId);
+            ps.setInt(2, productId);
+            ps.executeUpdate();
+        }
+    }
 
     // --- PHÂN TRANG ---
     public int getTotalProducts() {
@@ -429,5 +449,54 @@ public class ProductDAO extends BaseDao {
                 .mapToBean(Product.class)
                 .list());
     }
+    public int getMaxQuantityById(int idProduct){
+        int maxQuantity = 0;
+        String sql = """
+                SELECT p.quantity FROM products p WHERE p.id = ?
+                """;
+        try(PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, idProduct);
+            try(ResultSet rs = ps.executeQuery()){
+                if(rs.next()){
+                    maxQuantity=rs.getInt("quantity");
+                }
+            } catch(SQLException e){e.printStackTrace();}
 
+        }catch(SQLException e){ e.printStackTrace();}
+        return maxQuantity;
+    }
+    // Trong lớp ProductDAO.java
+    public Product getProductForUpdate(int productId) throws SQLException {
+        String sql = "SELECT id, product_name, quantity, version FROM products WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("product_name"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    product.setVersion(rs.getInt("version"));
+                    return product;
+                }
+            }
+        }
+        return null;
+    }
+    //Update lại số lượng tồn với trường hợp 2 người cùng mua 1 thời điểm cho 1 sản phẩm
+    public boolean updateProductQuantity(int productId, int quantityToSubtract, int oldVersion) throws SQLException {
+        String sql = "UPDATE products SET quantity = quantity - ?, version = version + 1 " +
+                "WHERE id = ? AND version = ? AND quantity >= ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, quantityToSubtract);
+            ps.setInt(2, productId);
+            ps.setInt(3, oldVersion);
+            ps.setInt(4, quantityToSubtract);
+
+            int rowsAffected = ps.executeUpdate();
+
+            return rowsAffected > 0;
+        }
+    }
 }

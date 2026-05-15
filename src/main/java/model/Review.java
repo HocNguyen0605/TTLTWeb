@@ -12,6 +12,10 @@ public class Review {
     private Timestamp createdAt;
 
     private String userName;
+    private String productName;
+    private String sellerReply;
+    private int likes;
+    private boolean hasLiked;
 
     public Review() {}
 
@@ -69,5 +73,33 @@ public class Review {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getSellerReply() {
+        return sellerReply;
+    }
+    public void setSellerReply(String sellerReply) {
+        this.sellerReply = sellerReply;
+    }
+
+    public int getLikes() {
+        return likes;
+    }
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public boolean isHasLiked() {
+        return hasLiked;
+    }
+    public void setHasLiked(boolean hasLiked) {
+        this.hasLiked = hasLiked;
     }
 }

@@ -40,6 +40,7 @@ public class CartItem implements Serializable {
         }
     }
     public double getTotalPrice() {
-        return this.price * this.quantity;
+        return price * quantity;
     }
+
 }
