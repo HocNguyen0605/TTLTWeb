@@ -206,4 +206,30 @@ public class AdminDAO {
         }
         return map;
     }
+
+    public int countTotalUsers() {
+        String sql = "SELECT COUNT(*) FROM account WHERE role = 'user'";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next())
+                return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int countLowStockProducts(int threshold) {
+        String sql = "SELECT COUNT(*) FROM products WHERE quantity < ? AND quantity >= 0";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, threshold);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next())
+                    return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

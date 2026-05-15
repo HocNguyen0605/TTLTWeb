@@ -36,11 +36,11 @@ public class ReviewDAO extends BaseDao {
                 SELECT r.id, r.product_id as productId, r.user_id as userId, r.rating, r.content, r.created_at as createdAt, 
                        r.seller_reply as sellerReply,
                        COALESCE(u.name, 'Người dùng Juicy') as userName,
-                       p.name as productName,
+                       p.product_name as productName,
                        (SELECT COUNT(*) FROM review_likes rl WHERE rl.review_id = r.id) as likes
                 FROM reviews r
                 LEFT JOIN user u ON r.user_id = u.id_account
-                LEFT JOIN product p ON r.product_id = p.id
+                LEFT JOIN products p ON r.product_id = p.id
                 ORDER BY r.created_at DESC
                 """;
         return jdbi.withHandle(handle -> handle.createQuery(sql)
