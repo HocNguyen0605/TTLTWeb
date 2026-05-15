@@ -21,6 +21,10 @@ export function initChangePassword() {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
         })
             .then(async res => {
+                if (res.status === 404) {
+                    window.location.href = form.action.replace('/changePassword', '/view/user/404.jsp');
+                    return;
+                }
                 const data = await res.json();
 
                 if (res.ok) {

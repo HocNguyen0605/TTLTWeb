@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/product.css">
     <link rel="stylesheet" href="css/login.css">
     <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/orders.css">
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>

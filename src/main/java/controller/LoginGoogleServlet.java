@@ -24,6 +24,7 @@ public class LoginGoogleServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Yêu cầu giả mạo bị từ chối!");
             return;
         }
+        session.removeAttribute("google_state");
 
         if (code != null && !code.isEmpty()) {
 

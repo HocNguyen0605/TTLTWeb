@@ -31,8 +31,16 @@ public class ProfileValidator {
 
         if (!ValidationUtils.isNotEmpty(oldPass)) {
             errors.put("oldPassword", "Mật khẩu hiện tại không được để trống.");
-        } else if (!oldPass.equals(actualOldPass)) {
-            errors.put("oldPassword", "Mật khẩu hiện tại không chính xác!");
+        } else {
+            boolean isValid = false;
+            try {
+                isValid = actualOldPass != null && org.mindrot.jbcrypt.BCrypt.checkpw(oldPass, actualOldPass);
+            } catch (IllegalArgumentException e) {
+                // Brycpt hash ko hợp lệ
+            }
+            if (!isValid) {
+                errors.put("oldPassword", "Mật khẩu hiện tại không chính xác!");
+            }
         }
 
         if (!ValidationUtils.isNotEmpty(newPass)) {
