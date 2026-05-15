@@ -18,14 +18,7 @@ public class CloudinaryService {
         ));
     }
 
-    /**
-     * Tải file ảnh dưới dạng mảng byte lên Cloudinary và trả về secure URL.
-     * @param fileBytes Mảng byte của ảnh
-     * @param fileName Tên gốc của ảnh (tùy chọn, làm id trên Cloudinary)
-     * @return Chuỗi link ảnh an toàn (HTTPS)
-     * @throws IOException Bắt lỗi nạp luồng
-     */
-    public String uploadImage(byte[] fileBytes, String fileName) throws IOException {
+    public String uploadImage(byte[] fileBytes, String fileName, String folderName) throws IOException {
         String publicId = "file_" + System.currentTimeMillis();
         if (fileName != null && fileName.contains(".")) {
             publicId = fileName.substring(0, fileName.lastIndexOf("."));
@@ -33,7 +26,7 @@ public class CloudinaryService {
 
         Map params = ObjectUtils.asMap(
                 "public_id", "juicy_product_" + System.currentTimeMillis() + "_" + publicId,
-                "folder", "juicy/products"
+                "folder", "juicy/"+ folderName
         );
         Map result = cloudinary.uploader().upload(fileBytes, params);
         return (String) result.get("secure_url");

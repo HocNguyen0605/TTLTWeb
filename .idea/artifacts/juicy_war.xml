@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" external-system-id="Maven" name="juicy:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>juicy</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="juicy.war">
+      <element id="artifact" artifact-name="juicy:war exploded" />
+    </root>
+  </artifact>
+</component>

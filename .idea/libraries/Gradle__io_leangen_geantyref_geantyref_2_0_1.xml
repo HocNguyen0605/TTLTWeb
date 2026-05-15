@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: io.leangen.geantyref:geantyref:2.0.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="io.leangen.geantyref" artifactId="geantyref" version="2.0.1" baseVersion="2.0.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.leangen.geantyref/geantyref/2.0.1/81253383ac75126142f97781d22d19de2532bf76/geantyref-2.0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.leangen.geantyref/geantyref/2.0.1/70927d0fd96236e193061d82247cdb7c56e46b0e/geantyref-2.0.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.leangen.geantyref/geantyref/2.0.1/a763a4d6cbe3a6b23aeda62e0c3722e5ffb0453c/geantyref-2.0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
