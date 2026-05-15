@@ -11,26 +11,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0a4e50b-df5d-44e4-9c90-42d29545fbf4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/9.4.1/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/controller/admin/BannerServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/controller/admin/BannerServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/dao/BannerDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/dao/BannerDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/BannerServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/controller/admin/BannerServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/BannerDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/WEB-INF/classes/dao/BannerDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/js/banner_admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/js/banner_admin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-banner.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/exploded/juicy.war/view/admin/admin-banner.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/libs/juicy.war" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/juicy.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BannerServlet.class.uniqueId0" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BannerServlet.class.uniqueId0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controller/admin/BannerServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controller/admin/BannerServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/BannerDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/BannerDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/js/banner_admin.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/js/banner_admin.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-banner.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/admin/admin-banner.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,30 +103,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build TTLTWeb.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "Gradle.TTLTWeb [build].executor": "Run",
-    "Gradle.TTLTWeb [clean].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Tomcat Server.Tomcat 11.0.15.executor": "Run",
-    "git-widget-placeholder": "Hoc",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/TTLTWeb",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build TTLTWeb.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TTLTWeb [build].executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.TTLTWeb [clean].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Tomcat Server.Tomcat 11.0.15.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Hoc&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/TTLTWeb&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunDashboard">
     <option name="configurationStatuses">
       <map>
@@ -332,7 +319,14 @@
       <workItem from="1777688616041" duration="25031000" />
       <workItem from="1777977885249" duration="107000" />
       <workItem from="1778294340088" duration="2461000" />
-      <workItem from="1778298806461" duration="21449000" />
+      <workItem from="1778298806461" duration="21660000" />
+      <workItem from="1778415142529" duration="78000" />
+      <workItem from="1778499051580" duration="128000" />
+      <workItem from="1778510431520" duration="39000" />
+      <workItem from="1778517975977" duration="335000" />
+      <workItem from="1778638317007" duration="219000" />
+      <workItem from="1778754131336" duration="47000" />
+      <workItem from="1778813228718" duration="1721000" />
     </task>
     <servers />
   </component>

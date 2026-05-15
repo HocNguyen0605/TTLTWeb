@@ -39,7 +39,7 @@ public class AddCTKMServlet extends HttpServlet {
                 PromotionDAO promotionDAO = new PromotionDAO(conn);
                 PromotionComboItemDAO promotionComboItemDAO = new PromotionComboItemDAO(conn);
                 ProductDAO productDAO = new ProductDAO(conn);
-                Promotion promotion = new Promotion();
+                Promotion promotion = new Promotion( );
                 promotion.setName(name);
                 promotion.setType(type);
                 promotion.setDiscount_type(discountType);
