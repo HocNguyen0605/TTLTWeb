@@ -6,29 +6,33 @@ import util.DBContext;
 
 
 public class UserDAO {
-    public User login(String emailOrUsername, String password) {
-        // 1. Cập nhật Query: Lấy thêm u.phone và u.address
-        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
-                "FROM account a LEFT JOIN user u ON a.id = u.id_account " +
-                "WHERE (a.username = :user OR u.email = :user) AND a.password = :pass";
+        public User login(String emailOrUsername, String password) {
+            // 1. Cập nhật Query: Lấy thêm u.phone và u.address
+            String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
+                    "FROM account a LEFT JOIN user u ON a.id = u.id_account " +
+                    "WHERE (a.username = :user OR u.email = :user)";
 
-        return DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
-                .bind("user", emailOrUsername)
-                .bind("pass", password)
-                .map((rs, ctx) -> new User(
-                        rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("name"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
-                        null,
-                        "LOCAL"))
-                .findFirst()
-                .orElse(null));
-    }
+            User user = DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
+                    .bind("user", emailOrUsername)
+                    .map((rs, ctx) -> new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
+                            "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                            null,
+                            "LOCAL"))
+                    .findFirst()
+                    .orElse(null));
+
+            if (user != null && user.getPassword() != null && org.mindrot.jbcrypt.BCrypt.checkpw(password, user.getPassword())) {
+                return user;
+            }
+            return null;
+        }
 
     public boolean isUserEmailExists(String email) {
         String query = "SELECT COUNT(*) FROM user WHERE email = :email";
@@ -219,7 +223,7 @@ public class UserDAO {
             int userId = createGoogleUser(googlePojo);
             return getUserById(userId);
         } else {
-            // 3. Nếu đã có: Cập nhật googleId (nếu chưa có) và trả về user
+            // Nếu đã có: Cập nhật googleId (nếu chưa có) và trả về user
             if (user.getGoogleId() == null || user.getGoogleId().isEmpty()) {
                 updateGoogleId(user.getId(), googlePojo.getId());
                 user.setGoogleId(googlePojo.getId());

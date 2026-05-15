@@ -51,6 +51,7 @@ public class OrderServlet extends HttpServlet {
 
         // lấy user từ session
         User user = (User) session.getAttribute("auth");
+        System.out.println(user.getId());
         if (user != null) {
             order.setUserId(user.getId());
         }

@@ -38,6 +38,7 @@ public class AddProductServlet extends HttpServlet {
         double price = 0;
         int volume = 0;
         int quantity = 0;
+        String folderName="products";
 
         try {
             String priceStr = request.getParameter("price");
@@ -70,7 +71,7 @@ public class AddProductServlet extends HttpServlet {
                     try (java.io.InputStream is = part.getInputStream()) {
                         byte[] fileBytes = is.readAllBytes();
                         service.CloudinaryService cloudinaryService = new service.CloudinaryService();
-                        String secureUrl = cloudinaryService.uploadImage(fileBytes, fileName);
+                        String secureUrl = cloudinaryService.uploadImage(fileBytes, fileName,folderName);
 
                         savedFileNames.add(secureUrl);
                     } catch (Exception e) {

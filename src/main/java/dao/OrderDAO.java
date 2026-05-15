@@ -1,6 +1,8 @@
 package dao;
 
 import model.Order;
+import util.DBContext;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,10 @@ public class OrderDAO {
 
     public OrderDAO(Connection conn) {
         this.conn = conn;
+    }
+
+    public OrderDAO() {
+
     }
 
     // Lấy danh sách đơn hàng
@@ -25,6 +31,7 @@ public class OrderDAO {
                     o.total AS total_price,
                     o.status_order AS status,
                     o.date AS order_date,
+                    o.delivered_date,
                     o.id_user,
                     COALESCE(s.receiver_name, u.name) AS customer_name
                 FROM orders o
@@ -42,6 +49,7 @@ public class OrderDAO {
                 o.setTotalPrice(rs.getDouble("total_price"));
                 o.setStatus(rs.getString("status"));
                 o.setOrderDate(rs.getTimestamp("order_date"));
+                o.setDeliveredDate(rs.getTimestamp("delivered_date"));
                 o.setCustomerName(rs.getString("customer_name"));
                 o.setUserId(rs.getInt("id_user"));
 
@@ -88,16 +96,21 @@ public class OrderDAO {
     }
 
     public int insertAndReturnId(Order order) throws SQLException {
-        String sql = "INSERT INTO orders(total, status_order, date, id_user) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO orders(total, status_order, date, delivered_date, id_user) VALUES (?,?,?,?,?)";
         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         ps.setDouble(1, order.getTotalPrice());
         ps.setString(2, order.getStatus());
-        ps.setTimestamp(3, new java.sql.Timestamp(order.getOrderDate().getTime()));
-        if (order.getUserId() > 0) {
-            ps.setInt(4, order.getUserId());
+        ps.setTimestamp(3, order.getOrderDate());
+        if (order.getDeliveredDate() != null) {
+            ps.setTimestamp(4, order.getDeliveredDate());
         } else {
-            ps.setNull(4, java.sql.Types.INTEGER);
+            ps.setNull(4, java.sql.Types.TIMESTAMP);
+        }
+        if (order.getUserId() > 0) {
+            ps.setInt(5, order.getUserId());
+        } else {
+            ps.setNull(5, java.sql.Types.INTEGER);
         }
         ps.executeUpdate();
 
@@ -129,5 +142,41 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Order> getOrdersByUserId(int userId) {
+        return DBContext.getJdbi().withHandle(handle -> {
+            List<Order> orders = handle.createQuery(
+                            "SELECT o.id, " +
+                                    "o.status_order AS status, " +
+                                    "o.total AS totalPrice, " +
+                                    "o.date AS orderDate, " +
+                                    "o.delivered_date AS deliveredDate " +
+                                    "FROM orders o " +
+                                    "WHERE o.id_user = :userId " +
+                                    "ORDER BY o.date DESC")
+                    .bind("userId", userId)
+                    .mapToBean(Order.class)
+                    .list();
+
+            for (Order order : orders) {
+                List<model.OrderItemDetail> items = handle.createQuery(
+                                "SELECT oi.id_product AS productId, p.product_name AS productName, " +
+                                        "COALESCE(pi.image_URL, p.image) AS productImg, " +                                        "p.volume, oi.quantity, oi.price_at_time AS priceAtTime " +
+                                        "FROM orderitems oi " +
+                                        "JOIN products p ON oi.id_product = p.id " +
+                                        "LEFT JOIN product_images pi ON p.image = pi.id " +
+                                        "WHERE oi.id_order = :orderId")
+                        .bind("orderId", order.getId())
+                        .mapToBean(model.OrderItemDetail.class)
+                        .list();
+                order.setItems(items);
+
+                if (items != null && !items.isEmpty()) {
+                    order.setItemName(items.get(0).getProductName());
+                }
+            }
+            return orders;
+        });
     }
 }

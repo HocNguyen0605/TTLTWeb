@@ -2,13 +2,16 @@ package util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import jakarta.servlet.http.HttpSession;
 import model.GooglePojo;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 
+import java.util.UUID;
+
 public class GoogleUtils {
-    public static String CLIENT_ID = "";
-    public static String CLIENT_SECRET = "";
+    public static String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
+    public static String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
     public static String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.uri");
     public static String LINK_GET_TOKEN = "https://oauth2.googleapis.com/token";
     public static String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
@@ -29,5 +32,20 @@ public class GoogleUtils {
         String link = LINK_GET_USER_INFO + accessToken;
         String response = Request.Get(link).execute().returnContent().asString();
         return new Gson().fromJson(response, GooglePojo.class);
+    }
+
+    public static String buildGoogleLoginUrl(HttpSession session) {
+        String state = UUID.randomUUID().toString();
+        session.setAttribute("google_state", state);
+
+        String clientId = ConfigLoader.getProperty("google.client.id");
+        String redirectUri = ConfigLoader.getProperty("google.redirect.uri");
+
+        return "https://accounts.google.com/o/oauth2/auth?"
+                + "scope=email%20profile"
+                + "&redirect_uri=" + redirectUri
+                + "&client_id=" + clientId
+                + "&response_type=code"
+                + "&state=" + state;
     }
 }

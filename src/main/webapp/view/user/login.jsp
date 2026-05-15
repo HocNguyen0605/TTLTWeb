@@ -176,10 +176,12 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Mã xác thực OTP *</label>
                         <div class="input-group has-validation">
-                            <input type="text" name="otp"
+                            <input type="text" name="otp" inputmode="numeric"
+                                   pattern="[0-9]*"
                                    class="form-control ${not empty errors.otp ? 'is-invalid' : ''}" maxlength="6"
                                    placeholder="Nhập mã 6 số"
-                                   required>
+                                   required
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                             <button class="btn btn-outline-success" type="button" id="btnSendOTP">Gửi mã</button>
                             <c:if test="${errors.otp != null}">
                                 <div class="invalid-feedback">

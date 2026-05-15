@@ -2,6 +2,9 @@ import {initRevenueChart} from './chart.js';
 import {togglePassword} from "./togglePassword.js";
 import {initChangePassword} from "./change-password.js";
 import { initLogoutConfirmation } from "./logout.js";
+import { initLoginAPI, initRegisterAPI } from "./auth-api.js";
+import { initUpdateProfileAPI } from "./profile-api.js";
+import { initTabUrlSync } from "./tab-url-sync.js";
 
 // Hàm chính để khởi tạo tất cả chức năng
 function initApp() {
@@ -13,6 +16,16 @@ function initApp() {
 
     // Logic xóa field đổi mk
     initChangePassword();
+
+    // Auth APIs
+    initLoginAPI();
+    initRegisterAPI();
+
+    // Profile API
+    initUpdateProfileAPI();
+
+    // Sync bootstrap tabs + URL
+    initTabUrlSync();
 
     // Thông báo xác nhận logout
     const contextPath = window.location.pathname.substring(0, window.location.pathname.indexOf("/", 1));

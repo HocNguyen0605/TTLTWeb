@@ -1,5 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:if test="${auth.googleAccount and empty auth.password}">
+    <c:redirect url="/view/user/404.jsp" />
+</c:if>
 
 <form id="formChangePassword" action="${pageContext.request.contextPath}/changePassword" method="POST">
     <div id="passwordFeedback" class="alert d-none"></div>

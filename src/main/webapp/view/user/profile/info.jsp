@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
-<form action="${pageContext.request.contextPath}/updateProfile" method="POST">
+<form action="${pageContext.request.contextPath}/updateProfile" method="POST" id="updateProfileForm">
     <div class="row">
         <div class="col-md-6 mb-3">
             <label class="form-label fw-semibold">Tên đăng nhập</label>
@@ -22,9 +22,10 @@
 
     <div class="mb-3">
         <label class="form-label fw-semibold">Số điện thoại</label>
-        <input type="text" maxlength="15" name="phone"
+        <input type="text" maxlength="10" name="phone"
                class="form-control ${not empty errors['phone'] ? 'is-invalid' : ''}"
-               value="${auth.phone}" placeholder="">
+               value="${auth.phone}" placeholder="0123456789"
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
         <c:if test="${not empty errors['phone']}">
             <div class="invalid-feedback">${errors['phone']}</div>
         </c:if>
@@ -49,7 +50,7 @@
         <label class="form-label fw-semibold">Email mới</label>
         <input type="email" maxlength="50" name="email" id="profileEmail"
                class="form-control ${not empty errors['email'] ? 'is-invalid' : ''}" value="${auth.email}"
-                ${auth.googleAccount ? 'readonly' : ''}>
+        ${auth.googleAccount ? 'readonly' : ''}>
         <c:if test="${not empty errors['email']}">
             <div class="invalid-feedback d-block">${errors['email']}</div>
         </c:if>
@@ -62,7 +63,8 @@
         <div class="input-group has-validation">
             <input type="text" name="otp" class="form-control ${not empty errors['otp'] ? 'is-invalid' : ''}"
                    maxlength="6"
-                   placeholder="Nhập mã 6 số" required>
+                   placeholder="Nhập mã 6 số" required
+                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             <button class="btn btn-outline-success" type="button" id="btnSendOTPProfile">Gửi mã</button>
             <c:if test="${not empty errors['otp']}">
                 <div class="invalid-feedback">${errors['otp']}</div>

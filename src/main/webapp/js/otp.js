@@ -24,43 +24,43 @@ function setupOTPSender(btnId, emailInputSelector, noticeId, contextPath) {
             return;
         }
 
-        let interval;
-        let timeLeft = 60;
-
         btn.disabled = true;
-        notice.innerHTML = "Đang gửi mã... (60s)";
-
-        const updateTimer = () => {
-            if (timeLeft <= 0) {
-                clearInterval(interval);
-                btn.disabled = false;
-                notice.innerHTML = "Mã đã hết hạn, vui lòng gửi lại";
-            } else {
-                notice.innerHTML = "Mã hiệu lực trong: " + timeLeft + "s";
-                timeLeft -= 1;
-            }
-        };
-
-        updateTimer();
-        interval = setInterval(updateTimer, 1000);
+        notice.innerHTML = "Đang gửi mã...";
+        notice.style.color = "black";
 
         fetch(contextPath + '/send-otp?email=' + encodeURIComponent(emailValue))
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    notice.innerHTML = data.message;
                     notice.style.color = "green";
+
+                    let interval;
+                    let timeLeft = 60;
+
+                    const updateTimer = () => {
+                        if (timeLeft <= 0) {
+                            clearInterval(interval);
+                            btn.disabled = false;
+                            notice.innerHTML = "Mã đã hết hạn, vui lòng gửi lại";
+                            notice.style.color = "red";
+                        } else {
+                            notice.innerHTML = "Mã hiệu lực trong: " + timeLeft + "s";
+                            timeLeft -= 1;
+                        }
+                    };
+
+                    updateTimer();
+                    interval = setInterval(updateTimer, 1000);
                 } else {
-                    clearInterval(interval);
                     btn.disabled = false;
                     notice.innerHTML = data.message;
                     notice.style.color = "red";
                 }
             })
             .catch(err => {
-                clearInterval(interval);
                 btn.disabled = false;
                 notice.innerHTML = "Lỗi kết nối máy chủ.";
+                notice.style.color = "red";
             });
     });
 }
