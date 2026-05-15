@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet({"/admin/reply-review", "/add-review-comment"})
+@WebServlet({"/admin/reply-review"})
 public class ReplyReviewServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -23,29 +23,28 @@ public class ReplyReviewServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User auth = (User) session.getAttribute("auth");
 
-        if (auth == null) {
-            sendResponse(response, false, "Bạn cần đăng nhập để thực hiện hành động này!");
+        // Chỉ cho phép ADMIN (role admin thôi nha) trả lời đánh giá
+        if (auth == null || auth.getRole() != 1) {
+            sendResponse(response, false, "Bạn không có quyền thực hiện hành động này!");
             return;
         }
 
         try {
             int reviewId = Integer.parseInt(request.getParameter("reviewId"));
-            // Chấp nhận cả 'reply' hoặc 'content' làm tên tham số
-            String content = request.getParameter("content");
-            if (content == null) content = request.getParameter("reply");
+            String content = request.getParameter("reply");
+            if (content == null) content = request.getParameter("content");
 
             if (content == null || content.trim().isEmpty()) {
-                sendResponse(response, false, "Nội dung không được để trống!");
+                sendResponse(response, false, "Nội dung phản hồi không được để trống!");
                 return;
             }
 
             ReviewDAO reviewDAO = new ReviewDAO();
+            // Sử dụng updateSellerReply thay vì insertComment để thống nhất
+            // logic phản hồi của Shop
+            reviewDAO.updateSellerReply(reviewId, content.trim());
 
-            // Lưu vào bảng bình luận (Threaded Comments)
-            Review.ReviewComment comment = new Review.ReviewComment(reviewId, auth.getId(), content.trim());
-            reviewDAO.insertComment(comment);
-
-            sendResponse(response, true, "Đã gửi phản hồi thành công!");
+            sendResponse(response, true, "Đã gửi phản hồi từ Shop thành công!");
         } catch (Exception e) {
             e.printStackTrace();
             sendResponse(response, false, "Có lỗi xảy ra: " + e.getMessage());
