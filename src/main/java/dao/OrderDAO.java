@@ -1,6 +1,8 @@
 package dao;
 
 import model.Order;
+import util.DBContext;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,5 +131,24 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Order> getOrdersByUserId(int userId) {
+        return DBContext.getJdbi().withHandle(handle -> {
+            return handle.createQuery(
+                            "SELECT o.id, " +
+                                    "o.status_order AS status, " +
+                                    "o.total AS totalPrice, " +
+                                    "o.date AS orderDate, " +
+                                    "(SELECT p.product_name FROM order_items oi " +
+                                    " JOIN products p ON oi.id_product = p.id " +
+                                    " WHERE oi.id_order = o.id LIMIT 1) AS itemName " +
+                                    "FROM orders o " +
+                                    "WHERE o.id_user = :userId " +
+                                    "ORDER BY o.date DESC")
+                    .bind("userId", userId)
+                    .mapToBean(Order.class)
+                    .list();
+        });
     }
 }
