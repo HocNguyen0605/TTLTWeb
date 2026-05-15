@@ -182,11 +182,20 @@
                         </button>
                     </c:when>
                     <c:otherwise>
-                        <button type="button" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
-                                data-bs-toggle="modal" data-bs-target="#checkoutModal">
-                            <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
-                        </button>
-
+                        <c:choose>
+                        <c:when test="${empty sessionScope.auth}">
+                            <button type="button" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                                    data-bs-toggle="modal" data-bs-target="#loginModal">
+                                <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
+                            </button>
+                        </c:when>
+                        <c:otherwise>
+                            <button type="button" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                                    data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                                <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
+                            </button>
+                        </c:otherwise>
+                        </c:choose>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -195,6 +204,32 @@
     <p style="color: red;">${errorMessage}</p>
 
 </section>
+        <%--Modal khi khách hàng chưa đăng nhập --%>
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow-lg border-0">
+                    <div class="modal-header bg-success text-dark">
+                        <h5 class="modal-title fw-bold" id="loginModalLabel">
+                            <i class="bi bi-info-circle-fill me-2 text-white"></i>
+                            <span class="text-white">Thông Báo</span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body text-center py-4">
+                        <p class="fs-5 fw-bold text-dark mb-0">Quý khách chưa đăng nhập!</p>
+                        <small class="text-muted">Vui lòng đăng nhập tài khoản để thực hiện chức năng thanh toán.</small>
+                    </div>
+
+                    <div class="modal-footer justify-content-center border-0 pt-0">
+                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                        <a href="${pageContext.request.contextPath}/login" class="btn btn-success px-4 fw-bold">
+                            Đăng nhập <i class="bi bi-arrow-right-short"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <%--Modal xác nhận thông tin đặt --%>
         <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered"> <div class="modal-content shadow-lg border-0">
