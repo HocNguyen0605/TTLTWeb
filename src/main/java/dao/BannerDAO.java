@@ -130,4 +130,31 @@ public class BannerDAO {
         }
         return null;
     }
+    //Tìm banner bằng tên
+    public List<Banner> getBannerByTitle(String title) {
+        List<Banner> list = new ArrayList<>();
+        String sql = "SELECT * FROM banners WHERE title = ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, title);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Banner banner = new Banner();
+                    banner.setId(rs.getInt("id"));
+                    banner.setTitle(rs.getString("title"));
+                    banner.setImageUrl(rs.getString("image_url"));
+                    banner.setLinkUrl(rs.getString("link_url"));
+                    banner.setPriority(rs.getInt("priority"));
+                    banner.setIsActive(rs.getBoolean("is_active"));
+                    banner.setCreatedAt(rs.getTimestamp("created_at"));
+                    list.add(banner);
+
+                }
+                return list;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

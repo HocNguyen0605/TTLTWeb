@@ -9,6 +9,7 @@ import model.Product;
 import service.CloudinaryService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @MultipartConfig(
@@ -74,9 +75,16 @@ public class BannerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BannerDAO bannerDAO = new BannerDAO();
-        List<Banner> banners = bannerDAO.getAllBanners();
+        List<Banner> banners = new ArrayList<>();
+        String search = request.getParameter("search");
+        if (search != null && !search.trim().isEmpty()) {
+            banners = bannerDAO.getBannerByTitle(search.trim());
+        }  else {
+            banners = bannerDAO.getAllBanners();
+        }
 
         request.setAttribute("banners", banners);
+        request.setAttribute("currentSearch", search);
         request.getRequestDispatcher("/view/admin/admin-banner.jsp").forward(request, response);
 
     }
