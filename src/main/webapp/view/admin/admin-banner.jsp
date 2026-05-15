@@ -103,9 +103,15 @@
                         <button type="submit" class="btn p-0 border-0">
                             <i class="bi bi-search search-icon"></i>
                         </button>
-
                     </form>
                 </div>
+                <!--Hiển thị danh sách banner tìm kiếm chạy bằng ajax -->
+                <div class="search-container position-relative">
+                    <input type="text" id="searchInput" name="search" class="search-input" autocomplete="off" ...>
+                    <div id="searchSuggestions" class="list-group position-absolute w-100 shadow-lg" style="z-index: 1000; display: none;">
+                    </div>
+                </div>
+                <!--Nút tạo banner mơis-->
                 <button class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
                         data-bs-toggle="modal" data-bs-target="#addBannerModal">
                     Tạo Banner mới
