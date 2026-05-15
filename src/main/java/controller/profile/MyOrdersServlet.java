@@ -29,6 +29,7 @@ public class MyOrdersServlet extends HttpServlet {
 
         OrderDAO orderDAO = new OrderDAO();
         List<Order> orders = orderDAO.getOrdersByUserId(auth.getId());
+        request.setAttribute("userOrders", orders);
 
         String json = new com.google.gson.Gson().toJson(orders);
         response.getWriter().write(json);

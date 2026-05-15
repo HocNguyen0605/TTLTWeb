@@ -3,7 +3,12 @@ package controller.profile;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import model.User;
+import model.Order;
+import dao.OrderDAO;
+
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet({"/profile", "/profile/*"})
 public class ProfileController extends HttpServlet {
@@ -18,7 +23,12 @@ public class ProfileController extends HttpServlet {
             return;
         }
 
-        String pathInfo = request.getPathInfo(); // null, "/info", "/password", "/orders", ...
+        User auth = (User) session.getAttribute("auth");
+        OrderDAO orderDAO = new OrderDAO();
+        List<Order> orders = orderDAO.getOrdersByUserId(auth.getId());
+        request.setAttribute("userOrders", orders);
+
+        String pathInfo = request.getPathInfo();
         String activeTab = "info";
         if (pathInfo != null && !pathInfo.isBlank()) {
             String normalized = pathInfo.trim().toLowerCase();

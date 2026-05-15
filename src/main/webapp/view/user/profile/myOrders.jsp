@@ -31,17 +31,44 @@
                         <span class="fw-bold">Mã đơn #${o.id}</span>
                         <span class="status-pill ${statusClass}">${st}</span>
                     </div>
-                    <a href="order-detail?id=${o.id}" class="btn btn-outline-success btn-sm rounded-pill">
-                        <i class="bi bi-eye me-1"></i>Xem chi tiết
-                    </a>
                 </div>
 
                 <div class="card-body">
+                    <!-- Products List -->
+                    <div class="order-items-preview mb-3 pb-3 border-bottom">
+                        <c:if test="${not empty o.items}">
+                            <c:set var="firstItem" value="${o.items[0]}" />
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="${firstItem.productImg}" alt="${firstItem.productName}" class="img-thumbnail me-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                <div class="flex-grow-1">
+                                    <span class="fw-bold">${firstItem.productName}</span>
+                                    <span class="text-muted ms-2">${firstItem.volume}ml</span>
+                                    <span class="text-muted ms-2">x${firstItem.quantity}</span>
+                                </div>
+                            </div>
+
+                            <c:if test="${fn:length(o.items) > 1}">
+                                <button class="btn btn-link btn-sm p-0 text-decoration-none mt-1 text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItems${o.id}" aria-expanded="false" aria-controls="collapseItems${o.id}">
+                                    Xem thêm ${fn:length(o.items) - 1} sản phẩm <i class="bi bi-chevron-down"></i>
+                                </button>
+                                <div class="collapse mt-2" id="collapseItems${o.id}">
+                                    <c:forEach items="${o.items}" var="item" begin="1">
+                                        <div class="d-flex align-items-center mt-2 pt-2 border-top">
+                                            <img src="${item.productImg}" alt="${item.productName}" class="img-thumbnail me-2" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <div class="flex-grow-1">
+                                                <span class="fw-bold">${item.productName}</span>
+                                                <span class="text-muted ms-2">${item.volume}ml</span>
+                                                <span class="text-muted ms-2">x${item.quantity}</span>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </c:if>
+                        </c:if>
+                    </div>
+
                     <div class="order-kv">
-                        <div>
-                            <div class="kv-label">Tên sản phẩm</div>
-                            <div class="kv-value">${o.itemName}</div>
-                        </div>
+
                         <div>
                             <div class="kv-label">Ngày đặt</div>
                             <div class="kv-value">
@@ -49,15 +76,28 @@
                             </div>
                         </div>
                         <div>
+                            <div class="kv-label">Ngày giao</div>
+                            <div class="kv-value">
+                                <c:choose>
+                                    <c:when test="${not empty o.deliveredDate}">
+                                        <fmt:formatDate value="${o.deliveredDate}" pattern="dd/MM/yyyy"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="text-muted" style="font-size: 0.9em;">Chưa có</i>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                        <div>
                             <div class="kv-label">Tổng tiền</div>
                             <div class="kv-value text-success">
-                                <fmt:formatNumber value="${o.totalPrice}" type="currency" currencySymbol="₫"/>
+                                <fmt:formatNumber value="${o.totalPrice}" pattern="#,###đ"/>
                             </div>
                         </div>
                         <div class="text-md-end">
                             <div class="order-actions mt-2 mt-md-0">
 
-                                <c:if test="${st == 'confirmed' or st == 'processing'}">
+                                <c:if test="${st == 'confirmed' or st == 'pending'}">
                                     <button class="btn btn-outline-danger btn-sm" type="button" disabled>
                                         <i class="bi bi-x-circle me-1"></i>Hủy đơn
                                     </button>
@@ -77,7 +117,7 @@
 
                                 <c:if test="${st == 'refunded'}">
                                     <button class="btn btn-outline-secondary btn-sm" type="button" disabled>
-                                        <i class="bi bi-cash-coin me-1"></i>Hoàn tiền
+                                        <i class="bi bi-cash-coin me-1"></i>Chi tiết hoàn tiền
                                     </button>
                                 </c:if>
                             </div>
