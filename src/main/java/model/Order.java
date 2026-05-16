@@ -16,6 +16,7 @@ public class Order {
     private String itemName;
     private Timestamp deliveredDate;
     private List<OrderItemDetail> items;
+    private String cancelReason;
 
     public Order() {
     }
@@ -121,5 +122,13 @@ public class Order {
 
     public void setItems(List<OrderItemDetail> items) {
         this.items = items;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
     }
 }
