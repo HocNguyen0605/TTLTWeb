@@ -40,7 +40,7 @@ public class Banner implements Serializable {
     public int getPriority() { return priority; }
     public void setPriority(int priority) { this.priority = priority; }
 
-    public boolean isIsActive() { return isActive; }
+    public boolean getIsActive() { return isActive; }
     public void setIsActive(boolean isActive) { this.isActive = isActive; }
 
     public Timestamp getCreatedAt() { return createdAt; }

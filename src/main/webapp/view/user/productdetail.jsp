@@ -83,8 +83,8 @@
 
     .filter-btn {
         background: #fff;
-        border: 1px solid rgba(0,0,0,.09);
-        color: rgba(0,0,0,.8);
+        border: 1px solid rgba(0, 0, 0, .09);
+        color: rgba(0, 0, 0, .8);
         padding: 7px 12px;
         border-radius: 2px;
         transition: all 0.1s;
@@ -113,6 +113,7 @@
         margin-top: 10px;
         border-radius: 4px;
     }
+
     .seller-reply-box .title {
         font-weight: bold;
         color: #ee4d2d;
@@ -133,9 +134,11 @@
         align-items: center;
         gap: 5px;
     }
+
     .like-btn:hover {
         color: #0d6efd;
     }
+
     .like-btn.liked {
         color: #0d6efd;
     }
@@ -150,6 +153,7 @@
         margin-top: 10px;
         text-decoration: underline;
     }
+
     .admin-reply-btn:hover {
         color: #218838;
     }
@@ -272,60 +276,88 @@
                 <div class="card border-0 shadow-sm p-4"
                      style="border: 1px solid #dee2e6 !important;">
                     <h6 class="fw-bold mb-3">Gửi đánh giá của bạn</h6>
-                    <form id="reviewForm" action="${pageContext.request.contextPath}/submit-review"
-                          method="POST">
-                        <input type="hidden" name="productId" value="${product.id}">
-                        <input type="hidden" name="rating" id="ratingValue" value="5">
-                        <div class="mb-3 text-warning fs-4 d-flex gap-1" id="starRating">
-                            <i class="bi bi-star-fill" data-value="1" style="cursor: pointer;"></i>
-                            <i class="bi bi-star-fill" data-value="2" style="cursor: pointer;"></i>
-                            <i class="bi bi-star-fill" data-value="3" style="cursor: pointer;"></i>
-                            <i class="bi bi-star-fill" data-value="4" style="cursor: pointer;"></i>
-                            <i class="bi bi-star-fill" data-value="5" style="cursor: pointer;"></i>
-                        </div>
-                        <div class="mb-3">
-                                                <textarea id="reviewContent" name="content" class="form-control"
-                                                          rows="4" placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..."
-                                                          required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-success fw-bold px-4 rounded-pill">Gửi
-                            Đánh Giá</button>
-                    </form>
+
+                    <c:choose>
+                        <c:when test="${empty auth}">
+                            <div class="text-center py-3">
+                                <p class="text-muted mb-3">Vui lòng đăng nhập để gửi đánh giá cho sản phẩm này.</p>
+                                <a href="${pageContext.request.contextPath}/login?returnUrl=${pageContext.request.requestURL}?${pageContext.request.queryString}"
+                                   class="btn btn-outline-success btn-sm rounded-pill px-4">Đăng nhập ngay</a>
+                            </div>
+                        </c:when>
+                        <c:when test="${not canReview}">
+                            <div class="alert alert-info border-0 shadow-sm" style="background-color: #f8f9fa;">
+                                <i class="bi bi-info-circle-fill text-info me-2"></i>
+                                <small class="text-muted">Bạn chỉ có thể đánh giá sản phẩm này sau khi đã mua và nhận hàng thành công.</small>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <form id="reviewForm" action="${pageContext.request.contextPath}/submit-review"
+                                  method="POST">
+                                <input type="hidden" name="productId" value="${product.id}">
+                                <input type="hidden" name="rating" id="ratingValue" value="5">
+                                <div class="mb-3 text-warning fs-4 d-flex gap-1" id="starRating">
+                                    <i class="bi bi-star-fill" data-value="1" style="cursor: pointer;"></i>
+                                    <i class="bi bi-star-fill" data-value="2" style="cursor: pointer;"></i>
+                                    <i class="bi bi-star-fill" data-value="3" style="cursor: pointer;"></i>
+                                    <i class="bi bi-star-fill" data-value="4" style="cursor: pointer;"></i>
+                                    <i class="bi bi-star-fill" data-value="5" style="cursor: pointer;"></i>
+                                </div>
+                                <div class="mb-3">
+                                    <textarea id="reviewContent" name="content" class="form-control"
+                                              rows="4" placeholder="Chia sẻ cảm nhận của bạn về sản phẩm này..."
+                                              required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success fw-bold px-4 rounded-pill">Gửi
+                                    Đánh Giá</button>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
             <div class="col-md-7 mt-4 mt-md-0">
                 <div class="card border-0 shadow-sm p-4"
                      style="border: 1px solid #dee2e6 !important;">
-                    <h6 class="fw-bold mb-4">Các lượt đánh giá (${reviews != null ? reviews.size() : 0})</h6>
+                    <h6 class="fw-bold mb-4">Các lượt đánh giá (${reviews != null ? reviews.size() :
+                            0})</h6>
 
                     <!-- RATING SUMMARY & FILTER (SHOPEE STYLE) -->
                     <div class="rating-summary-card">
                         <div class="text-center pe-4 border-end" style="min-width: 150px;">
                             <div class="rating-score">
-                                <fmt:formatNumber value="${avgRating != null ? avgRating : 0}" pattern="0.0"/>
+                                <fmt:formatNumber value="${avgRating != null ? avgRating : 0}"
+                                                  pattern="0.0" />
                                 <span class="fs-6 fw-normal text-muted"> trên 5</span>
                             </div>
                             <div class="rating-stars-main">
                                 <c:forEach begin="1" end="5" var="i">
-                                    <i class="bi bi-star${i <= avgRating ? '-fill' : (i - 0.5 <= avgRating ? '-half' : '')}"></i>
+                                    <i
+                                            class="bi bi-star${i <= avgRating ? '-fill' : (i - 0.5 <= avgRating ? '-half' : '')}"></i>
                                 </c:forEach>
                             </div>
                         </div>
 
                         <div class="ps-3 d-flex flex-wrap" id="reviewFilter">
                             <button class="filter-btn active" data-filter="all">Tất Cả</button>
-                            <button class="filter-btn" data-filter="5">5 Sao (${starCounts[5]})</button>
-                            <button class="filter-btn" data-filter="4">4 Sao (${starCounts[4]})</button>
-                            <button class="filter-btn" data-filter="3">3 Sao (${starCounts[3]})</button>
-                            <button class="filter-btn" data-filter="2">2 Sao (${starCounts[2]})</button>
-                            <button class="filter-btn" data-filter="1">1 Sao (${starCounts[1]})</button>
-                            <button class="filter-btn" data-filter="has-comment">Có Bình Luận (${commentCount})</button>
+                            <button class="filter-btn" data-filter="5">5 Sao
+                                (${starCounts[5]})</button>
+                            <button class="filter-btn" data-filter="4">4 Sao
+                                (${starCounts[4]})</button>
+                            <button class="filter-btn" data-filter="3">3 Sao
+                                (${starCounts[3]})</button>
+                            <button class="filter-btn" data-filter="2">2 Sao
+                                (${starCounts[2]})</button>
+                            <button class="filter-btn" data-filter="1">1 Sao
+                                (${starCounts[1]})</button>
+                            <button class="filter-btn" data-filter="has-comment">Có Bình Luận
+                                (${commentCount})</button>
                         </div>
                     </div>
 
                     <div class="review-list">
                         <c:forEach var="r" items="${reviews}">
-                            <div class="review-item mb-4 pb-3 border-bottom" data-rating="${r.rating}" data-has-comment="${not empty r.content}">
+                            <div class="review-item mb-4 pb-3 border-bottom"
+                                 data-rating="${r.rating}" data-has-comment="${not empty r.content}">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="fw-bold text-dark">${r.userName}</span>
                                     <small class="text-muted">
@@ -343,31 +375,25 @@
                                 </div>
                                 <p class="text-muted mb-0">${r.content}</p>
 
+
                                 <c:if test="${not empty r.sellerReply}">
                                     <div class="seller-reply-box">
                                         <div class="title">Phản hồi từ Người bán</div>
-                                        <div class="text-dark" style="font-size: 0.95rem;">${r.sellerReply}</div>
+                                        <div class="text-dark" style="font-size: 0.95rem;">
+                                                ${r.sellerReply}</div>
                                     </div>
                                 </c:if>
 
                                 <div class="d-flex align-items-center mt-2">
-                                    <button class="like-btn ${r.hasLiked ? 'liked' : ''}" data-review-id="${r.id}" onclick="toggleLike(this, ${r.id})">
-                                        <i class="bi bi-hand-thumbs-up${r.hasLiked ? '-fill' : ''}"></i>
-                                        <span>Hữu ích (<span class="like-count">${r.likes}</span>)</span>
+                                    <button class="like-btn ${r.hasLiked ? 'liked' : ''}"
+                                            data-review-id="${r.id}"
+                                            onclick="toggleLike(this, ${r.id})">
+                                        <i
+                                                class="bi bi-hand-thumbs-up${r.hasLiked ? '-fill' : ''}"></i>
+                                        <span>Hữu ích (<span
+                                                class="like-count">${r.likes}</span>)</span>
                                     </button>
-
-                                    <c:if test="${not empty auth && auth.role == 1 && empty r.sellerReply}">
-                                        <button class="admin-reply-btn" onclick="showReplyForm(${r.id})">Trả lời bình luận này</button>
-                                    </c:if>
                                 </div>
-
-                                <c:if test="${not empty auth && auth.role == 1}">
-                                    <div id="reply-form-${r.id}" class="mt-3 d-none">
-                                        <textarea class="form-control mb-2" id="reply-content-${r.id}" rows="2" placeholder="Nhập phản hồi của bạn..."></textarea>
-                                        <button class="btn btn-sm btn-success" onclick="submitReply(${r.id})">Gửi phản hồi</button>
-                                        <button class="btn btn-sm btn-secondary" onclick="hideReplyForm(${r.id})">Hủy</button>
-                                    </div>
-                                </c:if>
                             </div>
                         </c:forEach>
                         <c:if test="${empty reviews}">
@@ -605,7 +631,7 @@
         const reviewItems = document.querySelectorAll('.review-item');
 
         filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
 
@@ -671,37 +697,6 @@
             });
     }
 
-    // 6. Logic Admin Reply
-    function showReplyForm(reviewId) {
-        document.getElementById('reply-form-' + reviewId).classList.remove('d-none');
-    }
-
-    function hideReplyForm(reviewId) {
-        document.getElementById('reply-form-' + reviewId).classList.add('d-none');
-    }
-
-    function submitReply(reviewId) {
-        const content = document.getElementById('reply-content-' + reviewId).value;
-        if (!content.trim()) {
-            Swal.fire('Lỗi', 'Vui lòng nhập nội dung phản hồi.', 'warning');
-            return;
-        }
-
-        fetch("${pageContext.request.contextPath}/reply-review", {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ 'reviewId': reviewId, 'reply': content })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    Swal.fire('Thành công', 'Đã thêm phản hồi', 'success');
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    Swal.fire('Lỗi', data.message, 'error');
-                }
-            });
-    }
 </script>
 
 <%@include file="/view/user/include/footer.jsp" %>

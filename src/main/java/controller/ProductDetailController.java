@@ -38,10 +38,13 @@ public class  ProductDetailController extends HttpServlet {
                     ReviewDAO reviewDAO = new ReviewDAO();
 
                     int currentUserId = -1;
+                    boolean canReview = false;
                     model.User auth = (model.User) request.getSession().getAttribute("auth");
                     if (auth != null) {
                         currentUserId = auth.getId();
+                        canReview = reviewDAO.canUserReviewProduct(currentUserId, id);
                     }
+                    request.setAttribute("canReview", canReview);
 
                     List<Review> reviews = reviewDAO.getByProductId(id, currentUserId);
                     request.setAttribute("reviews", reviews);

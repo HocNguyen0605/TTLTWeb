@@ -213,7 +213,7 @@
             return;
         }
 
-        fetch("${pageContext.request.contextPath}/reply-review", {
+        fetch("${pageContext.request.contextPath}/admin/reply-review", {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ 'reviewId': reviewId, 'reply': content })

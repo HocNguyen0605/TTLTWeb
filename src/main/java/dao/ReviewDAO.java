@@ -1,6 +1,7 @@
 package dao;
 
 import model.Review;
+import model.Review.ReviewComment;
 import org.jdbi.v3.core.Jdbi;
 import util.DBContext;
 
@@ -20,11 +21,15 @@ public class ReviewDAO extends BaseDao {
                 WHERE r.product_id = :productId
                 ORDER BY r.created_at DESC
                 """;
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("productId", productId)
-                .bind("currentUserId", currentUserId)
-                .mapToBean(Review.class)
-                .list());
+        return jdbi.withHandle(handle -> {
+            List<Review> reviews = handle.createQuery(sql)
+                    .bind("productId", productId)
+                    .bind("currentUserId", currentUserId)
+                    .mapToBean(Review.class)
+                    .list();
+            populateComments(reviews);
+            return reviews;
+        });
     }
 
     public List<Review> getByProductId(int productId) {
@@ -43,9 +48,43 @@ public class ReviewDAO extends BaseDao {
                 LEFT JOIN products p ON r.product_id = p.id
                 ORDER BY r.created_at DESC
                 """;
+        return jdbi.withHandle(handle -> {
+            List<Review> reviews = handle.createQuery(sql)
+                    .mapToBean(Review.class)
+                    .list();
+            populateComments(reviews);
+            return reviews;
+        });
+    }
+
+    private void populateComments(List<Review> reviews) {
+        if (reviews == null || reviews.isEmpty()) return;
+        for (Review r : reviews) {
+            r.setComments(getCommentsByReviewId(r.getId()));
+        }
+    }
+
+    public List<ReviewComment> getCommentsByReviewId(int reviewId) {
+        String sql = """
+                SELECT rc.id, rc.review_id as reviewId, rc.user_id as userId, rc.content, rc.created_at as createdAt,
+                       COALESCE(u.name, a.username) as userName
+                FROM review_comments rc
+                JOIN account a ON rc.user_id = a.id
+                LEFT JOIN user u ON a.id = u.id_account
+                WHERE rc.review_id = :reviewId
+                ORDER BY rc.created_at ASC
+                """;
         return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .mapToBean(Review.class)
+                .bind("reviewId", reviewId)
+                .mapToBean(ReviewComment.class)
                 .list());
+    }
+
+    public void insertComment(ReviewComment comment) {
+        String sql = "INSERT INTO review_comments (review_id, user_id, content) VALUES (:reviewId, :userId, :content)";
+        jdbi.useHandle(handle -> handle.createUpdate(sql)
+                .bindBean(comment)
+                .execute());
     }
 
     public List<Review> getTopPositiveReviews(int limit) {
@@ -60,10 +99,14 @@ public class ReviewDAO extends BaseDao {
                 ORDER BY r.created_at DESC
                 LIMIT :limit
                 """;
-        return jdbi.withHandle(handle -> handle.createQuery(sql)
-                .bind("limit", limit)
-                .mapToBean(Review.class)
-                .list());
+        return jdbi.withHandle(handle -> {
+            List<Review> reviews = handle.createQuery(sql)
+                    .bind("limit", limit)
+                    .mapToBean(Review.class)
+                    .list();
+            populateComments(reviews);
+            return reviews;
+        });
     }
 
     public void insert(Review review) {
@@ -93,19 +136,17 @@ public class ReviewDAO extends BaseDao {
                     .one();
 
             if (count > 0) {
-                // Đã like -> Xóa like
                 handle.createUpdate("DELETE FROM review_likes WHERE review_id = :reviewId AND user_id = :userId")
                         .bind("reviewId", reviewId)
                         .bind("userId", userId)
                         .execute();
-                return false; // Trả về false nghĩa là unliked
+                return false;
             } else {
-                // Chưa like -> Thêm like
                 handle.createUpdate("INSERT INTO review_likes (review_id, user_id) VALUES (:reviewId, :userId)")
                         .bind("reviewId", reviewId)
                         .bind("userId", userId)
                         .execute();
-                return true; // Trả về true nghĩa là liked
+                return true;
             }
         });
     }
@@ -116,5 +157,21 @@ public class ReviewDAO extends BaseDao {
                 .bind("reply", reply)
                 .bind("reviewId", reviewId)
                 .execute());
+    }
+
+    public boolean canUserReviewProduct(int userId, int productId) {
+        String sql = """
+                SELECT COUNT(*) 
+                FROM orders o 
+                JOIN orderitems oi ON o.id = oi.id_order 
+                WHERE o.id_user = :userId 
+                  AND oi.id_product = :productId 
+                  AND o.status_order = 'Đã giao hàng'
+                """;
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .bind("productId", productId)
+                .mapTo(Integer.class)
+                .one() > 0);
     }
 }

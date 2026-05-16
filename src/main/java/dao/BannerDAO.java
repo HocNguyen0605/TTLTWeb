@@ -65,7 +65,7 @@ public class BannerDAO {
             ps.setString(2, b.getImageUrl());
             ps.setString(3, b.getLinkUrl());
             ps.setInt(4, b.getPriority());
-            ps.setBoolean(5, b.isIsActive());
+            ps.setBoolean(5, b.getIsActive());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +96,7 @@ public class BannerDAO {
             ps.setString(2, b.getImageUrl());
             ps.setString(3, b.getLinkUrl());
             ps.setInt(4, b.getPriority());
-            ps.setBoolean(5, b.isIsActive());
+            ps.setBoolean(5, b.getIsActive());
             ps.setInt(6, b.getId());
 
             return ps.executeUpdate() > 0;
@@ -129,5 +129,31 @@ public class BannerDAO {
             e.printStackTrace();
         }
         return null;
+    }
+    //Tìm banner bằng tên
+    public List<Banner> getBannerByTitle(String title) {
+        List<Banner> list = new ArrayList<>();
+        String sql = "SELECT * FROM banners WHERE title LIKE ?";
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + title + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Banner banner = new Banner();
+                    banner.setId(rs.getInt("id"));
+                    banner.setTitle(rs.getString("title"));
+                    banner.setImageUrl(rs.getString("image_url"));
+                    banner.setLinkUrl(rs.getString("link_url"));
+                    banner.setPriority(rs.getInt("priority"));
+                    banner.setIsActive(rs.getBoolean("is_active"));
+                    banner.setCreatedAt(rs.getTimestamp("created_at"));
+                    list.add(banner);
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

@@ -66,11 +66,20 @@ public class ReviewController extends HttpServlet {
             String content = request.getParameter("content");
 
             if (content != null && !content.trim().isEmpty()) {
+                ReviewDAO reviewDAO = new ReviewDAO();
+
+                // Kiểm tra quyền đánh giá (phải mua và nhận hàng thành công) mới được quyền đánh giá!!
+                if (!reviewDAO.canUserReviewProduct(user.getId(), productId)) {
+                    result.put("status", "error");
+                    result.put("message", "Bạn chỉ có thể đánh giá sản phẩm sau khi đã nhận hàng thành công.");
+                    out.write(gson.toJson(result));
+                    return;
+                }
+
                 Review review = new Review(productId, user.getId(), rating, content);
                 review.setCreatedAt(new Timestamp(System.currentTimeMillis()));
                 review.setUserName(user.getFullName());
 
-                ReviewDAO reviewDAO = new ReviewDAO();
                 reviewDAO.insert(review);
 
                 result.put("status", "success");
