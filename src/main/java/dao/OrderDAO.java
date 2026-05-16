@@ -20,11 +20,8 @@ public class OrderDAO {
     }
 
     // Lấy danh sách đơn hàng
-    // Lấy danh sách đơn hàng
     public List<Order> getAllOrders() {
         List<Order> list = new ArrayList<>();
-        // Updated SQL to match actual DB schema: orders(id, ...) and
-        // shippinginfo(id_order, receiver_name)
         String sql = """
                 SELECT
                     o.id,
@@ -72,6 +69,17 @@ public class OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean cancelOrder(int orderId, int userId, String reason) {
+        String sql = "UPDATE orders SET status_order='cancelled', cancel_reason=? WHERE id=? AND id_user=?";
+        return util.DBContext.getJdbi().withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind(0, reason)
+                        .bind(1, orderId)
+                        .bind(2, userId)
+                        .execute() > 0
+        );
     }
 
     public void deleteOrder(int orderId) {

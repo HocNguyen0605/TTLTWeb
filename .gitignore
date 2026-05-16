@@ -4,6 +4,7 @@ build/
 
 # IntelliJ IDEA
 .idea/
+.idea/workspace.xml
 *.iml
 out/
 gen/
@@ -31,3 +32,8 @@ Thumbs.db
 target/
 .ai/
 
+# SmartTomcat plugin
+.smarttomcat/
+
+# Root META-INF (likely IDE generated)
+META-INF/

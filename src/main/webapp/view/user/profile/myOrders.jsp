@@ -98,7 +98,7 @@
                             <div class="order-actions mt-2 mt-md-0">
 
                                 <c:if test="${st == 'confirmed' or st == 'pending'}">
-                                    <button class="btn btn-outline-danger btn-sm" type="button" disabled>
+                                    <button class="btn btn-outline-danger btn-sm btn-cancel-order" type="button" data-order-id="${o.id}">
                                         <i class="bi bi-x-circle me-1"></i>Hủy đơn
                                     </button>
                                 </c:if>
@@ -133,3 +133,34 @@
         </div>
     </c:otherwise>
 </c:choose>
+
+<!-- Cancel Order -->
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelOrderModalLabel">Hủy Đơn Hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="cancelOrderForm">
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn hủy đơn hàng <strong id="cancelOrderIdDisplay"></strong> không?</p>
+                    <div class="mb-3">
+                        <label for="cancelReason" class="form-label">Lý do hủy đơn (tối thiểu 10 ký tự) <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="cancelReason" name="reason" rows="3" required minlength="10" placeholder="Vui lòng cho chúng tôi biết lý do bạn hủy đơn..."></textarea>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập lý do hủy đơn (ít nhất 10 ký tự).
+                        </div>
+                    </div>
+                    <input type="hidden" id="cancelOrderIdInput" name="orderId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-danger" id="btnSubmitCancel">Xác nhận hủy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="${pageContext.request.contextPath}/js/myorders.js"></script>
