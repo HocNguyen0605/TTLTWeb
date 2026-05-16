@@ -76,6 +76,14 @@ public class ReviewController extends HttpServlet {
                     return;
                 }
 
+                // Kiểm tra xem đã đánh giá chưa
+                if (reviewDAO.hasUserReviewedProduct(user.getId(), productId)) {
+                    result.put("status", "error");
+                    result.put("message", "Bạn đã đánh giá sản phẩm này rồi.");
+                    out.write(gson.toJson(result));
+                    return;
+                }
+
                 Review review = new Review(productId, user.getId(), rating, content);
                 review.setCreatedAt(new Timestamp(System.currentTimeMillis()));
                 review.setUserName(user.getFullName());

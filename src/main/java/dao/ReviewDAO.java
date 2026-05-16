@@ -166,8 +166,17 @@ public class ReviewDAO extends BaseDao {
                 JOIN orderitems oi ON o.id = oi.id_order 
                 WHERE o.id_user = :userId 
                   AND oi.id_product = :productId 
-                  AND o.status_order = 'Đã giao hàng'
+                  AND o.status_order = 'delivered'
                 """;
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .bind("userId", userId)
+                .bind("productId", productId)
+                .mapTo(Integer.class)
+                .one() > 0);
+    }
+
+    public boolean hasUserReviewedProduct(int userId, int productId) {
+        String sql = "SELECT COUNT(*) FROM reviews WHERE user_id = :userId AND product_id = :productId";
         return jdbi.withHandle(handle -> handle.createQuery(sql)
                 .bind("userId", userId)
                 .bind("productId", productId)

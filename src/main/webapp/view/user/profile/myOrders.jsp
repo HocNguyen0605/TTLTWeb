@@ -10,6 +10,33 @@
     </div>
 </div>
 
+<style>
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+    .star-rating input {
+        display: none;
+    }
+    .star-rating label {
+        font-size: 1.5rem;
+        color: #ddd;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #ffc107;
+    }
+    .review-btn {
+        font-size: 0.8rem;
+        padding: 2px 8px;
+    }
+</style>
+
 <c:set var="hasOrders" value="${not empty orders}"/>
 
 <c:choose>
@@ -45,6 +72,15 @@
                                     <span class="text-muted ms-2">${firstItem.volume}ml</span>
                                     <span class="text-muted ms-2">x${firstItem.quantity}</span>
                                 </div>
+                                <c:if test="${st == 'delivered'}">
+                                    <button class="btn btn-primary btn-sm review-btn ms-2"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#reviewModal"
+                                            data-product-id="${firstItem.productId}"
+                                            data-product-name="${firstItem.productName}">
+                                        <i class="bi bi-star me-1"></i>Đánh giá
+                                    </button>
+                                </c:if>
                             </div>
 
                             <c:if test="${fn:length(o.items) > 1}">
@@ -60,6 +96,15 @@
                                                 <span class="text-muted ms-2">${item.volume}ml</span>
                                                 <span class="text-muted ms-2">x${item.quantity}</span>
                                             </div>
+                                            <c:if test="${st == 'delivered'}">
+                                                <button class="btn btn-primary btn-sm review-btn ms-2"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#reviewModal"
+                                                        data-product-id="${item.productId}"
+                                                        data-product-name="${item.productName}">
+                                                    <i class="bi bi-star me-1"></i>Đánh giá
+                                                </button>
+                                            </c:if>
                                         </div>
                                     </c:forEach>
                                 </div>
@@ -109,11 +154,6 @@
                                     </button>
                                 </c:if>
 
-                                <c:if test="${st == 'delivered'}">
-                                    <button class="btn btn-outline-primary btn-sm" type="button" disabled>
-                                        <i class="bi bi-star me-1"></i>Đánh giá
-                                    </button>
-                                </c:if>
 
                                 <c:if test="${st == 'refunded'}">
                                     <button class="btn btn-outline-secondary btn-sm" type="button" disabled>
@@ -133,6 +173,42 @@
         </div>
     </c:otherwise>
 </c:choose>
+
+<!-- Review Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">Đánh giá sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="reviewForm">
+                <div class="modal-body">
+                    <p class="mb-2 text-muted">Sản phẩm: <strong id="reviewProductName"></strong></p>
+                    <div class="mb-3">
+                        <label class="form-label d-block">Chất lượng sản phẩm</label>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" checked/><label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reviewContent" class="form-label">Cảm nhận của bạn <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="reviewContent" name="content" rows="4" required placeholder="Sản phẩm tuyệt vời, giao hàng nhanh..."></textarea>
+                    </div>
+                    <input type="hidden" id="reviewProductId" name="productId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-success" id="btnSubmitReview">Gửi đánh giá</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- Cancel Order -->
 <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
