@@ -28,7 +28,6 @@
           <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.10.1" />
           <element id="library" level="project" name="Gradle: org.apache.httpcomponents:fluent-hc:4.5.14" />
           <element id="library" level="project" name="Gradle: com.cloudinary:cloudinary-http44:1.36.0" />
-          <element id="library" level="project" name="Gradle: org.mindrot:jbcrypt:0.4" />
           <element id="library" level="project" name="Gradle: jakarta.el:jakarta.el-api:5.0.0" />
           <element id="library" level="project" name="Gradle: org.slf4j:slf4j-api:2.0.17" />
           <element id="library" level="project" name="Gradle: io.leangen.geantyref:geantyref:2.0.1" />
@@ -41,6 +40,7 @@
           <element id="library" level="project" name="Gradle: org.apache.commons:commons-lang3:3.1" />
           <element id="library" level="project" name="Gradle: org.apache.httpcomponents:httpcore:4.4.16" />
           <element id="library" level="project" name="Gradle: commons-codec:commons-codec:1.11" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mindrot/jbcrypt/0.4/af7e61017f73abb18ac4e036954f9f28c6366c07/jbcrypt-0.4.jar" />
         </element>
       </element>
     </root>

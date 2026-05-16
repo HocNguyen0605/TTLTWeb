@@ -97,19 +97,34 @@
 
             <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                 <div class="search-container d-none d-md-block">
-                    <form action="products" method="get">
-                        <i class="bi bi-search search-icon"></i>
+                    <form action="/admin/banner" method="get">
                         <input type="text" name="search" class="search-input"
-                               placeholder="Tìm kiếm banner..." value="${param.search}">
+                               placeholder="Nhập tên banner để tìm kiếm" value=${currentSearch}>
+                        <button type="submit" class="btn p-0 border-0">
+                            <i class="bi bi-search search-icon"></i>
+                        </button>
                     </form>
                 </div>
+                <!--Hiển thị danh sách banner tìm kiếm chạy bằng ajax -->
+                <div class="search-container position-relative">
+                    <input type="text" id="searchInput" name="search" class="search-input" autocomplete="off" ...>
+                    <div id="searchSuggestions" class="list-group position-absolute w-100 shadow-lg" style="z-index: 1000; display: none;">
+                    </div>
+                </div>
+                <!--Nút tạo banner mơis-->
                 <button class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
                         data-bs-toggle="modal" data-bs-target="#addBannerModal">
                     Tạo Banner mới
                 </button>
             </div>
         </div>
-
+        <c:choose>
+            <c:when test="${not empty banners}">
+            </c:when>
+            <c:otherwise>
+                <div class="alert alert-info">Không tìm thấy banner nào khớp với từ khóa "${currentSearch}"</div>
+            </c:otherwise>
+        </c:choose>
         <div class="card card-custom animate__animated animate__fadeInUp">
             <div class="card-body p-0">
                 <div class="table-responsive">
