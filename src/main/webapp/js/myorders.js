@@ -41,7 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const reason = document.getElementById('cancelReason').value.trim();
             if (reason.length < 10) {
-                alert("Vui lòng nhập lý do hủy đơn ít nhất 10 ký tự.");
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', "Vui lòng nhập lý do hủy đơn ít nhất 10 ký tự.", 'error');
+                else alert("Vui lòng nhập lý do hủy đơn ít nhất 10 ký tự.");
                 return;
             }
 
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const response = await fetch(`${getBasePath()}/user/cancel-order`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
                     body: formData.toString()
                 });
 
@@ -64,13 +65,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (response.ok && data.status === 'success') {
                     updateOrderUIToCancelled(orderId);
                     cancelModal.hide();
-                    alert(data.message || "Hủy đơn hàng thành công!");
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: data.message || "Hủy đơn hàng thành công!",
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    } else alert(data.message || "Hủy đơn hàng thành công!");
                 } else {
-                    alert(data.message || "Có lỗi xảy ra khi hủy đơn.");
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire('Lỗi', data.message || "Có lỗi xảy ra khi hủy đơn.", 'error');
+                    } else alert(data.message || "Có lỗi xảy ra khi hủy đơn.");
                 }
             } catch (error) {
                 console.error('Error cancelling order:', error);
-                alert("Lỗi kết nối đến máy chủ.");
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Lỗi', "Lỗi kết nối đến máy chủ.", 'error');
+                } else alert("Lỗi kết nối đến máy chủ.");
             } finally {
                 btnSubmitCancel.disabled = false;
                 btnSubmitCancel.textContent = 'Xác nhận hủy';
@@ -120,14 +133,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     const response = await fetch(`${getBasePath()}/submit-review`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
                         body: formData.toString()
                     });
 
                     const data = await response.json();
                     if (data.status === 'success') {
                         if (typeof Swal !== 'undefined') {
-                            Swal.fire({ icon: 'success', title: 'Thành công!', text: data.message, timer: 2000, showConfirmButton: false });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công!',
+                                text: data.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
                         } else alert(data.message);
 
                         bootstrap.Modal.getInstance(reviewModalElement).hide();
