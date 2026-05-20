@@ -10,7 +10,7 @@ public class OrderItemDAO extends DBContext {
     public OrderItemDAO(Connection conn) {
         this.conn = conn;
     }
-
+//Thêm hàng
     public boolean insertOrderItem(OrderItem item) throws SQLException {
         String sql = "INSERT INTO orderitems (id_order, id_product, quantity, price_at_time) VALUES (?, ?, ?, ?)";
 
@@ -22,5 +22,26 @@ public class OrderItemDAO extends DBContext {
 
             return ps.executeUpdate() > 0;
         }
+    }
+
+    //Lấy ra các sp có orderID là x
+    public java.util.List<OrderItem> getItemsByOrderId(int orderId) throws SQLException {
+        java.util.List<OrderItem> list = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM orderitems WHERE id_order = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderItem item = new OrderItem(
+                            rs.getInt("id_order"),
+                            rs.getInt("id_product"),
+                            rs.getInt("quantity"),
+                            rs.getDouble("price_at_time")
+                    );
+                    list.add(item);
+                }
+            }
+        }
+        return list;
     }
 }

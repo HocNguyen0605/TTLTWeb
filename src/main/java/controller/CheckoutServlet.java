@@ -36,7 +36,7 @@ public class CheckoutServlet extends HttpServlet {
             conn = DBContext.getConnection();
             conn.setAutoCommit(false); //  transaction
 
-            // ===== 1. Tạo Order =====
+            //1. Tạo Order
             Order order = new Order();
             order.setTotalPrice(cart.getTotalPrice());
             order.setOrderDate(new Date());
@@ -56,7 +56,7 @@ public class CheckoutServlet extends HttpServlet {
             OrderDAO orderDAO = new OrderDAO(conn);
             int orderId = orderDAO.insertAndReturnId(order);
 
-            // ===== 2. Tạo OrderItem =====
+            // 2. Tạo OrderItem
             OrderItemDAO itemDAO = new OrderItemDAO(conn);
 
             for (CartItem ci : cart.getAllItems()) {
@@ -70,8 +70,12 @@ public class CheckoutServlet extends HttpServlet {
 
             conn.commit(); //  OK
             session.removeAttribute("cart");
+            if (session.getAttribute("auth") != null) {
+                User auth = (User) session.getAttribute("auth");
+                new dao.CartDAO(conn).clearCart(auth.getId());
+            }
 
-            // ===== 3. Redirect theo payment =====
+            // 3. Redirect theo payment
             if ("COD".equals(paymentMethod)) {
                 response.sendRedirect("success.jsp");
             } else {

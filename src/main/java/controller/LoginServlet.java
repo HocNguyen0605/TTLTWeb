@@ -93,6 +93,17 @@ public class LoginServlet extends HttpServlet {
         if (u != null) {
             HttpSession session = request.getSession();
             session.setAttribute("auth", u);
+            //lấy hoặc tạo cart cho user
+            try (java.sql.Connection conn = util.DBContext.getConnection()) {
+                model.Cart cart = (model.Cart) session.getAttribute("cart");
+                if (cart == null) {
+                    cart = new model.Cart();
+                    session.setAttribute("cart", cart);
+                }
+                new dao.CartDAO(conn).syncCartToSession(u.getId(), cart);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             // Xử lí Cookies
             if (remember != null) {

@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return '';
     };
 
-    // --- HỦY ĐƠN HÀNG ---
+    //HỦY ĐƠN HÀNG
     const cancelModalElement = document.getElementById('cancelOrderModal');
     if (cancelModalElement) {
         const cancelModal = new bootstrap.Modal(cancelModalElement);
@@ -91,7 +91,52 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // --- ĐÁNH GIÁ SẢN PHẨM ---
+    //MUA LẠI ĐƠN HÀNG
+    document.addEventListener('click', async (event) => {
+        const reorderBtn = event.target.closest('.btn-reorder');
+        if (reorderBtn) {
+            const orderId = reorderBtn.dataset.orderId;
+            reorderBtn.disabled = true;
+            const originalHtml = reorderBtn.innerHTML;
+            reorderBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...';
+
+            const formData = new URLSearchParams();
+            formData.append('orderId', orderId);
+
+            try {
+                const response = await fetch(`${getBasePath()}/user/reorder`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    body: formData.toString()
+                });
+
+                const data = await response.json();
+                if (response.ok && data.status === 'success') {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ icon: 'success', title: 'Thành công!', text: data.message, timer: 1000, showConfirmButton: false }).then(() => {
+                            window.location.href = getBasePath() + '/cart';
+                        });
+                    } else {
+                        alert(data.message);
+                        window.location.href = getBasePath() + '/cart';
+                    }
+                } else {
+                    if (typeof Swal !== 'undefined') Swal.fire('Lỗi', data.message || "Có lỗi xảy ra.", 'error');
+                    else alert(data.message || "Có lỗi xảy ra.");
+                    reorderBtn.disabled = false;
+                    reorderBtn.innerHTML = originalHtml;
+                }
+            } catch (error) {
+                console.error('Error reordering:', error);
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', "Lỗi kết nối đến máy chủ.", 'error');
+                else alert("Lỗi kết nối đến máy chủ.");
+                reorderBtn.disabled = false;
+                reorderBtn.innerHTML = originalHtml;
+            }
+        }
+    });
+
+    //ĐÁNH GIÁ SẢN PHẨM
     const reviewModalElement = document.getElementById('reviewModal');
     if (reviewModalElement) {
         const reviewForm = document.getElementById('reviewForm');

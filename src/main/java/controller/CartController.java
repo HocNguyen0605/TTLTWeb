@@ -48,20 +48,32 @@ public class CartController extends HttpServlet {
                     Product product = productDAO.findById(productId);
                     if (product != null) {
                         cart.addProduct(product, quantity);
+                        if (session.getAttribute("auth") != null) {
+                            User auth = (User) session.getAttribute("auth");
+                            new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), product.getId(), cart.findItemByProductId(product.getId()).getQuantity());
+                        }
                     }
                 } else session.setAttribute("messageCart","Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
 
             } else if ("remove".equals(action)) {
                 cart.deleteProduct(productId);
 
+                if (session.getAttribute("auth") != null) {
+                    User auth = (User) session.getAttribute("auth");
+                    new dao.CartDAO(conn).removeCartItem(auth.getId(), productId);
+                }
             } else if ("update".equals(action)) {
                 int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
                 if (quantity <= stock) {
                     cart.update(productId, quantity);
                 } else {
-                    session.setAttribute("messageCart", "Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
-                    cart.update(productId, stock);}
-            }
+                    session.setAttribute("messageCart", "Chúng tôi hiện không đủ hàng tồn! Rất xin lỗi quý khách");
+                    cart.update(productId, stock);
+                }
+                if (session.getAttribute("auth") != null && cart.findItemByProductId(productId) != null) {
+                    User auth = (User) session.getAttribute("auth");
+                    new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), productId, cart.findItemByProductId(productId).getQuantity());
+                }            }
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
