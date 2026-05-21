@@ -10,36 +10,7 @@
     </div>
 </div>
 
-<style>
-    .star-rating {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-        gap: 5px;
-    }
-
-    .star-rating input {
-        display: none;
-    }
-
-    .star-rating label {
-        font-size: 1.5rem;
-        color: #ddd;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-
-    .star-rating input:checked ~ label,
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-        color: #ffc107;
-    }
-
-    .review-btn {
-        font-size: 0.8rem;
-        padding: 2px 8px;
-    }
-</style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/myOrders.css">
 
 <c:set var="hasOrders" value="${not empty orders}"/>
 
@@ -245,10 +216,10 @@
                     <div class="mb-3">
                         <label for="cancelReason" class="form-label">Lý do hủy đơn <span
                                 class="text-danger">*</span></label>
-                        <textarea class="form-control" id="cancelReason" name="reason" rows="4" required minlength="10"
+                        <textarea class="form-control" id="cancelReason" name="reason" rows="4" required minlength="5"
                                   placeholder="Vui lòng cho chúng tôi biết lý do bạn hủy đơn..."></textarea>
                         <div class="invalid-feedback">
-                            Vui lòng nhập lý do hủy đơn (ít nhất 10 ký tự).
+                            Vui lòng nhập lý do hủy đơn (ít nhất 5 ký tự).
                         </div>
                     </div>
                     <input type="hidden" id="cancelOrderIdInput" name="orderId">

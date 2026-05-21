@@ -72,14 +72,26 @@ public class OrderDAO {
     }
 
     public boolean cancelOrder(int orderId, int userId, String reason) {
-        String sql = "UPDATE orders SET status_order='cancelled', cancel_reason=? WHERE id=? AND id_user=?";
-        return util.DBContext.getJdbi().withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind(0, reason)
-                        .bind(1, orderId)
-                        .bind(2, userId)
-                        .execute() > 0
-        );
+        return DBContext.getJdbi().inTransaction(handle -> {
+            boolean updated = handle.createUpdate("UPDATE orders SET status_order='cancelled', cancel_reason=:reason WHERE id=:id AND id_user=:userId")
+                    .bind("reason", reason)
+                    .bind("id", orderId)
+                    .bind("userId", userId)
+                    .execute() > 0;
+            if (updated) {
+                List<java.util.Map<String, Object>> items = handle.createQuery("SELECT id_product, quantity FROM orderitems WHERE id_order = :id")
+                        .bind("id", orderId)
+                        .mapToMap()
+                        .list();
+                for (java.util.Map<String, Object> item : items) {
+                    handle.createUpdate("UPDATE products SET quantity = quantity + :quantity WHERE id = :pid")
+                            .bind("quantity", item.get("quantity"))
+                            .bind("pid", item.get("id_product"))
+                            .execute();
+                }
+            }
+            return updated;
+        });
     }
 
     public void deleteOrder(int orderId) {

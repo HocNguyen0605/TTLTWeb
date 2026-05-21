@@ -40,9 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const reason = document.getElementById('cancelReason').value.trim();
-            if (reason.length < 10) {
-                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', "Vui lòng nhập lý do hủy đơn ít nhất 10 ký tự.", 'error');
-                else alert("Vui lòng nhập lý do hủy đơn ít nhất 10 ký tự.");
+            if (reason.length < 5) {
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', "Vui lòng nhập lý do hủy đơn ít nhất 5 ký tự.", 'error');
+                else alert("Vui lòng nhập lý do hủy đơn ít nhất 5 ký tự.");
                 return;
             }
 
