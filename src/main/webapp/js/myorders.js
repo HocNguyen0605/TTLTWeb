@@ -70,10 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
                             icon: 'success',
                             title: 'Thành công!',
                             text: data.message || "Hủy đơn hàng thành công!",
-                            timer: 2000,
+                            timer: 1500,
                             showConfirmButton: false
+                        }).then(() => {
+                            window.location.reload();
                         });
-                    } else alert(data.message || "Hủy đơn hàng thành công!");
+                    } else {
+                        alert(data.message || "Hủy đơn hàng thành công!");
+                        window.location.reload();
+                    }
                 } else {
                     if (typeof Swal !== 'undefined') {
                         Swal.fire('Lỗi', data.message || "Có lỗi xảy ra khi hủy đơn.", 'error');
@@ -220,23 +225,74 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateOrderUIToCancelled(orderId) {
-        const cancelBtn = document.querySelector(`.btn-cancel-order[data-order-id="${orderId}"]`);
-        if (!cancelBtn) return;
-        const orderCard = cancelBtn.closest('.order-card');
-        if (!orderCard) return;
-        const statusPill = orderCard.querySelector('.status-pill');
-        if (statusPill) {
-            statusPill.className = 'status-pill status-cancelled';
-            statusPill.textContent = 'cancelled';
-        }
-        const actionContainer = orderCard.querySelector('.order-actions');
-        if (actionContainer) {
-            cancelBtn.remove();
-            const reorderBtn = document.createElement('button');
-            reorderBtn.className = 'btn btn-warning btn-sm';
-            reorderBtn.disabled = true;
-            reorderBtn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>Mua lại';
-            actionContainer.appendChild(reorderBtn);
-        }
+        const cancelBtns = document.querySelectorAll(`.btn-cancel-order[data-order-id="${orderId}"]`);
+        cancelBtns.forEach(cancelBtn => {
+            const orderCard = cancelBtn.closest('.order-card');
+            if (!orderCard) return;
+            const statusPill = orderCard.querySelector('.status-pill');
+            if (statusPill) {
+                statusPill.className = 'status-pill status-cancelled text-danger';
+                statusPill.textContent = 'ĐÃ HỦY';
+            }
+            const actionContainer = orderCard.querySelector('.order-actions');
+            if (actionContainer) {
+                cancelBtn.remove();
+                const reorderBtn = document.createElement('button');
+                reorderBtn.className = 'btn btn-warning btn-sm btn-reorder text-white';
+                reorderBtn.setAttribute('data-order-id', orderId);
+                reorderBtn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>Mua lại';
+                actionContainer.appendChild(reorderBtn);
+            }
+        });
+    }
+
+    // Search bar
+    const searchInput = document.getElementById('orderSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const activePane = document.querySelector('.tab-pane.active');
+            if (!activePane) return;
+
+            const cards = activePane.querySelectorAll('.order-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const orderId = card.getAttribute('data-order-id') || '';
+                const productTitles = Array.from(card.querySelectorAll('.order-items-preview .fw-bold')).map(el => el.textContent.toLowerCase());
+
+                const matchesId = orderId.includes(query);
+                const matchesProducts = productTitles.some(title => title.includes(query));
+
+                if (query === '' || matchesId || matchesProducts) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hiện/Ẩn trạng thái rỗng của tab hiện tại nếu tìm kiếm không ra kết quả
+            let emptyState = activePane.querySelector('.empty-tab-state');
+            if (!emptyState && visibleCount === 0) {
+                // Tạo một empty state động nếu chưa có
+                emptyState = document.createElement('div');
+                emptyState.className = 'text-center py-5 empty-tab-state dynamic-empty';
+                emptyState.innerHTML = `
+                    <i class="bi bi-search text-muted" style="font-size: 3rem; opacity: 0.4;"></i>
+                    <p class="text-muted mt-2 mb-0">Không tìm thấy đơn hàng nào phù hợp</p>
+                `;
+                activePane.appendChild(emptyState);
+            } else if (emptyState && visibleCount > 0) {
+                // Xoá empty state động hoặc ẩn đi
+                if (emptyState.classList.contains('dynamic-empty')) {
+                    emptyState.remove();
+                } else {
+                    emptyState.style.display = 'none';
+                }
+            } else if (emptyState && visibleCount === 0) {
+                emptyState.style.display = '';
+            }
+        });
     }
 });

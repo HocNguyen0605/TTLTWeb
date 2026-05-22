@@ -1,24 +1,105 @@
-.star-rating {
+/* ========================================================
+   JUICY E-COMMERCE - MYORDERS.CSS (Tabs & Search Rules)
+   ======================================================== */
+
+/* --- Dynamic Fit Status Tabs --- */
+.order-tabs-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+}
+
+.order-tabs {
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    gap: 5px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #f1f1f1;
 }
-.star-rating input {
-    display: none;
+
+.order-tabs::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari/Opera */
 }
-.star-rating label {
-    font-size: 1.5rem;
-    color: #ddd;
+
+.order-tab-item {
+    flex: 1;
+    min-width: 0; /* Let it scale dynamically without hard minimum width */
+    list-style: none;
+    text-align: center;
+}
+
+.order-tab-link {
+    background: none !important;
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    color: #666666 !important;
     cursor: pointer;
-    transition: color 0.2s;
+    display: block;
+    font-size: 0.88rem !important; /* Compact premium size */
+    font-weight: 600 !important; /* Medium-bold for premium feel */
+    padding: 12px 2px !important; /* Balanced padding to prevent wrapping */
+    transition: all 0.2s ease-in-out;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
-.star-rating input:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: var(--color-secondary);
+
+.order-tab-link:hover {
+    color: var(--color-primary, #5cb85c) !important;
 }
-.review-btn {
-    font-size: 0.8rem;
-    padding: 2px 8px;
+
+.order-tab-link.active {
+    color: var(--color-primary, #5cb85c) !important;
+    border-bottom-color: var(--color-primary, #5cb85c) !important;
+    font-weight: 700 !important;
+}
+
+/* --- Search Input Styling --- */
+.search-orders-container #orderSearchInput {
+    background-color: #f6f6f6;
+    border-color: transparent !important;
+    color: #333;
+    font-size: 0.9rem;
+    padding-left: 3rem !important;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.search-orders-container #orderSearchInput:focus {
+    background-color: #fff;
+    border-color: var(--color-primary, #5cb85c) !important;
+    box-shadow: 0 0 0 3px rgba(92, 184, 92, 0.15) !important;
+}
+
+/* --- Empty Tab States --- */
+.empty-tab-state {
+    color: #aaaaaa;
+    font-size: 0.95rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    padding: 50px 20px !important;
+}
+
+.empty-tab-state i {
+    color: #cccccc !important;
+    display: inline-block;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 0.6; }
+}
+
+/* --- Keep compatibility with myorders.js text danger class --- */
+.status-pill.status-cancelled.text-danger {
+    color: #d32f2f !important;
+    background-color: #ffebee !important;
 }
