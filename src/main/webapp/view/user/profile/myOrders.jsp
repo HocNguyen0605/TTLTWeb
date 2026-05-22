@@ -17,20 +17,24 @@
         justify-content: flex-end;
         gap: 5px;
     }
+
     .star-rating input {
         display: none;
     }
+
     .star-rating label {
         font-size: 1.5rem;
         color: #ddd;
         cursor: pointer;
         transition: color 0.2s;
     }
+
     .star-rating input:checked ~ label,
     .star-rating label:hover,
     .star-rating label:hover ~ label {
         color: #ffc107;
     }
+
     .review-btn {
         font-size: 0.8rem;
         padding: 2px 8px;
@@ -64,9 +68,10 @@
                     <!-- Products List -->
                     <div class="order-items-preview mb-3 pb-3 border-bottom">
                         <c:if test="${not empty o.items}">
-                            <c:set var="firstItem" value="${o.items[0]}" />
+                            <c:set var="firstItem" value="${o.items[0]}"/>
                             <div class="d-flex align-items-center mb-2">
-                                <img src="${firstItem.productImg}" alt="${firstItem.productName}" class="img-thumbnail me-2" style="width: 60px; height: 60px; object-fit: cover;">
+                                <img src="${firstItem.productImg}" alt="${firstItem.productName}"
+                                     class="img-thumbnail me-2" style="width: 60px; height: 60px; object-fit: cover;">
                                 <div class="flex-grow-1">
                                     <span class="fw-bold">${firstItem.productName}</span>
                                     <span class="text-muted ms-2">${firstItem.volume}ml</span>
@@ -84,13 +89,17 @@
                             </div>
 
                             <c:if test="${fn:length(o.items) > 1}">
-                                <button class="btn btn-link btn-sm p-0 text-decoration-none mt-1 text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseItems${o.id}" aria-expanded="false" aria-controls="collapseItems${o.id}">
+                                <button class="btn btn-link btn-sm p-0 text-decoration-none mt-1 text-dark"
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseItems${o.id}"
+                                        aria-expanded="false" aria-controls="collapseItems${o.id}">
                                     Xem thêm ${fn:length(o.items) - 1} sản phẩm <i class="bi bi-chevron-down"></i>
                                 </button>
                                 <div class="collapse mt-2" id="collapseItems${o.id}">
                                     <c:forEach items="${o.items}" var="item" begin="1">
                                         <div class="d-flex align-items-center mt-2 pt-2 border-top">
-                                            <img src="${item.productImg}" alt="${item.productName}" class="img-thumbnail me-2" style="width: 50px; height: 50px; object-fit: cover;">
+                                            <img src="${item.productImg}" alt="${item.productName}"
+                                                 class="img-thumbnail me-2"
+                                                 style="width: 50px; height: 50px; object-fit: cover;">
                                             <div class="flex-grow-1">
                                                 <span class="fw-bold">${item.productName}</span>
                                                 <span class="text-muted ms-2">${item.volume}ml</span>
@@ -143,14 +152,15 @@
                             <div class="order-actions mt-2 mt-md-0">
 
                                 <c:if test="${st == 'confirmed' or st == 'pending'}">
-                                    <button class="btn btn-outline-danger btn-sm btn-cancel-order" type="button" data-order-id="${o.id}">
+                                    <button class="btn btn-outline-danger btn-sm btn-cancel-order" type="button"
+                                            data-order-id="${o.id}">
                                         <i class="bi bi-x-circle me-1"></i>Hủy đơn
                                     </button>
                                 </c:if>
 
                                 <c:if test="${st == 'delivered' or st == 'cancelled' or st == 'refunded'}">
-                                    <button class="btn btn-warning btn-sm" type="button" disabled>
-                                        <i class="bi bi-arrow-repeat me-1"></i>Mua lại
+                                    <button class="btn btn-warning btn-sm btn-reorder" type="button"
+                                            data-order-id="${o.id}"><i class="bi bi-arrow-repeat me-1"></i>Mua lại
                                     </button>
                                 </c:if>
 
@@ -188,16 +198,27 @@
                     <div class="mb-3">
                         <label class="form-label d-block">Chất lượng sản phẩm</label>
                         <div class="star-rating">
-                            <input type="radio" id="star5" name="rating" value="5" checked/><label for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star2" name="rating" value="2"/><label for="star2" title="2 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star5" name="rating" value="5" checked/><label for="star5"
+                                                                                                   title="5 stars"><i
+                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star4" name="rating" value="4"/><label for="star4"
+                                                                                           title="4 stars"><i
+                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star3" name="rating" value="3"/><label for="star3"
+                                                                                           title="3 stars"><i
+                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star2" name="rating" value="2"/><label for="star2"
+                                                                                           title="2 stars"><i
+                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"><i
+                                class="bi bi-star-fill"></i></label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="reviewContent" class="form-label">Cảm nhận của bạn <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="reviewContent" name="content" rows="4" required placeholder="Sản phẩm tuyệt vời, giao hàng nhanh..."></textarea>
+                        <label for="reviewContent" class="form-label">Cảm nhận của bạn <span
+                                class="text-danger">*</span></label>
+                        <textarea class="form-control" id="reviewContent" name="content" rows="4" required
+                                  placeholder="Sản phẩm tuyệt vời, giao hàng nhanh..."></textarea>
                     </div>
                     <input type="hidden" id="reviewProductId" name="productId">
                 </div>
@@ -215,15 +236,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cancelOrderModalLabel">Hủy Đơn Hàng</h5>
+                <h5 class="modal-title" id="cancelOrderModalLabel">Hủy đơn hàng</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="cancelOrderForm">
                 <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn hủy đơn hàng <strong id="cancelOrderIdDisplay"></strong> không?</p>
+                    <p class="mb-2 text-muted">Đơn hàng: <strong id="cancelOrderIdDisplay"></strong></p>
                     <div class="mb-3">
-                        <label for="cancelReason" class="form-label">Lý do hủy đơn (tối thiểu 10 ký tự) <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="cancelReason" name="reason" rows="3" required minlength="10" placeholder="Vui lòng cho chúng tôi biết lý do bạn hủy đơn..."></textarea>
+                        <label for="cancelReason" class="form-label">Lý do hủy đơn <span
+                                class="text-danger">*</span></label>
+                        <textarea class="form-control" id="cancelReason" name="reason" rows="4" required minlength="10"
+                                  placeholder="Vui lòng cho chúng tôi biết lý do bạn hủy đơn..."></textarea>
                         <div class="invalid-feedback">
                             Vui lòng nhập lý do hủy đơn (ít nhất 10 ký tự).
                         </div>

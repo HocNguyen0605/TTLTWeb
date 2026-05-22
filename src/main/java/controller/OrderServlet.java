@@ -93,6 +93,10 @@ public class OrderServlet extends HttpServlet {
             shippingDAO.insert(shippingInfo);
             conn.commit(); // Thành công
             session.removeAttribute("cart");
+            if (session.getAttribute("auth") != null) {
+                User auth = (User) session.getAttribute("auth");
+                new dao.CartDAO(conn).clearCart(auth.getId());
+            }
             response.sendRedirect(request.getContextPath() + "/home");
         } catch (Exception e) {
             e.printStackTrace();
