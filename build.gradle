@@ -82,8 +82,3 @@ dependencies {
     implementation 'org.mindrot:jbcrypt:0.4'
 
 }
-
-tasks.register('dumpDB', JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'util.DumpDB'
-}

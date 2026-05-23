@@ -12,6 +12,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c0a4e50b-df5d-44e4-9c90-42d29545fbf4" name="Changes" comment="Fix conflict">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/ReviewDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/ReviewDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/js/myorders.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/js/myorders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/view/user/profile/myOrders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/view/user/profile/myOrders.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -366,7 +369,7 @@
       <workItem from="1779115864354" duration="1000" />
       <workItem from="1779115908620" duration="1494000" />
       <workItem from="1779529285491" duration="1973000" />
-      <workItem from="1779546035844" duration="1883000" />
+      <workItem from="1779546035844" duration="2688000" />
     </task>
     <servers />
   </component>
