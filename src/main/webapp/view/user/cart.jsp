@@ -22,6 +22,7 @@
                 <table class="table align-middle">
                     <thead class="table-light">
                     <tr>
+                        <th></th>
                         <th>Sản Phẩm</th>
                         <th class="text-center">Số Lượng</th>
                         <th class="text-end">Đơn Giá</th>
@@ -45,6 +46,11 @@
                         <c:otherwise>
                             <c:forEach items="${sessionScope.cart.allItems}" var="item">
                                 <tr>
+                                    <td class="text-center align-middle">
+                                        <input type="checkbox"
+                                               class="form-check-input cart-item-checkbox"
+                                               data-product-id="${item.product.id}">
+                                    </td>
                                     <%-- Sản phẩm --%>
                                     <td>
                                         <div class="d-flex align-items-center">
@@ -122,7 +128,7 @@
                 <!-- Tạm tính -->
                 <div class="d-flex justify-content-between mb-2">
                     <span>Tạm tính:</span>
-                    <span>
+                    <span id="totalPrice">
                 <fmt:formatNumber value="${totalPrice}"
                                   pattern="#,### đ" />
             </span>
@@ -131,7 +137,7 @@
                 <!-- Phí ship -->
                 <div class="d-flex justify-content-between mb-2">
                     <span>Phí giao hàng:</span>
-                    <span>
+                    <span id="shippingFee">
                 <fmt:formatNumber value="${shippingFee}"
                                   pattern="#,### đ" />
             </span>
@@ -139,7 +145,8 @@
 
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>Giảm Giá:</span>
-                    <span class="text-danger"> <fmt:formatNumber
+                    <span id="totalDiscount" class="text-danger">
+                        <fmt:formatNumber
                             value="${totalDiscount}"
                             pattern="#,### đ" />
     </span>
@@ -147,7 +154,7 @@
 
                 <div class="d-flex justify-content-between fw-bold border-top pt-2">
                     <span>TỔNG CỘNG:</span>
-                    <span class="text-success fs-5">
+                    <span id="total" class="text-success fs-5">
                 <fmt:formatNumber
                         value="${total}"
                         pattern="#,### đ" />

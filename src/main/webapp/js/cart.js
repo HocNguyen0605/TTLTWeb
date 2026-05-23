@@ -39,3 +39,44 @@ document.addEventListener('click', function (e) {
         addToCart(productId);
     }
 });
+//Tính tổng tiền sản phẩm được tích chọn
+document.addEventListener("DOMContentLoaded", function (){
+    const checkBoxs= document.querySelectorAll(".cart-item-checkbox");
+    function fetchCart(){
+        let listProductIdSelected= [];
+        checkBoxs.forEach(cb=>{
+            if(cb.checked){
+                listProductIdSelected.push(cb.getAttribute("data-product-id"))
+            }
+        });
+        const params = new URLSearchParams();
+        params.append("listIdSelected", listProductIdSelected.join(","));
+        fetch(window.contextPath + '/cart?' + params.toString(), {
+            method: "GET",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        })
+            .then(respone=> respone.json())
+            .then(data => {
+                const set = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerText = formatCurrency(val);
+                };
+                set("totalPrice", data.totalPrice);
+                set("discountPromotion", data.discountPromotion);
+                set("discountVoucher", data.discountVoucher);
+                set("shippingFee", data.shippingFee);
+                set("totalDiscount", data.totalDiscount);
+                set("total", data.total);
+            })
+            .catch(error=>console.error("Lỗi tính toán giỏ hàng: ", error));
+    }
+    //Format số tiền trước khi inner vào HTML
+    function formatCurrency(amount){
+        return amount.toLocaleString('vi-VN')+'đ';
+    }
+    checkBoxs.forEach(cb=>{
+        cb.addEventListener("change", fetchCart);
+    })
+})
