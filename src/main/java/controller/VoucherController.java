@@ -18,26 +18,32 @@ public class VoucherController extends HttpServlet {
         try {
             Connection conn = DBContext.getConnection();
 
-        String code = request.getParameter("codeVoucher");
-        HttpSession session = request.getSession(false);
+            String code = request.getParameter("codeVoucher");
+            HttpSession session = request.getSession(false);
 
-        VoucherDAO vDAO = new VoucherDAO(conn);
-        Voucher v = vDAO.getVoucherWithDiscount(code);
-        if(code==null || code.trim().isEmpty()){
-            session.removeAttribute("voucher");
-            session.setAttribute("voucherError", "Vui lòng nhập mã giảm giá!");
+            VoucherDAO vDAO = new VoucherDAO(conn);
+            Voucher v = vDAO.getVoucherWithDiscount(code);
+            String requestedWith = request.getHeader("X-Requested-With");
+            if ("XMLHttpRequest".equals(requestedWith)) {
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                if (code == null || code.trim().isEmpty()) {
+                    session.removeAttribute("voucher");
+                    response.getWriter().write("{\"success\":false,\"error\":\"Vui lòng nhập mã giảm giá\"}");
+                } else if (v != null) {
+                    session.setAttribute("voucher", v);
+                    session.removeAttribute("voucherError");
+                    response.getWriter().write("{\"success\":true}");
+                } else {
+                    session.removeAttribute("voucher");
+                    response.getWriter().write("{\"success\":false,\"error\": \"Mã giảm giá không hợp lệ hoăc đã hết hạn\"}");
+                }
+                return;
+            }
+            response.sendRedirect(request.getContextPath() + "/cart");
+        }catch(Exception e){
+                throw new RuntimeException(e);
+            }
         }
-        else if (v != null) {
-            session.setAttribute("voucher", v);
-            session.removeAttribute("voucherError");
-        } else {
-            session.removeAttribute("voucher");
-            session.setAttribute("voucherError", "*Mã giảm giá không hợp lệ hoặc đã hết hạn!");
-        }
-        response.sendRedirect(request.getContextPath() + "/cart");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 }
