@@ -41,8 +41,14 @@ public class CartController extends HttpServlet {
             int stock = productDAO.getMaxQuantityById(productId);
             if ("add".equals(action)) {
                 // Nếu có truyền quantity thì lấy,
-                // nếu không (từ trang list) thì mặc định là 1
-                int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
+                // nếu không thì mặc định là 1
+                int quantity = 1;
+                if (quantityRaw != null && !quantityRaw.isBlank()) {
+                    try {
+                        quantity = Integer.parseInt(quantityRaw);
+                    } catch (NumberFormatException e) {
+                    }
+                }
                 int countProduct = cart.getTotalQuantityByID(productId);
                 if (countProduct+quantity<=stock) {
                     Product product = productDAO.findById(productId);
