@@ -163,23 +163,14 @@
                 <!-- Mã giảm giá voucher -->
                 <div class="mt-3">
                     <label class="form-label fw-semibold">Mã giảm giá</label>
-                    <form action="${pageContext.request.contextPath}/apply-voucher" method="post" class="input-group">
-                        <input type="text" class="form-control" name="codeVoucher" placeholder="Nhập mã..." maxlength="15">
-                        <button type="submit" class="btn btn-outline-success">
+                    <form id="voucherForm" class="input-group">
+                        <input type="text" class="form-control" id="codeVoucher" name="codeVoucher" placeholder="Nhập mã..." maxlength="15">
+                        <button type="button" class="btn btn-outline-success" id="applyVoucherBtn" >
                             Áp dụng
                         </button>
                     </form>
                 </div>
-                <div>
-                    <c:choose>
-                        <c:when test="${empty sessionScope.voucher}">
-                            <span class="text-danger">${sessionScope.voucherError}</span>
-                        </c:when>
-                        <c:otherwise>
-                            <span class="text-success">Áp dụng voucher thành công</span>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
+                <div id="voucherMessage"></div>
 
                 <!-- Thanh toán -->
                 <c:choose>

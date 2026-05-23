@@ -40,43 +40,67 @@ document.addEventListener('click', function (e) {
     }
 });
 //Tính tổng tiền sản phẩm được tích chọn
-document.addEventListener("DOMContentLoaded", function (){
-    const checkBoxs= document.querySelectorAll(".cart-item-checkbox");
-    function fetchCart(){
-        let listProductIdSelected= [];
-        checkBoxs.forEach(cb=>{
-            if(cb.checked){
-                listProductIdSelected.push(cb.getAttribute("data-product-id"))
-            }
-        });
-        const params = new URLSearchParams();
-        params.append("listIdSelected", listProductIdSelected.join(","));
-        fetch(window.contextPath + '/cart?' + params.toString(), {
-            method: "GET",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            }
-        })
-            .then(respone=> respone.json())
-            .then(data => {
-                const set = (id, val) => {
-                    const el = document.getElementById(id);
-                    if (el) el.innerText = formatCurrency(val);
-                };
-                set("totalPrice", data.totalPrice);
-                set("discountPromotion", data.discountPromotion);
-                set("discountVoucher", data.discountVoucher);
-                set("shippingFee", data.shippingFee);
-                set("totalDiscount", data.totalDiscount);
-                set("total", data.total);
-            })
-            .catch(error=>console.error("Lỗi tính toán giỏ hàng: ", error));
-    }
-    //Format số tiền trước khi inner vào HTML
-    function formatCurrency(amount){
-        return amount.toLocaleString('vi-VN')+'đ';
-    }
+function fetchCart(){
+    const checkBoxs = document.querySelectorAll(".cart-item-checkbox");
+    let listProductIdSelected= [];
     checkBoxs.forEach(cb=>{
-        cb.addEventListener("change", fetchCart);
+        if(cb.checked){
+            listProductIdSelected.push(cb.getAttribute("data-product-id"))
+        }
+    });
+    const params = new URLSearchParams();
+    params.append("listIdSelected", listProductIdSelected.join(","));
+    fetch(window.contextPath + '/cart?' + params.toString(), {
+        method: "GET",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
     })
-})
+        .then(respone=> respone.json())
+        .then(data => {
+            const set = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = formatCurrency(val);
+            };
+            set("totalPrice", data.totalPrice);
+            set("discountPromotion", data.discountPromotion);
+            set("discountVoucher", data.discountVoucher);
+            set("shippingFee", data.shippingFee);
+            set("totalDiscount", data.totalDiscount);
+            set("total", data.total);
+        })
+        .catch(error=>console.error ("Lỗi tính toán giỏ hàng: ", error));
+}
+function formatCurrency(amount){
+    return amount.toLocaleString('vi-VN')+'đ';
+}
+//áp dụng voucher bằng AJAX
+function applyVoucher(){
+    const code = document.getElementById("codeVoucher").value.trim();
+    const params = new URLSearchParams();
+    params.append("codeVoucher",code);
+    fetch(window.contextPath+ '/apply-voucher',{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Requested-With": "XMLHttpRequest"
+        },
+        body: params.toString()
+    }).then(respone=>respone.json())
+        .then(data=>{
+            const message= document.getElementById("voucherMessage");
+            if(data.success){
+                message.innerHTML='<span class="text-success">Áp dụng voucher thành công</span>';
+            }else {
+                message.innerHTML = `<span class="text-danger">${data.error}</span>`;
+            }
+            fetchCart();
+        }).catch(error=> console.error("Lỗi voucher: ", error));
+}
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".cart-item-checkbox").forEach(cb => {
+        cb.addEventListener("change", fetchCart);
+    });
+    const btn = document.getElementById("applyVoucherBtn");
+    if (btn) btn.addEventListener("click", applyVoucher);
+});

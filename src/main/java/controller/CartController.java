@@ -193,6 +193,7 @@ public class CartController extends HttpServlet {
             } else if (voucher.getDiscountType().equals("amount")) {
                 discountVoucher= voucher.getDiscountValue();
             }
+            session.removeAttribute("voucher");
         }
         double shippingFee = listCalculate.isEmpty() ? 0 : 15000;
         totalDiscount = discountVoucher + discountPromotion;
