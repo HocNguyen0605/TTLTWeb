@@ -197,7 +197,7 @@ public class CartController extends HttpServlet {
         }
         double shippingFee = listCalculate.isEmpty() ? 0 : 15000;
         totalDiscount = discountVoucher + discountPromotion;
-        total = totalPrice - totalDiscount + shippingFee;
+        total = (totalPrice - totalDiscount + shippingFee)>0? totalPrice - totalDiscount + shippingFee:0 ;
         //Hàm response cho AJAX của JS
         String requestedWith = request.getHeader("X-Requested-With");
         if ("XMLHttpRequest".equals(requestedWith)) {
