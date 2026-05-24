@@ -117,13 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const data = await response.json();
                 if (response.ok && data.status === 'success') {
+                    const redirectUrl = getBasePath() + '/cart' + (data.productIds ? '?listIdSelected=' + data.productIds : '');
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({ icon: 'success', title: 'Thành công!', text: data.message, timer: 1000, showConfirmButton: false }).then(() => {
-                            window.location.href = getBasePath() + '/cart';
+                            window.location.href = redirectUrl;
                         });
                     } else {
                         alert(data.message);
-                        window.location.href = getBasePath() + '/cart';
+                        window.location.href = redirectUrl;
                     }
                 } else {
                     if (typeof Swal !== 'undefined') Swal.fire('Lỗi', data.message || "Có lỗi xảy ra.", 'error');

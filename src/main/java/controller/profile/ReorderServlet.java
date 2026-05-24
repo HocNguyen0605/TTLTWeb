@@ -77,7 +77,14 @@ public class ReorderServlet extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             if (added) {
-                response.getWriter().write("{\"status\":\"success\",\"message\":\"Thêm vào giỏ hàng thành công!\"}");
+                StringBuilder sb = new StringBuilder();
+                for (OrderItem item : items) {
+                    if (sb.length() > 0) {
+                        sb.append(",");
+                    }
+                    sb.append(item.getProductId());
+                }
+                response.getWriter().write("{\"status\":\"success\",\"message\":\"Thêm vào giỏ hàng thành công!\",\"productIds\":\"" + sb.toString() + "\"}");
             } else {
                 response.getWriter().write("{\"status\":\"error\",\"message\":\"Sản phẩm không còn đủ trong kho!\"}");
             }
