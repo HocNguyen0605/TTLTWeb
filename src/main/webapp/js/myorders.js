@@ -224,6 +224,90 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // YÊU CẦU TRẢ HÀNG / HOÀN TIỀN
+    const refundModalElement = document.getElementById('refundOrderModal');
+    if (refundModalElement) {
+        const refundModal = new bootstrap.Modal(refundModalElement);
+        const refundForm = document.getElementById('refundForm');
+        const refundOrderIdInput = document.getElementById('refundOrderIdInput');
+        const refundOrderIdDisplay = document.getElementById('refundOrderIdDisplay');
+        const btnSubmitRefund = document.getElementById('btnSubmitRefund');
+
+        // Mở modal khi click
+        document.addEventListener('click', (event) => {
+            const refundBtn = event.target.closest('.request-refund-btn');
+            if (refundBtn) {
+                const orderId = refundBtn.dataset.orderId;
+                refundOrderIdInput.value = orderId;
+                refundOrderIdDisplay.textContent = '#' + orderId;
+                refundForm.reset();
+                refundForm.classList.remove('was-validated');
+                refundModal.show();
+            }
+        });
+
+        // Xử lí form
+        refundForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (!refundForm.checkValidity()) {
+                event.stopPropagation();
+                refundForm.classList.add('was-validated');
+                return;
+            }
+            //Kiểm tra input
+            const reason = document.getElementById('refundReason').value.trim();
+            if (reason.length < 5) {
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', 'Vui lòng nhập lý do ít nhất 5 ký tự.', 'error');
+                else alert('Vui lòng nhập lý do ít nhất 5 ký tự.');
+                return;
+            }
+            //Điền orderID vào form
+            const orderId = refundOrderIdInput.value;
+            const formData = new URLSearchParams();
+            formData.append('orderId', orderId);
+            formData.append('reason', reason);
+
+            btnSubmitRefund.disabled = true;
+            btnSubmitRefund.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...';
+
+            //Xử lí status data trả về thông báo hệ thống
+            try {
+                const response = await fetch(`${getBasePath()}/user/requestRefund`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    body: formData.toString()
+                });
+
+                const data = await response.json();
+                if (response.ok && data.status === 'success') {
+                    refundModal.hide();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: data.message || 'Yêu cầu hoàn tiền đã được ghi nhận.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => { window.location.reload(); });
+                    } else {
+                        alert(data.message || 'Yêu cầu hoàn tiền đã được ghi nhận.');
+                        window.location.reload();
+                    }
+                } else {
+                    if (typeof Swal !== 'undefined') Swal.fire('Lỗi', data.message || 'Có lỗi xảy ra.', 'error');
+                    else alert(data.message || 'Có lỗi xảy ra.');
+                }
+            } catch (error) {
+                console.error('Error requesting refund:', error);
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', 'Lỗi kết nối đến máy chủ.', 'error');
+                else alert('Lỗi kết nối đến máy chủ.');
+            } finally {
+                btnSubmitRefund.disabled = false;
+                btnSubmitRefund.textContent = 'Gửi yêu cầu';
+            }
+        });
+    }
+
     function updateOrderUIToCancelled(orderId) {
         const cancelBtns = document.querySelectorAll(`.btn-cancel-order[data-order-id="${orderId}"]`);
         cancelBtns.forEach(cancelBtn => {

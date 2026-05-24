@@ -330,7 +330,7 @@
                 </div>
                 <div class="modal-footer border-top-0 py-3">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary px-4" id="btnSubmitRefund">Gửi yêu cầu</button>
+                    <button type="submit" class="btn btn-juicy-refund px-4" id="btnSubmitRefund">Gửi yêu cầu</button>
                 </div>
             </form>
         </div>

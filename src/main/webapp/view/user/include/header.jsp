@@ -5,19 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="images/png" href="images/logo/logo-juicy.png" sizes="32x32">
-    <link rel="shortcut icon" href="images/logo/logo-juicy.png" type="image/png">
+    <link rel="icon" type="images/png" href="${pageContext.request.contextPath}/images/logo/logo-juicy.png" sizes="32x32">
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/images/logo/logo-juicy.png" type="image/png">
     <title>${param.title}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/product.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/about.css">
-    <link rel="stylesheet" href="css/orders.css">
-    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/product.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/about.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/orders.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart.css">
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>

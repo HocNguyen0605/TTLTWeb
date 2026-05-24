@@ -9,10 +9,12 @@ import java.util.List;
 
 public class RefundDAO {
     private Connection conn;
+
     public RefundDAO(Connection conn) {
         this.conn = conn;
     }
 
+    //Tạo yêu cầu hoàn tiền
     public void createRefund(RefundRequest r) throws SQLException {
         String sql = "INSERT INTO refund_requests (order_id, user_id, reason, status, amount, created_at) " +
                 "VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
@@ -31,6 +33,7 @@ public class RefundDAO {
         }
     }
 
+    //Get yêu cầu refund
     public RefundRequest getById(int id) throws SQLException {
         String sql = "SELECT * FROM refund_requests WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -45,6 +48,7 @@ public class RefundDAO {
         return null;
     }
 
+    //Get yêu cầu đang chờ
     public List<RefundRequest> getPendingRefunds() throws SQLException {
         List<RefundRequest> list = new ArrayList<>();
         String sql = "SELECT * FROM refund_requests WHERE status = 'PENDING'";
@@ -57,6 +61,21 @@ public class RefundDAO {
         return list;
     }
 
+    //Lấy yêu cầu hoàn tiền mới nhất theo order_id
+    public RefundRequest getLatestRefundByOrderId(int orderId) throws SQLException {
+        String sql = "SELECT * FROM refund_requests WHERE order_id = ? ORDER BY created_at DESC LIMIT 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        }
+        return null;
+    }
+
+    //Cập nhập status
     public void updateStatus(int id, String status, int adminId) throws SQLException {
         String sql = "UPDATE refund_requests SET status = ?, reviewed_at = CURRENT_TIMESTAMP, reviewed_by = ? WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
