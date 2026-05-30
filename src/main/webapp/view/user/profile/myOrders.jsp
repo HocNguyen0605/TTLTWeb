@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myOrders.css">
 
 
-
 <c:choose>
     <c:when test="${not empty userOrders}">
         <div class="order-tabs-container mb-3">
@@ -77,10 +76,10 @@
             <!-- TẤT CẢ -->
             <div class="tab-pane fade show active" id="all-orders" role="tabpanel"
                  aria-labelledby="all-orders-tab">
-                <c:set var="countAll" value="0" />
+                <c:set var="countAll" value="0"/>
                 <c:forEach items="${userOrders}" var="o">
-                    <c:set var="countAll" value="${countAll + 1}" />
-                    <c:set var="st" value="${o.status}" />
+                    <c:set var="countAll" value="${countAll + 1}"/>
+                    <c:set var="st" value="${o.status}"/>
                     <%@include file="/view/user/profile/orderCard.jsp" %>
                 </c:forEach>
                 <c:if test="${countAll == 0}">
@@ -95,11 +94,11 @@
             <!-- CHỜ XỬ LÝ -->
             <div class="tab-pane fade" id="pending-orders" role="tabpanel"
                  aria-labelledby="pending-orders-tab">
-                <c:set var="countPending" value="0" />
+                <c:set var="countPending" value="0"/>
                 <c:forEach items="${userOrders}" var="o">
                     <c:if test="${o.status == 'pending'}">
-                        <c:set var="countPending" value="${countPending + 1}" />
-                        <c:set var="st" value="${o.status}" />
+                        <c:set var="countPending" value="${countPending + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
                         <%@include file="/view/user/profile/orderCard.jsp" %>
                     </c:if>
                 </c:forEach>
@@ -115,11 +114,11 @@
             <!-- CHỜ GIAO HÀNG -->
             <div class="tab-pane fade" id="confirmed-orders" role="tabpanel"
                  aria-labelledby="confirmed-orders-tab">
-                <c:set var="countConfirmed" value="0" />
+                <c:set var="countConfirmed" value="0"/>
                 <c:forEach items="${userOrders}" var="o">
                     <c:if test="${o.status == 'confirmed' or o.status == 'processing'}">
-                        <c:set var="countConfirmed" value="${countConfirmed + 1}" />
-                        <c:set var="st" value="${o.status}" />
+                        <c:set var="countConfirmed" value="${countConfirmed + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
                         <%@include file="/view/user/profile/orderCard.jsp" %>
                     </c:if>
                 </c:forEach>
@@ -135,11 +134,11 @@
             <!-- VẬN CHUYỂN -->
             <div class="tab-pane fade" id="shipping-orders" role="tabpanel"
                  aria-labelledby="shipping-orders-tab">
-                <c:set var="countShipping" value="0" />
+                <c:set var="countShipping" value="0"/>
                 <c:forEach items="${userOrders}" var="o">
                     <c:if test="${o.status == 'shipping'}">
-                        <c:set var="countShipping" value="${countShipping + 1}" />
-                        <c:set var="st" value="${o.status}" />
+                        <c:set var="countShipping" value="${countShipping + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
                         <%@include file="/view/user/profile/orderCard.jsp" %>
                     </c:if>
                 </c:forEach>
@@ -154,11 +153,11 @@
             <!-- HOÀN THÀNH -->
             <div class="tab-pane fade" id="delivered-orders" role="tabpanel"
                  aria-labelledby="delivered-orders-tab">
-                <c:set var="countDelivered" value="0" />
+                <c:set var="countDelivered" value="0"/>
                 <c:forEach items="${userOrders}" var="o">
                     <c:if test="${o.status == 'delivered'}">
-                        <c:set var="countDelivered" value="${countDelivered + 1}" />
-                        <c:set var="st" value="${o.status}" />
+                        <c:set var="countDelivered" value="${countDelivered + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
                         <%@include file="/view/user/profile/orderCard.jsp" %>
                     </c:if>
                 </c:forEach>
@@ -174,11 +173,11 @@
             <!-- ĐÃ HỦY -->
             <div class="tab-pane fade" id="cancelled-orders" role="tabpanel"
                  aria-labelledby="cancelled-orders-tab">
-                <c:set var="countCancelled" value="0" />
+                <c:set var="countCancelled" value="0"/>
                 <c:forEach items="${userOrders}" var="o">
                     <c:if test="${o.status == 'cancelled'}">
-                        <c:set var="countCancelled" value="${countCancelled + 1}" />
-                        <c:set var="st" value="${o.status}" />
+                        <c:set var="countCancelled" value="${countCancelled + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
                         <%@include file="/view/user/profile/orderCard.jsp" %>
                     </c:if>
                 </c:forEach>
@@ -194,11 +193,11 @@
             <!-- TRẢ HÀNG/HOÀN TIỀN -->
             <div class="tab-pane fade" id="refunded-orders" role="tabpanel"
                  aria-labelledby="refunded-orders-tab">
-                <c:set var="countRefunded" value="0" />
+                <c:set var="countRefunded" value="0"/>
                 <c:forEach items="${userOrders}" var="o">
                     <c:if test="${o.status == 'refunded'}">
-                        <c:set var="countRefunded" value="${countRefunded + 1}" />
-                        <c:set var="st" value="${o.status}" />
+                        <c:set var="countRefunded" value="${countRefunded + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
                         <%@include file="/view/user/profile/orderCard.jsp" %>
                     </c:if>
                 </c:forEach>
@@ -242,30 +241,35 @@
                         <label class="form-label d-block fw-bold text-dark mb-2">Chất lượng sản
                             phẩm</label>
                         <div class="star-rating">
-                            <input type="radio" id="star5" name="rating" value="5" checked /><label
+                            <input type="radio" id="star5" name="rating" value="5" checked/><label
                                 for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4"
-                                                                                            title="4 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3"
-                                                                                            title="3 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2"
-                                                                                            title="2 stars"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1"
-                                                                                            title="1 star"><i class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star4" name="rating" value="4"/><label for="star4"
+                                                                                           title="4 stars"><i
+                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star3" name="rating" value="3"/><label for="star3"
+                                                                                           title="3 stars"><i
+                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star2" name="rating" value="2"/><label for="star2"
+                                                                                           title="2 stars"><i
+                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star1" name="rating" value="1"/><label for="star1"
+                                                                                           title="1 star"><i
+                                class="bi bi-star-fill"></i></label>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="reviewContent" class="form-label fw-bold text-dark">Cảm nhận của bạn
                             <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="reviewContent" name="content" rows="4"
-                                  required placeholder="Sản phẩm tuyệt vời, giao hàng nhanh..."></textarea>
+                                  placeholder="Sản phẩm tuyệt vời, giao hàng nhanh..."></textarea>
                     </div>
                     <input type="hidden" id="reviewProductId" name="productId">
                 </div>
                 <div class="modal-footer border-top-0 py-3">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
                     <button type="submit" class="btn btn-success px-4" id="btnSubmitReview">Gửi đánh
-                        giá</button>
+                        giá
+                    </button>
                 </div>
             </form>
         </div>
@@ -301,7 +305,8 @@
                 <div class="modal-footer border-top-0 py-3">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
                     <button type="submit" class="btn btn-danger px-4" id="btnSubmitCancel">Xác nhận
-                        hủy</button>
+                        hủy
+                    </button>
                 </div>
             </form>
         </div>
@@ -318,13 +323,16 @@
             </div>
             <form id="refundForm">
                 <div class="modal-body py-2">
-                    <p class="mb-3 text-muted">Đơn hàng: <strong id="refundOrderIdDisplay" class="text-dark"></strong></p>
+                    <p class="mb-3 text-muted">Đơn hàng: <strong id="refundOrderIdDisplay" class="text-dark"></strong>
+                    </p>
                     <div class="mb-3">
-                        <label for="refundReason" class="form-label fw-bold text-dark">Lý do trả hàng/hoàn tiền
+                        <label for="refundReason" class="form-label fw-bold text-dark">Lý do trả hàng/hoàn tiền và thông
+                            tin chuyển khoản
                             <span class="text-danger">*</span></label>
                         <textarea class="form-control" id="refundReason" name="reason" rows="4" required minlength="5"
-                                  placeholder="Vui lòng cung cấp lý do..."></textarea>
-                        <div class="invalid-feedback">Vui lòng nhập lý do (ít nhất 5 ký tự).</div>
+                                  placeholder="Lý do và Ngân hàng-Số tài khoản"></textarea>
+                        <div class="invalid-feedback">Vui lòng nhập lý do và thông tin chuyển khoản (ít nhất 5 ký tự).
+                        </div>
                     </div>
                     <input type="hidden" id="refundOrderIdInput" name="orderId">
                 </div>
