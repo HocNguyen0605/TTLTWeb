@@ -15,19 +15,7 @@ import java.util.List;
 public class AccountController extends HttpServlet {
     private final UserDAO userDAO = new UserDAO();
 
-    @Override
-    public void init() throws ServletException {
-        try {
-            util.DBContext.getJdbi().useHandle(handle -> {
-                // Đảm bảo cột role là VARCHAR để chứa được 'pro-admin'
-                handle.execute("ALTER TABLE account MODIFY COLUMN role VARCHAR(20) DEFAULT 'user'");
-                // Tự động thăng cấp tài khoản 'admin' lên pro-admin để không bị mất quyền
-                handle.execute("UPDATE account SET role = 'pro-admin' WHERE username = 'admin'");
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

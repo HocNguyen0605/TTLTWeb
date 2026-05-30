@@ -57,6 +57,14 @@ public class VerifyProAdminServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         if ("sendOTP".equals(action)) {
+            // Cập nhật lại thông tin User từ Database để đảm bảo lấy được Email mới nhất
+            dao.UserDAO userDAO = new dao.UserDAO();
+            User latestUser = userDAO.login(authUser.getUsername(), authUser.getPassword());
+            if (latestUser != null) {
+                session.setAttribute("auth", latestUser);
+                authUser = latestUser;
+            }
+
             // Generate 6-digit OTP
             String otp = String.format("%06d", new Random().nextInt(999999));
             session.setAttribute("pro_otp", otp);
