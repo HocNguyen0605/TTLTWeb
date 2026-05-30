@@ -111,8 +111,8 @@ public class ReviewDAO extends BaseDao {
 
     public void insert(Review review) {
         String sql = """
-                INSERT INTO reviews (product_id, user_id, rating, content)
-                VALUES (:productId, :userId, :rating, :content)
+                INSERT INTO reviews (product_id, user_id, rating, content, created_at)
+                VALUES (:productId, :userId, :rating, :content, :createdAt)
                 """;
         jdbi.useHandle(handle -> handle.createUpdate(sql)
                 .bindBean(review)

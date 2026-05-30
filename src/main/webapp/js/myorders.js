@@ -144,7 +144,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Bắt sự kiện khi modal sắp hiển thị để đổ dữ liệu
         reviewModalElement.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget; // Nút đã kích hoạt modal
+            const button = event.relatedTarget ? event.relatedTarget.closest('.review-btn') : null;
+            if (!button) return;
             const productId = button.getAttribute('data-product-id');
             const productName = button.getAttribute('data-product-name');
 

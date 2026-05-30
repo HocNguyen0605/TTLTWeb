@@ -192,7 +192,7 @@
                 <h5 class="modal-title" id="reviewModalLabel">Đánh giá sản phẩm</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="reviewForm">
+            <form id="reviewForm" onsubmit="event.preventDefault();">
                 <div class="modal-body">
                     <p class="mb-2 text-muted">Sản phẩm: <strong id="reviewProductName"></strong></p>
                     <div class="mb-3">
