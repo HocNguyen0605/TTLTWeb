@@ -38,10 +38,10 @@ public class CancelOrderServlet extends HttpServlet {
         String orderIdStr = request.getParameter("orderId");
         String reason = request.getParameter("reason");
 
-        if (orderIdStr == null || orderIdStr.trim().isEmpty() || reason == null || reason.trim().length() < 5) {
+        if (orderIdStr == null || orderIdStr.trim().isEmpty() || reason == null || reason.trim().length() < 10) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             result.put("status", "error");
-            result.put("message", "Vui lòng cung cấp lý do hủy đơn (tối thiểu 5 ký tự).");
+            result.put("message", "Vui lòng cung cấp lý do hủy đơn (tối thiểu 10 ký tự).");
             response.getWriter().write(new Gson().toJson(result));
             return;
         }
