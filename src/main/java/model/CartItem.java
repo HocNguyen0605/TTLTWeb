@@ -5,6 +5,7 @@ public class CartItem implements Serializable {
     private Product product;
     private double price;
     private int quantity;
+    boolean checked = false;
 
     public CartItem() {
     }
@@ -43,4 +44,11 @@ public class CartItem implements Serializable {
         return price * quantity;
     }
 
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 }

@@ -5,12 +5,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBContext {
-    private static final String URL = "jdbc:mysql://localhost:3306/juicy_db"
-            + "?useSSL=false&allowPublicKeyRetrieval=true"
-            + "&serverTimezone=Asia/Ho_Chi_Minh";
-    private static final String USER = "root";
-    private static final String PASSWORD = "Hockun001$";
+    private static final String HOST = ConfigLoader.getProperty("db.host");
+    private static final String PORT = ConfigLoader.getProperty("db.port");
+    private static final String DB_NAME = ConfigLoader.getProperty("db.dbName");
+    private static final String URL = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DB_NAME ;
 
+    private static final String USER = ConfigLoader.getProperty("db.username");
+    private static final String PASSWORD = ConfigLoader.getProperty("db.password");
     //Tao Ham rỗng
     private static Jdbi jdbi;
 

@@ -125,7 +125,9 @@ public class CartController extends HttpServlet {
                 for(CartItem item : cart.getAllItems()) {
                     if(listIds.contains(String.valueOf(item.getProduct().getId()))) {
                         listCalculate.add(item);
+                        item.setChecked(true);
                     }
+                    else item.setChecked(false);
                 }
             }
 

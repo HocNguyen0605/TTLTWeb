@@ -9,16 +9,20 @@ import model.Contact;
 
 public class MailUtil {
 
-    private static final String FROM_EMAIL = "weebooguy@gmail.com";
-    private static final String APP_PASSWORD = "jtrw hgae qbqa mhjm";
-    private static final String TO_EMAIL = "luonghoaisangvn@gmail.com";
+    private static final String FROM_EMAIL = ConfigLoader.getProperty("mail.from");
+    private static final String APP_PASSWORD = ConfigLoader.getProperty("mail.password");
+    private static final String TO_EMAIL_DEFAULT = ConfigLoader.getProperty("mail.to.default");
 
-    public static void sendContactMail(Contact c) {
+    private static Properties getSmtpProperties() {
         Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", ConfigLoader.getProperty("mail.smtp.host"));
+        props.put("mail.smtp.port", ConfigLoader.getProperty("mail.smtp.port"));
+        props.put("mail.smtp.auth", ConfigLoader.getProperty("mail.smtp.auth"));
+        props.put("mail.smtp.starttls.enable", ConfigLoader.getProperty("mail.smtp.starttls.enable"));
+        return props;
+    }
+    public static void sendContactMail(Contact c) {
+        Properties props = getSmtpProperties();
 
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -31,7 +35,7 @@ public class MailUtil {
             message.setFrom(new InternetAddress(FROM_EMAIL));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse(TO_EMAIL)
+                    InternetAddress.parse(TO_EMAIL_DEFAULT)
             );
 
             message.setSubject("Liên hệ mới từ khách hàng");
@@ -60,12 +64,7 @@ public class MailUtil {
     }
 
     public static boolean sendMail(String toEmail, String subject, String htmlContent) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
+        Properties props = getSmtpProperties();
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(FROM_EMAIL, APP_PASSWORD);

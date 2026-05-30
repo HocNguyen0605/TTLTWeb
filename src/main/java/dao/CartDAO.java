@@ -15,7 +15,7 @@ public class CartDAO {
 
     //Thêm hoặc cập nhật(trùng sp) sẩn phẩm vào giỏ
     public void addOrUpdateCartItem(int userId, int productId, int quantity) throws SQLException {
-        String sql = "INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?) " +
+        String sql = "INSERT INTO cart (user_id, product_id, quantity) VALUES (?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE quantity = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -27,7 +27,7 @@ public class CartDAO {
     }
     //xóa sp khỏi giổ
     public void removeCartItem(int userId, int productId) throws SQLException {
-        String sql = "DELETE FROM cart_items WHERE user_id = ? AND product_id = ?";
+        String sql = "DELETE FROM cart WHERE user_id = ? AND product_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.setInt(2, productId);
@@ -36,7 +36,7 @@ public class CartDAO {
     }
     //Xóa toàn bộ sp trong giỏ user
     public void clearCart(int userId) throws SQLException {
-        String sql = "DELETE FROM cart_items WHERE user_id = ?";
+        String sql = "DELETE FROM cart WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ps.executeUpdate();
@@ -46,7 +46,7 @@ public class CartDAO {
         ProductDAO productDAO = new ProductDAO(conn);
 
         // 1. Lấy sp từ db
-        String sql = "SELECT product_id, quantity FROM cart_items WHERE user_id = ?";
+        String sql = "SELECT product_id, quantity FROM cart WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
