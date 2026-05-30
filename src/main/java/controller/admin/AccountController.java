@@ -38,6 +38,12 @@ public class AccountController extends HttpServlet {
             return;
         }
 
+        // Bước 2: Kiểm tra OTP
+        if (!Boolean.TRUE.equals(req.getSession().getAttribute("pro_verified"))) {
+            resp.sendRedirect(req.getContextPath() + "/admin/verify-pro");
+            return;
+        }
+
         List<User> users = userDAO.getAllUsers();
         req.setAttribute("users", users);
         req.getRequestDispatcher("/view/admin/admin-accounts.jsp").forward(req, resp);
@@ -49,6 +55,12 @@ public class AccountController extends HttpServlet {
         // Chỉ Pro-Admin mới được thay đổi quyền hoặc xóa
         if (authUser == null || authUser.getRole() != 2) {
             req.getRequestDispatcher("/view/user/403.jsp").forward(req, resp);
+            return;
+        }
+
+        // Bước 2: Kiểm tra OTP (đề phòng ai đó gọi API trực tiếp qua Postman mà chưa verify OTP)
+        if (!Boolean.TRUE.equals(req.getSession().getAttribute("pro_verified"))) {
+            resp.sendRedirect(req.getContextPath() + "/admin/verify-pro");
             return;
         }
 
