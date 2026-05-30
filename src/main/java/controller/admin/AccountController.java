@@ -16,7 +16,28 @@ public class AccountController extends HttpServlet {
     private final UserDAO userDAO = new UserDAO();
 
     @Override
+    public void init() throws ServletException {
+        try {
+            util.DBContext.getJdbi().useHandle(handle -> {
+                // Đảm bảo cột role là VARCHAR để chứa được 'pro-admin'
+                handle.execute("ALTER TABLE account MODIFY COLUMN role VARCHAR(20) DEFAULT 'user'");
+                // Tự động thăng cấp tài khoản 'admin' lên pro-admin để không bị mất quyền
+                handle.execute("UPDATE account SET role = 'pro-admin' WHERE username = 'admin'");
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User authUser = (User) req.getSession().getAttribute("auth");
+        // Chỉ Pro-Admin mới được truy cập
+        if (authUser == null || authUser.getRole() != 2) {
+            req.getRequestDispatcher("/view/user/403.jsp").forward(req, resp);
+            return;
+        }
+
         List<User> users = userDAO.getAllUsers();
         req.setAttribute("users", users);
         req.getRequestDispatcher("/view/admin/admin-accounts.jsp").forward(req, resp);
@@ -24,6 +45,13 @@ public class AccountController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User authUser = (User) req.getSession().getAttribute("auth");
+        // Chỉ Pro-Admin mới được thay đổi quyền hoặc xóa
+        if (authUser == null || authUser.getRole() != 2) {
+            req.getRequestDispatcher("/view/user/403.jsp").forward(req, resp);
+            return;
+        }
+
         String action = req.getParameter("action");
         String idStr = req.getParameter("id");
 
@@ -32,7 +60,7 @@ public class AccountController extends HttpServlet {
 
             if ("updateRole".equals(action)) {
                 String newRole = req.getParameter("role");
-                if (newRole != null && (newRole.equals("admin") || newRole.equals("user"))) {
+                if (newRole != null && (newRole.equals("admin") || newRole.equals("user") || newRole.equals("pro-admin"))) {
                     boolean success = userDAO.updateUserRole(id, newRole);
                     if (success) {
                         req.getSession().setAttribute("message", "Cập nhật quyền thành công!");
