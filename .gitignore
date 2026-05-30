@@ -21,7 +21,7 @@ gen/
 *.log
 
 # Sensitive info
-db.properties
+application.properties
 src/main/resources/google.properties
 
 # OS files
