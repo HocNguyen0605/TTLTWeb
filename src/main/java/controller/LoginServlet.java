@@ -121,6 +121,7 @@ public class LoginServlet extends HttpServlet {
             String redirectUrl;
             if (u.getRole() == 1) {
                 redirectUrl = request.getContextPath() + "/admin/dashboard";
+                session.setAttribute("justLoggedIn", true);
                 //đánh giá
             } else {
                 String returnUrl = (String) session.getAttribute("returnUrl");
