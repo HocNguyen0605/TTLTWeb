@@ -41,7 +41,7 @@ document.addEventListener('click', function (e) {
 });
 //Tính tổng tiền sản phẩm được tích chọn
 function fetchCart(){
-    const checkBoxs = document.querySelectorAll(".cart-item-checkbox");
+        const checkBoxs = document.querySelectorAll(".cart-item-checkbox");
     let listProductIdSelected= [];
     checkBoxs.forEach(cb=>{
         if(cb.checked){
