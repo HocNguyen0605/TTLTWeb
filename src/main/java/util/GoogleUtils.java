@@ -10,11 +10,12 @@ import org.apache.http.client.fluent.Request;
 import java.util.UUID;
 
 public class GoogleUtils {
-    public static String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
-    public static String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
-    public static String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.uri");
-    public static String LINK_GET_TOKEN = "https://oauth2.googleapis.com/token";
-    public static String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
+
+    public static final String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
+    public static final String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
+    public static final String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.uri");
+    public static final String LINK_GET_TOKEN = "https://oauth2.googleapis.com/token";
+    public static final String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
     public static String getToken(final String code) throws Exception {
         String response = Request.Post(LINK_GET_TOKEN)

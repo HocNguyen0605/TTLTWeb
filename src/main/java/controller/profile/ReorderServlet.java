@@ -52,27 +52,43 @@ public class ReorderServlet extends HttpServlet {
             if (cart == null) {
                 cart = new Cart();
                 session.setAttribute("cart", cart);
-            }//Duyệt từng hàng
+            }
+            boolean added = false;
+            //Duyệt từng đơn hàng
             for (OrderItem item : items) {
                 Product product = productDAO.findById(item.getProductId());
                 if (product != null) {
                     int maxStock = productDAO.getMaxQuantityById(product.getId());
                     int currentCartQty = cart.getTotalQuantityByID(product.getId());
                     int requestedQty = item.getQuantity();
-                    // Kiểm tra tồn kho
+                    // Nếu số lượng thêm nhiều hơn tồn thì giảm sô lượng thêm xuống
                     if (currentCartQty + requestedQty > maxStock) {
                         requestedQty = maxStock - currentCartQty;
                     }
+                    //Add khi thêm > 0
                     if (requestedQty > 0) {
                         cart.addProduct(product, requestedQty);
                         // Thêm vào giỏ
                         cartDAO.addOrUpdateCartItem(auth.getId(), product.getId(), cart.getTotalQuantityByID(product.getId()));
+                        added = true;
                     }
                 }
             }
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"status\":\"success\",\"message\":\"Thêm vào giỏ hàng thành công!\"}");
+            if (added) {
+                StringBuilder sb = new StringBuilder();
+                for (OrderItem item : items) {
+                    if (sb.length() > 0) {
+                        sb.append(",");
+                    }
+                    sb.append(item.getProductId());
+                }
+                response.getWriter().write("{\"status\":\"success\",\"message\":\"Thêm vào giỏ hàng thành công!\",\"productIds\":\"" + sb.toString() + "\"}");
+            } else {
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Sản phẩm không còn đủ trong kho!\"}");
+            }
+            // Response already sent based on stock availability
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

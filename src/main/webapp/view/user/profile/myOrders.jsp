@@ -3,204 +3,246 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
-<div class="orders-toolbar mb-3">
-    <div class="d-flex align-items-center gap-2">
-        <i class="bi bi-receipt-cutoff text-success"></i>
-        <span class="fw-bold">Danh sách đơn hàng</span>
-    </div>
-</div>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/myOrders.css">
 
-<style>
-    .star-rating {
-        display: flex;
-        flex-direction: row-reverse;
-        justify-content: flex-end;
-        gap: 5px;
-    }
-
-    .star-rating input {
-        display: none;
-    }
-
-    .star-rating label {
-        font-size: 1.5rem;
-        color: #ddd;
-        cursor: pointer;
-        transition: color 0.2s;
-    }
-
-    .star-rating input:checked ~ label,
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-        color: #ffc107;
-    }
-
-    .review-btn {
-        font-size: 0.8rem;
-        padding: 2px 8px;
-    }
-</style>
-
-<c:set var="hasOrders" value="${not empty orders}"/>
 
 <c:choose>
     <c:when test="${not empty userOrders}">
-        <c:forEach items="${userOrders}" var="o">
-            <c:set var="st" value="${o.status}"/>
+        <div class="order-tabs-container mb-3">
+            <ul class="nav order-tabs border-bottom" id="orderStatusTab" role="tablist">
+                <li class="nav-item order-tab-item" role="presentation">
+                    <button class="order-tab-link active" id="all-orders-tab" data-bs-toggle="tab"
+                            data-bs-target="#all-orders" type="button" role="tab" aria-controls="all-orders"
+                            aria-selected="true">
+                        Tất cả
+                    </button>
+                </li>
+                <li class="nav-item order-tab-item" role="presentation">
+                    <button class="order-tab-link" id="pending-orders-tab" data-bs-toggle="tab"
+                            data-bs-target="#pending-orders" type="button" role="tab"
+                            aria-controls="pending-orders" aria-selected="false">
+                        Chờ xử lý
+                    </button>
+                </li>
+                <li class="nav-item order-tab-item" role="presentation">
+                    <button class="order-tab-link" id="confirmed-orders-tab" data-bs-toggle="tab"
+                            data-bs-target="#confirmed-orders" type="button" role="tab"
+                            aria-controls="confirmed-orders" aria-selected="false">
+                        Chờ giao hàng
+                    </button>
+                </li>
+                <li class="nav-item order-tab-item" role="presentation">
+                    <button class="order-tab-link" id="shipping-orders-tab" data-bs-toggle="tab"
+                            data-bs-target="#shipping-orders" type="button" role="tab"
+                            aria-controls="shipping-orders" aria-selected="false">
+                        Vận chuyển
+                    </button>
+                </li>
+                <li class="nav-item order-tab-item" role="presentation">
+                    <button class="order-tab-link" id="delivered-orders-tab" data-bs-toggle="tab"
+                            data-bs-target="#delivered-orders" type="button" role="tab"
+                            aria-controls="delivered-orders" aria-selected="false">
+                        Hoàn thành
+                    </button>
+                </li>
+                <li class="nav-item order-tab-item" role="presentation">
+                    <button class="order-tab-link" id="cancelled-orders-tab" data-bs-toggle="tab"
+                            data-bs-target="#cancelled-orders" type="button" role="tab"
+                            aria-controls="cancelled-orders" aria-selected="false">
+                        Đã hủy
+                    </button>
+                </li>
+                <li class="nav-item order-tab-item" role="presentation">
+                    <button class="order-tab-link" id="refunded-orders-tab" data-bs-toggle="tab"
+                            data-bs-target="#refunded-orders" type="button" role="tab"
+                            aria-controls="refunded-orders" aria-selected="false">
+                        Trả hàng/Hoàn tiền
+                    </button>
+                </li>
+            </ul>
+        </div>
 
-            <c:set var="statusClass"
-                   value="${st == 'confirmed' ? 'status-confirmed' :
-                           st == 'processing' ? 'status-processing' :
-                           st == 'shipping' ? 'status-shipping' :
-                           st == 'delivered' ? 'status-delivered' :
-                           st == 'cancelled' ? 'status-cancelled' :
-                           st == 'refunded' ? 'status-refunded' : 'status-processing'}"/>
+        <!-- Search bar -->
+        <div class="search-orders-container mb-4 position-relative">
+            <i
+                    class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+            <input type="text" id="orderSearchInput" class="form-control ps-5 py-2.5"
+                   placeholder="Bạn có thể tìm kiếm theo ID đơn hàng hoặc Tên sản phẩm..."
+                   style="border-radius: 4px; border: 1px solid #e0e0e0; font-size: 0.95rem;">
+        </div>
 
-            <div class="card order-card shadow-sm mb-3">
-                <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2 py-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="fw-bold">Mã đơn #${o.id}</span>
-                        <span class="status-pill ${statusClass}">${st}</span>
+        <!-- Tab contents -->
+        <div class="tab-content" id="orderStatusTabContent">
+            <!-- TẤT CẢ -->
+            <div class="tab-pane fade show active" id="all-orders" role="tabpanel"
+                 aria-labelledby="all-orders-tab">
+                <c:set var="countAll" value="0"/>
+                <c:forEach items="${userOrders}" var="o">
+                    <c:set var="countAll" value="${countAll + 1}"/>
+                    <c:set var="st" value="${o.status}"/>
+                    <%@include file="/view/user/profile/orderCard.jsp" %>
+                </c:forEach>
+                <c:if test="${countAll == 0}">
+                    <div class="text-center py-5 empty-tab-state">
+                        <i class="bi bi-receipt text-muted"
+                           style="font-size: 3.5rem; opacity: 0.4;"></i>
+                        <p class="text-muted mt-2 mb-0">Chưa có đơn hàng nào</p>
                     </div>
-                </div>
-
-                <div class="card-body">
-                    <!-- Products List -->
-                    <div class="order-items-preview mb-3 pb-3 border-bottom">
-                        <c:if test="${not empty o.items}">
-                            <c:set var="firstItem" value="${o.items[0]}"/>
-                            <div class="d-flex align-items-center mb-2">
-                                <img src="${firstItem.productImg}" alt="${firstItem.productName}"
-                                     class="img-thumbnail me-2" style="width: 60px; height: 60px; object-fit: cover;">
-                                <div class="flex-grow-1">
-                                    <span class="fw-bold">${firstItem.productName}</span>
-                                    <span class="text-muted ms-2">${firstItem.volume}ml</span>
-                                    <span class="text-muted ms-2">x${firstItem.quantity}</span>
-                                </div>
-                                <c:if test="${st == 'delivered'}">
-                                    <button class="btn btn-primary btn-sm review-btn ms-2"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#reviewModal"
-                                            data-product-id="${firstItem.productId}"
-                                            data-product-name="${firstItem.productName}">
-                                        <i class="bi bi-star me-1"></i>Đánh giá
-                                    </button>
-                                </c:if>
-                            </div>
-
-                            <c:if test="${fn:length(o.items) > 1}">
-                                <button class="btn btn-link btn-sm p-0 text-decoration-none mt-1 text-dark"
-                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseItems${o.id}"
-                                        aria-expanded="false" aria-controls="collapseItems${o.id}">
-                                    Xem thêm ${fn:length(o.items) - 1} sản phẩm <i class="bi bi-chevron-down"></i>
-                                </button>
-                                <div class="collapse mt-2" id="collapseItems${o.id}">
-                                    <c:forEach items="${o.items}" var="item" begin="1">
-                                        <div class="d-flex align-items-center mt-2 pt-2 border-top">
-                                            <img src="${item.productImg}" alt="${item.productName}"
-                                                 class="img-thumbnail me-2"
-                                                 style="width: 50px; height: 50px; object-fit: cover;">
-                                            <div class="flex-grow-1">
-                                                <span class="fw-bold">${item.productName}</span>
-                                                <span class="text-muted ms-2">${item.volume}ml</span>
-                                                <span class="text-muted ms-2">x${item.quantity}</span>
-                                            </div>
-                                            <c:if test="${st == 'delivered'}">
-                                                <button class="btn btn-primary btn-sm review-btn ms-2"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#reviewModal"
-                                                        data-product-id="${item.productId}"
-                                                        data-product-name="${item.productName}">
-                                                    <i class="bi bi-star me-1"></i>Đánh giá
-                                                </button>
-                                            </c:if>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                            </c:if>
-                        </c:if>
-                    </div>
-
-                    <div class="order-kv">
-
-                        <div>
-                            <div class="kv-label">Ngày đặt</div>
-                            <div class="kv-value">
-                                <fmt:formatDate value="${o.orderDate}" pattern="dd/MM/yyyy"/>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="kv-label">Ngày giao</div>
-                            <div class="kv-value">
-                                <c:choose>
-                                    <c:when test="${not empty o.deliveredDate}">
-                                        <fmt:formatDate value="${o.deliveredDate}" pattern="dd/MM/yyyy"/>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <i class="text-muted" style="font-size: 0.9em;">Chưa có</i>
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="kv-label">Tổng tiền</div>
-                            <div class="kv-value text-success">
-                                <fmt:formatNumber value="${o.totalPrice}" pattern="#,###đ"/>
-                            </div>
-                        </div>
-                        <div class="text-md-end">
-                            <div class="order-actions mt-2 mt-md-0">
-
-                                <c:if test="${st == 'confirmed' or st == 'pending'}">
-                                    <button class="btn btn-outline-danger btn-sm btn-cancel-order" type="button"
-                                            data-order-id="${o.id}">
-                                        <i class="bi bi-x-circle me-1"></i>Hủy đơn
-                                    </button>
-                                </c:if>
-
-                                <c:if test="${st == 'delivered' or st == 'cancelled' or st == 'refunded'}">
-                                    <button class="btn btn-warning btn-sm btn-reorder" type="button"
-                                            data-order-id="${o.id}"><i class="bi bi-arrow-repeat me-1"></i>Mua lại
-                                    </button>
-                                </c:if>
-
-
-                                <c:if test="${st == 'refunded'}">
-                                    <button class="btn btn-outline-secondary btn-sm" type="button" disabled>
-                                        <i class="bi bi-cash-coin me-1"></i>Chi tiết hoàn tiền
-                                    </button>
-                                </c:if>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </c:if>
             </div>
-        </c:forEach>
+
+            <!-- CHỜ XỬ LÝ -->
+            <div class="tab-pane fade" id="pending-orders" role="tabpanel"
+                 aria-labelledby="pending-orders-tab">
+                <c:set var="countPending" value="0"/>
+                <c:forEach items="${userOrders}" var="o">
+                    <c:if test="${o.status == 'pending'}">
+                        <c:set var="countPending" value="${countPending + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
+                        <%@include file="/view/user/profile/orderCard.jsp" %>
+                    </c:if>
+                </c:forEach>
+                <c:if test="${countPending == 0}">
+                    <div class="text-center py-5 empty-tab-state">
+                        <i class="bi bi-wallet2 text-muted"
+                           style="font-size: 3.5rem; opacity: 0.4;"></i>
+                        <p class="text-muted mt-2 mb-0">Không có đơn hàng nào đang chờ xử lý</p>
+                    </div>
+                </c:if>
+            </div>
+
+            <!-- CHỜ GIAO HÀNG -->
+            <div class="tab-pane fade" id="confirmed-orders" role="tabpanel"
+                 aria-labelledby="confirmed-orders-tab">
+                <c:set var="countConfirmed" value="0"/>
+                <c:forEach items="${userOrders}" var="o">
+                    <c:if test="${o.status == 'confirmed' or o.status == 'processing'}">
+                        <c:set var="countConfirmed" value="${countConfirmed + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
+                        <%@include file="/view/user/profile/orderCard.jsp" %>
+                    </c:if>
+                </c:forEach>
+                <c:if test="${countConfirmed == 0}">
+                    <div class="text-center py-5 empty-tab-state">
+                        <i class="bi bi-box-seam text-muted"
+                           style="font-size: 3.5rem; opacity: 0.4;"></i>
+                        <p class="text-muted mt-2 mb-0">Không có đơn hàng nào đang chờ giao hàng</p>
+                    </div>
+                </c:if>
+            </div>
+
+            <!-- VẬN CHUYỂN -->
+            <div class="tab-pane fade" id="shipping-orders" role="tabpanel"
+                 aria-labelledby="shipping-orders-tab">
+                <c:set var="countShipping" value="0"/>
+                <c:forEach items="${userOrders}" var="o">
+                    <c:if test="${o.status == 'shipping'}">
+                        <c:set var="countShipping" value="${countShipping + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
+                        <%@include file="/view/user/profile/orderCard.jsp" %>
+                    </c:if>
+                </c:forEach>
+                <c:if test="${countShipping == 0}">
+                    <div class="text-center py-5 empty-tab-state">
+                        <i class="bi bi-truck text-muted" style="font-size: 3.5rem; opacity: 0.4;"></i>
+                        <p class="text-muted mt-2 mb-0">Không có đơn hàng nào đang vận chuyển</p>
+                    </div>
+                </c:if>
+            </div>
+
+            <!-- HOÀN THÀNH -->
+            <div class="tab-pane fade" id="delivered-orders" role="tabpanel"
+                 aria-labelledby="delivered-orders-tab">
+                <c:set var="countDelivered" value="0"/>
+                <c:forEach items="${userOrders}" var="o">
+                    <c:if test="${o.status == 'delivered'}">
+                        <c:set var="countDelivered" value="${countDelivered + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
+                        <%@include file="/view/user/profile/orderCard.jsp" %>
+                    </c:if>
+                </c:forEach>
+                <c:if test="${countDelivered == 0}">
+                    <div class="text-center py-5 empty-tab-state">
+                        <i class="bi bi-check2-circle text-muted"
+                           style="font-size: 3.5rem; opacity: 0.4;"></i>
+                        <p class="text-muted mt-2 mb-0">Chưa có đơn hàng nào hoàn thành</p>
+                    </div>
+                </c:if>
+            </div>
+
+            <!-- ĐÃ HỦY -->
+            <div class="tab-pane fade" id="cancelled-orders" role="tabpanel"
+                 aria-labelledby="cancelled-orders-tab">
+                <c:set var="countCancelled" value="0"/>
+                <c:forEach items="${userOrders}" var="o">
+                    <c:if test="${o.status == 'cancelled'}">
+                        <c:set var="countCancelled" value="${countCancelled + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
+                        <%@include file="/view/user/profile/orderCard.jsp" %>
+                    </c:if>
+                </c:forEach>
+                <c:if test="${countCancelled == 0}">
+                    <div class="text-center py-5 empty-tab-state">
+                        <i class="bi bi-x-octagon text-muted"
+                           style="font-size: 3.5rem; opacity: 0.4;"></i>
+                        <p class="text-muted mt-2 mb-0">Không có đơn hàng nào bị hủy</p>
+                    </div>
+                </c:if>
+            </div>
+
+            <!-- TRẢ HÀNG/HOÀN TIỀN -->
+            <div class="tab-pane fade" id="refunded-orders" role="tabpanel"
+                 aria-labelledby="refunded-orders-tab">
+                <c:set var="countRefunded" value="0"/>
+                <c:forEach items="${userOrders}" var="o">
+                    <c:if test="${o.status == 'refunded'}">
+                        <c:set var="countRefunded" value="${countRefunded + 1}"/>
+                        <c:set var="st" value="${o.status}"/>
+                        <%@include file="/view/user/profile/orderCard.jsp" %>
+                    </c:if>
+                </c:forEach>
+                <c:if test="${countRefunded == 0}">
+                    <div class="text-center py-5 empty-tab-state">
+                        <i class="bi bi-arrow-counterclockwise text-muted"
+                           style="font-size: 3.5rem; opacity: 0.4;"></i>
+                        <p class="text-muted mt-2 mb-0">Không có đơn hàng nào trả hàng hoặc hoàn tiền
+                        </p>
+                    </div>
+                </c:if>
+            </div>
+        </div>
     </c:when>
     <c:otherwise>
-        <div class="text-center py-5">
-            <p class="text-muted">Hiện chưa có đơn hàng nào.</p>
+        <div class="text-center py-5 shadow-sm bg-white rounded">
+            <i class="bi bi-inbox text-muted" style="font-size: 4rem; opacity: 0.3;"></i>
+            <p class="text-muted mt-3 fs-5">Hiện chưa có đơn hàng nào của bạn.</p>
+            <a href="${pageContext.request.contextPath}/product" class="btn btn-success px-4 mt-2">
+                <i class="bi bi-cart3 me-2"></i>Mua sắm ngay
+            </a>
         </div>
     </c:otherwise>
 </c:choose>
 
 <!-- Review Modal -->
-<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reviewModalLabel">Đánh giá sản phẩm</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 8px;">
+            <div class="modal-header border-bottom-0 py-3">
+                <h5 class="modal-title fw-bold" id="reviewModalLabel">Đánh giá sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
-            <form id="reviewForm" onsubmit="event.preventDefault();">
-                <div class="modal-body">
-                    <p class="mb-2 text-muted">Sản phẩm: <strong id="reviewProductName"></strong></p>
+            <form id="reviewForm">
+                <div class="modal-body py-2">
+                    <p class="mb-3 text-muted">Sản phẩm: <strong id="reviewProductName"
+                                                                 class="text-dark"></strong></p>
                     <div class="mb-3">
-                        <label class="form-label d-block">Chất lượng sản phẩm</label>
+                        <label class="form-label d-block fw-bold text-dark mb-2">Chất lượng sản
+                            phẩm</label>
                         <div class="star-rating">
-                            <input type="radio" id="star5" name="rating" value="5" checked/><label for="star5"
-                                                                                                   title="5 stars"><i
-                                class="bi bi-star-fill"></i></label>
+                            <input type="radio" id="star5" name="rating" value="5" checked/><label
+                                for="star5" title="5 stars"><i class="bi bi-star-fill"></i></label>
                             <input type="radio" id="star4" name="rating" value="4"/><label for="star4"
                                                                                            title="4 stars"><i
                                 class="bi bi-star-fill"></i></label>
@@ -210,52 +252,93 @@
                             <input type="radio" id="star2" name="rating" value="2"/><label for="star2"
                                                                                            title="2 stars"><i
                                 class="bi bi-star-fill"></i></label>
-                            <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"><i
+                            <input type="radio" id="star1" name="rating" value="1"/><label for="star1"
+                                                                                           title="1 star"><i
                                 class="bi bi-star-fill"></i></label>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="reviewContent" class="form-label">Cảm nhận của bạn <span
-                                class="text-danger">*</span></label>
-                        <textarea class="form-control" id="reviewContent" name="content" rows="4" required
+                        <label for="reviewContent" class="form-label fw-bold text-dark">Cảm nhận của bạn
+                            <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="reviewContent" name="content" rows="4"
                                   placeholder="Sản phẩm tuyệt vời, giao hàng nhanh..."></textarea>
                     </div>
                     <input type="hidden" id="reviewProductId" name="productId">
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-success" id="btnSubmitReview">Gửi đánh giá</button>
+                <div class="modal-footer border-top-0 py-3">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-success px-4" id="btnSubmitReview">Gửi đánh
+                        giá
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Cancel Order -->
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+<!-- Cancel Order Modal -->
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cancelOrderModalLabel">Hủy đơn hàng</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 8px;">
+            <div class="modal-header border-bottom-0 py-3">
+                <h5 class="modal-title fw-bold" id="cancelOrderModalLabel">Hủy đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
             <form id="cancelOrderForm">
-                <div class="modal-body">
-                    <p class="mb-2 text-muted">Đơn hàng: <strong id="cancelOrderIdDisplay"></strong></p>
+                <div class="modal-body py-2">
+                    <p class="mb-3 text-muted">Đơn hàng: <strong id="cancelOrderIdDisplay"
+                                                                 class="text-dark"></strong></p>
                     <div class="mb-3">
-                        <label for="cancelReason" class="form-label">Lý do hủy đơn <span
-                                class="text-danger">*</span></label>
-                        <textarea class="form-control" id="cancelReason" name="reason" rows="4" required minlength="10"
+                        <label for="cancelReason" class="form-label fw-bold text-dark">Lý do hủy đơn
+                            <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="cancelReason" name="reason" rows="4" required
+                                  minlength="5"
                                   placeholder="Vui lòng cho chúng tôi biết lý do bạn hủy đơn..."></textarea>
                         <div class="invalid-feedback">
-                            Vui lòng nhập lý do hủy đơn (ít nhất 10 ký tự).
+                            Vui lòng nhập lý do hủy đơn (ít nhất 5 ký tự).
                         </div>
                     </div>
                     <input type="hidden" id="cancelOrderIdInput" name="orderId">
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-danger" id="btnSubmitCancel">Xác nhận hủy</button>
+                <div class="modal-footer border-top-0 py-3">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-danger px-4" id="btnSubmitCancel">Xác nhận
+                        hủy
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Refund Request Modal -->
+<div class="modal fade" id="refundOrderModal" tabindex="-1" aria-labelledby="refundOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 8px;">
+            <div class="modal-header border-bottom-0 py-3">
+                <h5 class="modal-title fw-bold" id="refundOrderModalLabel">Yêu cầu trả hàng/hoàn tiền</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="refundForm">
+                <div class="modal-body py-2">
+                    <p class="mb-3 text-muted">Đơn hàng: <strong id="refundOrderIdDisplay" class="text-dark"></strong>
+                    </p>
+                    <div class="mb-3">
+                        <label for="refundReason" class="form-label fw-bold text-dark">Lý do trả hàng/hoàn tiền và thông
+                            tin chuyển khoản
+                            <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="refundReason" name="reason" rows="4" required minlength="5"
+                                  placeholder="Lý do và Ngân hàng-Số tài khoản"></textarea>
+                        <div class="invalid-feedback">Vui lòng nhập lý do và thông tin chuyển khoản (ít nhất 5 ký tự).
+                        </div>
+                    </div>
+                    <input type="hidden" id="refundOrderIdInput" name="orderId">
+                </div>
+                <div class="modal-footer border-top-0 py-3">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-juicy-refund px-4" id="btnSubmitRefund">Gửi yêu cầu</button>
                 </div>
             </form>
         </div>

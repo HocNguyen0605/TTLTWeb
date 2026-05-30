@@ -80,13 +80,6 @@ public class ReviewDAO extends BaseDao {
                 .list());
     }
 
-    public void insertComment(ReviewComment comment) {
-        String sql = "INSERT INTO review_comments (review_id, user_id, content) VALUES (:reviewId, :userId, :content)";
-        jdbi.useHandle(handle -> handle.createUpdate(sql)
-                .bindBean(comment)
-                .execute());
-    }
-
     public List<Review> getTopPositiveReviews(int limit) {
         String sql = """
                 SELECT r.id, r.product_id as productId, r.user_id as userId, r.rating, r.content, r.created_at as createdAt, 

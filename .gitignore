@@ -21,8 +21,7 @@ gen/
 *.log
 
 # Sensitive info
-application.properties
-src/main/resources/google.properties
+src/main/resources/application.properties
 
 # OS files
 .DS_Store

@@ -38,15 +38,21 @@ public class CartController extends HttpServlet {
         String action = request.getParameter("action");
         int productId = Integer.parseInt(request.getParameter("productId"));
         String quantityRaw = request.getParameter("quantity");
-        try(Connection conn = DBContext.getConnection()) {
+        try (Connection conn = DBContext.getConnection()) {
             ProductDAO productDAO = new ProductDAO(conn);
             int stock = productDAO.getMaxQuantityById(productId);
             if ("add".equals(action)) {
                 // Nếu có truyền quantity thì lấy,
-                // nếu không (từ trang list) thì mặc định là 1
-                int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
+                // nếu không thì mặc định là 1
+                int quantity = 1;
+                if (quantityRaw != null && !quantityRaw.isBlank()) {
+                    try {
+                        quantity = Integer.parseInt(quantityRaw);
+                    } catch (NumberFormatException e) {
+                    }
+                }
                 int countProduct = cart.getTotalQuantityByID(productId);
-                if (countProduct+quantity<=stock) {
+                if (countProduct + quantity <= stock) {
                     Product product = productDAO.findById(productId);
                     if (product != null) {
                         cart.addProduct(product, quantity);
@@ -55,7 +61,7 @@ public class CartController extends HttpServlet {
                             new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), product.getId(), cart.findItemByProductId(product.getId()).getQuantity());
                         }
                     }
-                } else session.setAttribute("messageCart","Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
+                } else session.setAttribute("messageCart", "Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
 
             } else if ("remove".equals(action)) {
                 cart.deleteProduct(productId);
@@ -75,7 +81,8 @@ public class CartController extends HttpServlet {
                 if (session.getAttribute("auth") != null && cart.findItemByProductId(productId) != null) {
                     User auth = (User) session.getAttribute("auth");
                     new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), productId, cart.findItemByProductId(productId).getQuantity());
-                }            }
+                }
+            }
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -111,23 +118,30 @@ public class CartController extends HttpServlet {
         }
         Cart cart = (Cart) session.getAttribute("cart");
         Voucher voucher = (Voucher) session.getAttribute("voucher");
-        List<CartItem> listCalculate= new ArrayList<>();
-        String listIdSelectedParam= request.getParameter("listIdSelected");
-        double totalPrice= 0;
-        double discountVoucher =0;
+        List<CartItem> listCalculate = new ArrayList<>();
+        String listIdSelectedParam = request.getParameter("listIdSelected");
+        List<Integer> selectedIds = new ArrayList<>();
+        double totalPrice = 0;
+        double discountVoucher = 0;
         double discountPromotion = 0;
         double totalDiscount = 0;
-        double total=0;
+        double total = 0;
         //Tinh so tien san pham
         if (cart != null && cart.getAllItems() != null && !cart.getAllItems().isEmpty()) {
-            if(listIdSelectedParam!=null){
+            if (listIdSelectedParam != null) {
                 List<String> listIds = Arrays.asList(listIdSelectedParam.split(","));
-                for(CartItem item : cart.getAllItems()) {
-                    if(listIds.contains(String.valueOf(item.getProduct().getId()))) {
+                for (CartItem item : cart.getAllItems()) {
+                    if (listIds.contains(String.valueOf(item.getProduct().getId()))) {
                         listCalculate.add(item);
+                        selectedIds.add(item.getProduct().getId());
                         item.setChecked(true);
                     }
                     else item.setChecked(false);
+                }
+            } else {
+                for(CartItem item : cart.getAllItems()) {
+                    listCalculate.add(item);
+                    selectedIds.add(item.getProduct().getId());
                 }
             }
 
@@ -152,8 +166,8 @@ public class CartController extends HttpServlet {
                     int maxCombo = Integer.MAX_VALUE;
                     for (PromotionComboItem pci : pciList) {
                         CartItem item = null;
-                        for(CartItem cartItem : listCalculate) {
-                            if(cartItem.getProduct().getId() == pci.getProductId()) {
+                        for (CartItem cartItem : listCalculate) {
+                            if (cartItem.getProduct().getId() == pci.getProductId()) {
                                 item = cartItem;
                                 break;
                             }
@@ -170,10 +184,11 @@ public class CartController extends HttpServlet {
                     if (isComboSatisfied && maxCombo > 0) {
                         for (PromotionComboItem pci : pciList) {
                             CartItem item = null;
-                            for(CartItem cartItem : listCalculate) {
-                                if(cartItem.getProduct().getId() == pci.getProductId()) {
+                            for (CartItem cartItem : listCalculate) {
+                                if (cartItem.getProduct().getId() == pci.getProductId()) {
                                     item = cartItem;
-                                    priceProductCombo += item.getPrice() * (pci.getQuantity() * maxCombo);                                    break;
+                                    priceProductCombo += item.getPrice() * (pci.getQuantity() * maxCombo);
+                                    break;
                                 }
                             }
                         }
@@ -187,6 +202,7 @@ public class CartController extends HttpServlet {
                 e.printStackTrace();
             }
         }
+        request.setAttribute("selectedIds", selectedIds);
 
         //Tính giảm giá voucher
         if (voucher != null) {
