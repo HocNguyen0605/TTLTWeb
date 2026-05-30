@@ -1,12 +1,9 @@
-package util;
+package controller.vnp;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 
 public class HmacSHA512 {
     public HmacSHA512() {

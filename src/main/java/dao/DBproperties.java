@@ -8,7 +8,7 @@ public class DBproperties {
 
     static {
         try {
-            prop.load(DBproperties.class.getClassLoader().getResourceAsStream("db.properties"));
+            prop.load(DBproperties.class.getClassLoader().getResourceAsStream("application.properties"));
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
