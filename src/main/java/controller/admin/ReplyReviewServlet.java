@@ -24,7 +24,7 @@ public class ReplyReviewServlet extends HttpServlet {
         User auth = (User) session.getAttribute("auth");
 
         // Chỉ cho phép ADMIN (role admin thôi nha) trả lời đánh giá
-        if (auth == null || auth.getRole() != 1) {
+        if (auth == null || auth.getRole() < 1) {
             sendResponse(response, false, "Bạn không có quyền thực hiện hành động này!");
             return;
         }

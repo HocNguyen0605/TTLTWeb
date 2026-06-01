@@ -137,23 +137,18 @@
                                         <input type="hidden" name="orderId" value="${o.id}" />
 
                                         <select name="status" onchange="this.form.submit()" class="form-select form-select-sm border-0 fw-bold rounded-3
-                                                    ${o.status == 'Đã giao hàng' ? 'text-success bg-success-subtle' :
-                                                      o.status == 'Đang giao hàng' ? 'text-primary bg-primary-subtle' :
-                                                      o.status == 'Đã hủy' ? 'text-danger bg-danger-subtle' :
-                                                      o.status == 'Bị hoàn' ? 'text-danger bg-danger-subtle' :
+                                                    ${o.status == 'delivered' ? 'text-success bg-success-subtle' :
+                                                      o.status == 'shipping' ? 'text-primary bg-primary-subtle' :
+                                                      o.status == 'cancelled' ? 'text-danger bg-danger-subtle' :
+                                                      o.status == 'refunded' ? 'text-danger bg-danger-subtle' :
                                                       'text-warning bg-warning-subtle'}" style="width: 160px;">
-                                            <option value="Chờ xác nhận" ${o.status=='Chờ xác nhận'
-                                                    ? 'selected' : '' }>Chờ xác nhận</option>
-                                            <option value="Đang xác nhận" ${o.status=='Đang xác nhận'
-                                                    ? 'selected' : '' }>Đang xác nhận</option>
-                                            <option value="Đang giao hàng" ${o.status=='Đang giao hàng'
-                                                    ? 'selected' : '' }>Đang giao hàng</option>
-                                            <option value="Đã giao hàng" ${o.status=='Đã giao hàng'
-                                                    ? 'selected' : '' }>Đã giao hàng</option>
-                                            <option value="Bị hoàn" ${o.status=='Bị hoàn' ? 'selected'
-                                                    : '' }>Bị hoàn</option>
-                                            <option value="Đã hủy" ${o.status=='Đã hủy' ? 'selected'
-                                                    : '' }>Đã hủy</option>
+                                            <option value="pending" ${o.status=='pending' ? 'selected' : '' }>Chờ xác nhận</option>
+                                            <option value="confirmed" ${o.status=='confirmed' ? 'selected' : '' }>Đã xác nhận</option>
+                                            <option value="processing" ${o.status=='processing' ? 'selected' : '' }>Đang xử lý</option>
+                                            <option value="shipping" ${o.status=='shipping' ? 'selected' : '' }>Đang giao hàng</option>
+                                            <option value="delivered" ${o.status=='delivered' ? 'selected' : '' }>Đã giao hàng</option>
+                                            <option value="refunded" ${o.status=='refunded' ? 'selected' : '' }>Bị hoàn</option>
+                                            <option value="cancelled" ${o.status=='cancelled' ? 'selected' : '' }>Đã hủy</option>
                                         </select>
                                     </form>
                                 </td>

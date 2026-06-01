@@ -213,12 +213,58 @@
     © 2024 Juicy. All Rights Reserved.
 </footer>
 
+<c:if test="${not empty showOutOfStockAlert}">
+    <!-- Modal báo cáo hết hàng -->
+    <div class="modal fade" id="outOfStockModal" tabindex="-1" aria-labelledby="outOfStockModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title" id="outOfStockModalLabel"><i class="fas fa-exclamation-triangle"></i> Báo cáo sản phẩm hết hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Các sản phẩm sau đã hết hàng và tự động được chuyển sang trạng thái <strong>Đã ẩn</strong>:</p>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Nhà cung cấp</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="p" items="${outOfStockProducts}">
+                            <tr>
+                                <td>${p.id}</td>
+                                <td>${p.name}</td>
+                                <td>${p.supplier_name}</td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <a href="${pageContext.request.contextPath}/admin/products" class="btn btn-primary">Đi đến Quản lý sản phẩm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:if>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const contextPath = '${pageContext.request.contextPath}';
     // Dữ liệu từ Servlet được inject vào đây (fallback initial data)
     window.revenueLabels = ${ revenueLabels };
     window.revenueData = ${ revenueData };
+
+    <c:if test="${not empty showOutOfStockAlert}">
+    document.addEventListener("DOMContentLoaded", function() {
+        var myModal = new bootstrap.Modal(document.getElementById('outOfStockModal'));
+        myModal.show();
+    });
+    </c:if>
 </script>
 <script src="${pageContext.request.contextPath}/js/admin-chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

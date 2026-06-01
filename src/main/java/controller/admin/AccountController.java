@@ -15,8 +15,23 @@ import java.util.List;
 public class AccountController extends HttpServlet {
     private final UserDAO userDAO = new UserDAO();
 
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User authUser = (User) req.getSession().getAttribute("auth");
+        // Chỉ Pro-Admin mới được truy cập
+        if (authUser == null || authUser.getRole() != 2) {
+            req.getRequestDispatcher("/view/user/403.jsp").forward(req, resp);
+            return;
+        }
+
+        // Bước 2: Kiểm tra OTP
+        if (!Boolean.TRUE.equals(req.getSession().getAttribute("pro_verified"))) {
+            resp.sendRedirect(req.getContextPath() + "/admin/verify-pro");
+            return;
+        }
+
         List<User> users = userDAO.getAllUsers();
         req.setAttribute("users", users);
         req.getRequestDispatcher("/view/admin/admin-accounts.jsp").forward(req, resp);
@@ -24,6 +39,19 @@ public class AccountController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User authUser = (User) req.getSession().getAttribute("auth");
+        // Chỉ Pro-Admin mới được thay đổi quyền hoặc xóa
+        if (authUser == null || authUser.getRole() != 2) {
+            req.getRequestDispatcher("/view/user/403.jsp").forward(req, resp);
+            return;
+        }
+
+        // Bước 2: Kiểm tra OTP (đề phòng ai đó gọi API trực tiếp qua Postman mà chưa verify OTP)
+        if (!Boolean.TRUE.equals(req.getSession().getAttribute("pro_verified"))) {
+            resp.sendRedirect(req.getContextPath() + "/admin/verify-pro");
+            return;
+        }
+
         String action = req.getParameter("action");
         String idStr = req.getParameter("id");
 
@@ -32,7 +60,7 @@ public class AccountController extends HttpServlet {
 
             if ("updateRole".equals(action)) {
                 String newRole = req.getParameter("role");
-                if (newRole != null && (newRole.equals("admin") || newRole.equals("user"))) {
+                if (newRole != null && (newRole.equals("admin") || newRole.equals("user") || newRole.equals("pro-admin"))) {
                     boolean success = userDAO.updateUserRole(id, newRole);
                     if (success) {
                         req.getSession().setAttribute("message", "Cập nhật quyền thành công!");
