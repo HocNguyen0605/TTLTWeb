@@ -104,3 +104,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const btn = document.getElementById("applyVoucherBtn");
     if (btn) btn.addEventListener("click", applyVoucher);
 });
+//js load thông báo lỗi
+document.addEventListener("DOMContentLoaded", function (){
+    const msgElement = document.getElementById("sessionMsg");
+    if(msgElement){
+        const content = msgElement.getAttribute('data-content')
+        if(typeof Swaf !== 'undefined'){
+            Swaf.fire({
+                icon: 'warning',
+                title: 'Thông báo',
+                text: content,
+                confirmButtonText: 'Đã hiểu'
+            })
+        }
+        else {
+            alert(content);
+        }
+    }
+})

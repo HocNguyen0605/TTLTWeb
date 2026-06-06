@@ -6,11 +6,12 @@
 </jsp:include>
 
 <!-- GIỎ HÀNG -->
-<%-- Hiển thông báo thêm vượt số tồn  --%>
-<c:if test="${not empty messageCart}">
-    <div class="alert alert-warning">
-            ${messageCart}
-    </div>
+<%-- Hiển thị các thông báo lỗi  --%>
+<c:if test="${not empty messageCart ||not empty errorPayment ||not empty errorReturnPm}">
+    <div id="sessionMsg" style="display: none" data-content="${messageCart}${errorPayment}${errorReturnPm}"></div>
+    <c:remove var="messageCart" scope="session"/>
+    <c:remove var="messageCart" scope="session"/>
+    <c:remove var="messageCart" scope="session"/>
 </c:if>
 <section class="container my-5">
     <h2 class="text-center text-success fw-bold mb-4">Giỏ Hàng Của Bạn</h2>

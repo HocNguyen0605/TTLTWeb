@@ -37,6 +37,17 @@ public class LoginGoogleServlet extends HttpServlet {
 
                 if (user != null) {
                     session.setAttribute("auth", user);
+                    try (java.sql.Connection conn = util.DBContext.getConnection()) {
+                        model.Cart cart = (model.Cart) session.getAttribute("cart");
+                        if (cart == null) {
+                            cart = new model.Cart();
+                            session.setAttribute("cart", cart);
+                        }
+                        // Gọi hàm sync để lôi đồ từ DB lên session hoặc đẩy đồ từ session xuống DB
+                        new dao.CartDAO(conn).syncCartToSession(user.getId(), cart);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     response.sendRedirect(request.getContextPath() + "/products");
                 } else {
                     response.sendRedirect("login?error=auth_failed");

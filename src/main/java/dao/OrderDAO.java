@@ -70,6 +70,17 @@ public class OrderDAO {
             e.printStackTrace();
         }
     }
+    public void updateStatusPayment(int orderId, String status) {
+        String sql = "UPDATE orders SET status_payment=? WHERE id=?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public boolean cancelOrder(int orderId, int userId, String reason) {
         String sql = "UPDATE orders SET status_order='cancelled', cancel_reason=? WHERE id=? AND id_user=?";
@@ -186,5 +197,28 @@ public class OrderDAO {
             }
             return orders;
         });
+    }
+    public Order getOrderById(int orderId) {
+        String sql = "SELECT * FROM orders WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Order order = new Order();
+                    order.setId(rs.getInt("id"));
+                    order.setUserId(rs.getInt("id_user"));
+                    order.setOrderDate(rs.getTimestamp("date"));
+                    order.setStatus(rs.getString("status_order"));
+                    order.setStatus(rs.getString("status_payment"));
+                    order.setTotalPrice(rs.getDouble("total"));
+                    order.setCancelReason(rs.getString("cancel_reason"));
+
+                    return order;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy đơn hàng
     }
 }
