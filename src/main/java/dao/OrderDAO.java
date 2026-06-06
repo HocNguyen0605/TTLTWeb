@@ -60,7 +60,12 @@ public class OrderDAO {
 
     // Cập nhật trạng thái đơn hàng
     public void updateStatus(int orderId, String status) {
-        String sql = "UPDATE orders SET status_order=? WHERE id=?";
+        String sql;
+        if ("delivered".equalsIgnoreCase(status)) {
+            sql = "UPDATE orders SET status_order=?, delivered_date=NOW() WHERE id=?";
+        } else {
+            sql = "UPDATE orders SET status_order=?, delivered_date=NULL WHERE id=?";
+        }
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, status);

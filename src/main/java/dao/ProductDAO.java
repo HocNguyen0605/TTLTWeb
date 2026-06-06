@@ -72,6 +72,9 @@ public class ProductDAO extends BaseDao {
 
     // Thêm sản phẩm
     public int insert(Product p) {
+        if (p.getQuantity() == 0) {
+            p.setQuantity(-1);
+        }
         String sql = """
                     INSERT INTO products
                     (product_name, price, volume, supplier_name, quantity, image, description)
@@ -375,10 +378,11 @@ public class ProductDAO extends BaseDao {
     }
 
     public void updateQuantity(int id, int quantity) {
+        int finalQuantity = (quantity == 0) ? -1 : quantity;
         String sql = "UPDATE products SET quantity = :qty WHERE id = :id";
         get().useHandle(handle -> handle.createUpdate(sql)
                 .bind("id", id)
-                .bind("qty", quantity)
+                .bind("qty", finalQuantity)
                 .execute());
     }
 
@@ -485,18 +489,40 @@ public class ProductDAO extends BaseDao {
     }
     //Update lại số lượng tồn với trường hợp 2 người cùng mua 1 thời điểm cho 1 sản phẩm
     public boolean updateProductQuantity(int productId, int quantityToSubtract, int oldVersion) throws SQLException {
-        String sql = "UPDATE products SET quantity = quantity - ?, version = version + 1 " +
+        String sql = "UPDATE products SET quantity = CASE WHEN quantity - ? = 0 THEN -1 ELSE quantity - ? END, version = version + 1 " +
                 "WHERE id = ? AND version = ? AND quantity >= ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, quantityToSubtract);
-            ps.setInt(2, productId);
-            ps.setInt(3, oldVersion);
-            ps.setInt(4, quantityToSubtract);
+            ps.setInt(2, quantityToSubtract);
+            ps.setInt(3, productId);
+            ps.setInt(4, oldVersion);
+            ps.setInt(5, quantityToSubtract);
 
             int rowsAffected = ps.executeUpdate();
 
             return rowsAffected > 0;
         }
+    }
+
+    public List<Product> getOutOfStockProducts() {
+        String sql = """
+                    SELECT
+                        p.id AS id,
+                        p.product_name AS name,
+                        p.price,
+                        p.volume,
+                        p.supplier_name,
+                        p.quantity,
+                        COALESCE(pi.image_URL, p.image) AS img,
+                        p.description
+                    FROM products p
+                    LEFT JOIN product_images pi ON p.image = pi.id
+                    WHERE p.quantity = -1
+                    GROUP BY p.id
+                """;
+        return get().withHandle(handle -> handle.createQuery(sql)
+                .mapToBean(Product.class)
+                .list());
     }
 }

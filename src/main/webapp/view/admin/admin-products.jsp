@@ -88,6 +88,12 @@
         </ol>
     </div>
     <div class="container my-5">
+        <c:if test="${param.success == 'true'}">
+            <div class="alert alert-success alert-dismissible fade show animate__animated animate__fadeInDown mt-2" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i> Lưu sản phẩm thành công!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </c:if>
         <div
                 class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 animate__animated animate__fadeInDown">
             <div>
@@ -166,9 +172,10 @@
                                           class="d-flex gap-1 align-items-center">
                                         <input type="hidden" name="action" value="update_price">
                                         <input type="hidden" name="id" value="${p.id}">
-                                        <input type="number" name="price" step="0.01"
+                                        <fmt:formatNumber value="${p.price}" pattern="#" var="formattedPrice" />
+                                        <input type="number" name="price" step="1000"
                                                class="form-control form-control-sm text-end px-1 fw-semibold text-success"
-                                               style="width: 100px;" value="${p.price}" min="0"
+                                               style="width: 100px;" value="${formattedPrice}" min="0"
                                                required>
                                         <span class="fw-semibold text-success fs-6 mt-1">₫</span>
                                         <button type="submit"
@@ -177,6 +184,7 @@
                                             <i class="bi bi-check-lg fw-bold"></i>
                                         </button>
                                     </form>
+
                                 </td>
                                 <td><span
                                         class="badge bg-light text-dark border">${p.volume}ml</span>
@@ -214,28 +222,48 @@
                                     </c:choose>
                                 </td>
                                 <td class="text-center">
-                                    <form method="post" action="products" style="display:inline">
-                                        <input type="hidden" name="id" value="${p.id}">
-
-                                        <c:choose>
-                                            <c:when test="${p.quantity == -1}">
+                                    <c:choose>
+                                        <c:when test="${p.quantity == -1}">
+                                            <form method="post" action="products" style="display:inline">
+                                                <input type="hidden" name="id" value="${p.id}">
                                                 <input type="hidden" name="action" value="show">
-                                                <button class="btn-action-delete text-primary"
+                                                <button type="submit" class="btn-action-delete text-primary"
                                                         title="Hiện sản phẩm"
                                                         onclick="return confirm('Hiện lại sản phẩm này?')">
                                                     <i class="bi bi-eye-fill"></i>
                                                 </button>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <input type="hidden" name="action" value="hidden">
-                                                <button class="btn-action-delete"
-                                                        title="Ẩn sản phẩm"
-                                                        onclick="return confirm('Bạn có chắc muốn ẩn sản phẩm này?')">
-                                                    <i class="bi bi-eye-slash"></i>
-                                                </button>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </form>
+                                            </form>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button type="button" class="btn-action-delete text-danger border-0 bg-transparent"
+                                                    title="Ẩn sản phẩm"
+                                                    data-bs-toggle="modal" data-bs-target="#hideProductModal${p.id}">
+                                                <i class="bi bi-eye-slash"></i>
+                                            </button>
+                                            <!-- Modal Ẩn Sản Phẩm -->
+                                            <div class="modal fade text-start" id="hideProductModal${p.id}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content shadow-lg">
+                                                        <div class="modal-header bg-danger text-white">
+                                                            <h5 class="modal-title"><i class="bi bi-exclamation-triangle-fill me-2"></i>Xác nhận ẩn</h5>
+                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center py-4">
+                                                            <p class="fs-5 mb-0">Bạn có chắc chắn muốn ẩn sản phẩm <strong class="text-danger">${p.name}</strong> không?</p>
+                                                        </div>
+                                                        <div class="modal-footer justify-content-center border-0 pt-0">
+                                                            <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Hủy</button>
+                                                            <form method="post" action="products" style="display:inline">
+                                                                <input type="hidden" name="id" value="${p.id}">
+                                                                <input type="hidden" name="action" value="hidden">
+                                                                <button type="submit" class="btn btn-danger px-4">Đồng ý</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -335,6 +363,12 @@
                                 Vui lòng chọn ảnh hoặc nhập URL!
                             </div>
                         </c:if>
+                        <c:if test="${param.error == 'cloudinary_failed'}">
+                            <div class="alert alert-danger mt-2 d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                Lỗi upload ảnh lên Cloudinary! Vui lòng kiểm tra lại cấu hình hoặc thử nhập URL trực tiếp.
+                            </div>
+                        </c:if>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 pt-3 border-top">
@@ -400,6 +434,13 @@
 <script type="module" src="js/init.js"></script>
 
 <script>
+    <c:if test="${not empty param.error}">
+    document.addEventListener("DOMContentLoaded", function() {
+        var addModal = new bootstrap.Modal(document.getElementById('addProductModal'));
+        addModal.show();
+    });
+    </c:if>
+
     // 1. Preview Image Logic
     const input = document.getElementById("imageInput");
     const preview = document.getElementById("previewImage");

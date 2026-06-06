@@ -14,6 +14,17 @@ public class DashboardServlet extends HttpServlet {
 
         // Lấy dữ liệu từ DAO
         try (java.sql.Connection conn = util.DBContext.getConnection()) {
+            HttpSession session = req.getSession(false);
+            if (session != null && session.getAttribute("justLoggedIn") != null) {
+                session.removeAttribute("justLoggedIn");
+                dao.ProductDAO productDAO = new dao.ProductDAO(conn);
+                java.util.List<model.Product> outOfStockProducts = productDAO.getOutOfStockProducts();
+                if (outOfStockProducts != null && !outOfStockProducts.isEmpty()) {
+                    req.setAttribute("showOutOfStockAlert", true);
+                    req.setAttribute("outOfStockProducts", outOfStockProducts);
+                }
+            }
+
             dao.AdminDAO adminDAO = new dao.AdminDAO(conn);
 
             // 1. Số liệu tổng quan

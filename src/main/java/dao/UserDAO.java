@@ -21,7 +21,7 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         null,
                         "LOCAL"))
                 .findFirst()
@@ -65,7 +65,7 @@ public class UserDAO {
                     .createUpdate("INSERT INTO account (username, password, role) VALUES (:username, :password, :role)")
                     .bind("username", user.getUsername())
                     .bind("password", user.getPassword())
-                    .bind("role", user.getRole() == 1 ? "admin" : "user")
+                    .bind("role", user.getRole() == 2 ? "pro-admin" : user.getRole() == 1 ? "admin" : "user")
                     .executeAndReturnGeneratedKeys("id")
                     .mapTo(Integer.class)
                     .one();
@@ -150,7 +150,7 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         null,
                         "LOCAL"))
                 .findFirst()
@@ -170,7 +170,7 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         null,
                         "LOCAL"))
                 .list());
@@ -218,7 +218,7 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         rs.getString("googleId"),
                         rs.getString("authProvider")))
                 .findFirst()
@@ -281,7 +281,7 @@ public class UserDAO {
                         rs.getString("email"),
                         rs.getString("phone"),
                         rs.getString("address"),
-                        "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
+                        "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         rs.getString("googleId"),
                         rs.getString("authProvider")))
                 .findFirst()

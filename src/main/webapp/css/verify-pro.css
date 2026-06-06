@@ -1,0 +1,32 @@
+body {
+    background-color: #f8f9fa;
+}
+.otp-input {
+    width: 50px;
+    height: 60px;
+    font-size: 24px;
+    text-align: center;
+    margin: 0 5px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-weight: bold;
+}
+.otp-input:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    outline: none;
+}
+.otp-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+/* Ẩn mũi tên của input type number */
+.otp-input::-webkit-outer-spin-button,
+.otp-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.otp-input[type=number] {
+    -moz-appearance: textfield;
+}
