@@ -5,9 +5,9 @@
     <jsp:param name="title" value="Hồ sơ cá nhân"/>
 </jsp:include>
 
-<section class="container-fluid px-lg-5 py-5" style="max-width: 1400px; margin: 0 auto;">
+<section class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-lg-12">
+        <div class="col-lg-10 col-md-12">
             <div class="profile-container shadow-sm p-4 bg-white rounded">
 
                 <c:if test="${not empty message}">

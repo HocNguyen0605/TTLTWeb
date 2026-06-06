@@ -72,26 +72,14 @@ public class OrderDAO {
     }
 
     public boolean cancelOrder(int orderId, int userId, String reason) {
-        return DBContext.getJdbi().inTransaction(handle -> {
-            boolean updated = handle.createUpdate("UPDATE orders SET status_order='cancelled', cancel_reason=:reason WHERE id=:id AND id_user=:userId")
-                    .bind("reason", reason)
-                    .bind("id", orderId)
-                    .bind("userId", userId)
-                    .execute() > 0;
-            if (updated) {
-                List<java.util.Map<String, Object>> items = handle.createQuery("SELECT id_product, quantity FROM orderitems WHERE id_order = :id")
-                        .bind("id", orderId)
-                        .mapToMap()
-                        .list();
-                for (java.util.Map<String, Object> item : items) {
-                    handle.createUpdate("UPDATE products SET quantity = quantity + :quantity WHERE id = :pid")
-                            .bind("quantity", item.get("quantity"))
-                            .bind("pid", item.get("id_product"))
-                            .execute();
-                }
-            }
-            return updated;
-        });
+        String sql = "UPDATE orders SET status_order='cancelled', cancel_reason=? WHERE id=? AND id_user=?";
+        return util.DBContext.getJdbi().withHandle(handle ->
+                handle.createUpdate(sql)
+                        .bind(0, reason)
+                        .bind(1, orderId)
+                        .bind(2, userId)
+                        .execute() > 0
+        );
     }
 
     public void deleteOrder(int orderId) {
@@ -182,7 +170,7 @@ public class OrderDAO {
             for (Order order : orders) {
                 List<model.OrderItemDetail> items = handle.createQuery(
                                 "SELECT oi.id_product AS productId, p.product_name AS productName, " +
-                                        "COALESCE(pi.image_URL, p.image) AS productImg, " + "p.volume, oi.quantity, oi.price_at_time AS priceAtTime " +
+                                        "COALESCE(pi.image_URL, p.image) AS productImg, " +                                        "p.volume, oi.quantity, oi.price_at_time AS priceAtTime " +
                                         "FROM orderitems oi " +
                                         "JOIN products p ON oi.id_product = p.id " +
                                         "LEFT JOIN product_images pi ON p.image = pi.id " +
@@ -198,59 +186,5 @@ public class OrderDAO {
             }
             return orders;
         });
-    }
-
-    //Lấy thông tin đơn hàng theo id
-    public model.Order getOrderById(int orderId) {
-        String sql = "SELECT id, id_user, status_order AS status, total AS totalPrice, delivered_date AS deliveredDate FROM orders WHERE id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, orderId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    model.Order o = new model.Order();
-                    o.setId(rs.getInt("id"));
-                    o.setUserId(rs.getInt("id_user"));
-                    o.setStatus(rs.getString("status"));
-                    o.setTotalPrice(rs.getDouble("totalPrice"));
-                    o.setDeliveredDate(rs.getTimestamp("deliveredDate"));
-                    return o;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    //Trả về tổng tiền của đơn
-    public double getOrderTotalById(int orderId) {
-        String sql = "SELECT total FROM orders WHERE id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, orderId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDouble("total");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-    //Trả về userid của đơn
-    public int getUserIdByOrderId(int orderId) {
-        String sql = "SELECT id_user FROM orders WHERE id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, orderId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("id_user");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1; // not found
     }
 }
