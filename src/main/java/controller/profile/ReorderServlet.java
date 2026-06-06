@@ -88,7 +88,6 @@ public class ReorderServlet extends HttpServlet {
             } else {
                 response.getWriter().write("{\"status\":\"error\",\"message\":\"Sản phẩm không còn đủ trong kho!\"}");
             }
-            // Response already sent based on stock availability
         } catch (Exception e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -345,4 +345,32 @@
     </div>
 </div>
 
+<!-- Track Order Modal -->
+<div class="modal fade" id="trackOrderModal" tabindex="-1" aria-labelledby="trackOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 8px;">
+            <div class="modal-header border-bottom-0 py-3">
+                <h5 class="modal-title fw-bold" id="trackOrderModalLabel">Theo dõi đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-2">
+                <p class="mb-3 text-muted">Đơn hàng: <strong id="trackOrderIdDisplay" class="text-dark"></strong></p>
+                <div id="trackingTimelineContainer" class="position-relative px-3">
+                    <!-- JS sẽ render timeline ở đây -->
+                    <div class="text-center text-muted py-4" id="trackingLoading">
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Đang tải dữ liệu...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 py-3">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="${pageContext.request.contextPath}/js/myorders.js"></script>

@@ -30,6 +30,7 @@ public class OrderDAO {
                     o.date AS order_date,
                     o.delivered_date,
                     o.id_user,
+                    o.tracking_code,
                     COALESCE(s.receiver_name, u.name) AS customer_name
                 FROM orders o
                 LEFT JOIN shippinginfo s ON o.id = s.id_order
@@ -49,7 +50,7 @@ public class OrderDAO {
                 o.setDeliveredDate(rs.getTimestamp("delivered_date"));
                 o.setCustomerName(rs.getString("customer_name"));
                 o.setUserId(rs.getInt("id_user"));
-
+                o.setTrackingCode(rs.getString("tracking_code"));
                 list.add(o);
             }
         } catch (SQLException e) {
@@ -202,7 +203,7 @@ public class OrderDAO {
 
     //Lấy thông tin đơn hàng theo id
     public model.Order getOrderById(int orderId) {
-        String sql = "SELECT id, id_user, status_order AS status, total AS totalPrice, delivered_date AS deliveredDate FROM orders WHERE id = ?";
+        String sql = "SELECT id, id_user, tracking_code, status_order AS status, total AS totalPrice, delivered_date AS deliveredDate FROM orders WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -210,6 +211,7 @@ public class OrderDAO {
                     model.Order o = new model.Order();
                     o.setId(rs.getInt("id"));
                     o.setUserId(rs.getInt("id_user"));
+                    o.setTrackingCode(rs.getString("tracking_code"));
                     o.setStatus(rs.getString("status"));
                     o.setTotalPrice(rs.getDouble("totalPrice"));
                     o.setDeliveredDate(rs.getTimestamp("deliveredDate"));
@@ -252,5 +254,17 @@ public class OrderDAO {
             e.printStackTrace();
         }
         return -1; // not found
+    }
+    //Cập nhật mã vận đơn cho đơn hàng(mã lâý từ GHN)
+    public boolean updateTrackingCode(int orderId, String trackingCode) {
+        String sql = "UPDATE orders SET tracking_code = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, trackingCode);
+            ps.setInt(2, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
