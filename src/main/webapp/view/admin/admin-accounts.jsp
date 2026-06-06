@@ -132,6 +132,7 @@
                 <select name="role" class="form-select form-select-sm" style="width: auto;">
                   <option value="user" ${u.role == 0 ? 'selected' : ''}>User</option>
                   <option value="admin" ${u.role == 1 ? 'selected' : ''}>Admin</option>
+                  <option value="pro-admin" ${u.role == 2 ? 'selected' : ''}>Pro-Admin</option>
                 </select>
                 <button type="submit" class="btn btn-sm btn-outline-primary">
                   <i class="bi bi-save"></i>

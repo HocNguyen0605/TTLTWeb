@@ -27,14 +27,13 @@ public class AddProductServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        // No JSON response content type
 
         // 1. Lấy dữ liệu form
         String name = request.getParameter("name");
         String supplier = request.getParameter("supplier_name");
         String description = request.getParameter("description");
 
-        // Handle optional input gracefully
+        // Xử lý đầu vào
         double price = 0;
         int volume = 0;
         int quantity = 0;
@@ -59,7 +58,7 @@ public class AddProductServlet extends HttpServlet {
 
         java.util.List<String> savedFileNames = new java.util.ArrayList<>();
 
-        // Loop through all parts to find multiple "images"
+        // Lặp qua tất cả các phần để tìm nhiều "hình ảnh"
         try {
             for (Part part : request.getParts()) {
                 if ("images".equals(part.getName()) && part.getSize() > 0) {
@@ -76,6 +75,9 @@ public class AddProductServlet extends HttpServlet {
                         savedFileNames.add(secureUrl);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        //fix bug ko thêm mới đc sản phẩm
+                        response.sendRedirect(request.getContextPath() + "/admin/products?error=cloudinary_failed");
+                        return;
                     }
                 }
             }
@@ -83,7 +85,7 @@ public class AddProductServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // 3. Fallback to URL if no files uploaded
+        // 3. Sử dụng URL nếu không có tệp nào được tải lên.
         if (savedFileNames.isEmpty()) {
             String imageUrl = request.getParameter("image_url");
             if (imageUrl != null && !imageUrl.trim().isEmpty()) {
@@ -91,23 +93,23 @@ public class AddProductServlet extends HttpServlet {
             }
         }
 
-        // 4. Final validation check
+        // 4. Kiểm tra xác nhận cuối cùng
         if (savedFileNames.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/admin/products?error=no_image");
             return;
         }
 
-        // 5. Set Product
+        // 5. Đặt sản phẩm
         Product p = new Product();
         p.setName(name);
         p.setPrice(price);
         p.setQuantity(quantity);
-        p.setImg(null); // Set null so DB uses default or later update
+        p.setImg(null);
         p.setDescription(description);
         p.setSupplier_name(supplier);
         p.setVolume(volume);
 
-        // 6. Insert Product to DB
+        // 6. Chèn thêm sản phẩm mới vào database
         ProductDAO dao = new ProductDAO();
         int newProductId = 0;
         try {
@@ -118,30 +120,25 @@ public class AddProductServlet extends HttpServlet {
             return;
         }
 
-        // 7. Insert Images and update Main Product Image
+        // 7. Chèn hình ảnh và cập nhật hình ảnh vào trang sản phẩm chính.
         try {
             boolean first = true;
             for (String img : savedFileNames) {
-                // Insert image to DB and get the ID
+                // chèn ảnh bằng id img
                 int imageId = dao.insertImage(newProductId, img);
 
                 if (first) {
-                    // Update the product's main image FK
+                    // cập nhật sp và khóa phụ FK
                     dao.updateProductImage(newProductId, String.valueOf(imageId));
                     first = false;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // Even if image update fails, the product is created.
-            // We might want to warn the user, but for now redirect with success (since
-            // product exists)
-            // or specific warning.
             response.sendRedirect(request.getContextPath() + "/admin/products?success=true&warning=image_error");
             return;
         }
 
-        // Success Response - Redirect
         response.sendRedirect(request.getContextPath() + "/admin/products?success=true");
     }
 }

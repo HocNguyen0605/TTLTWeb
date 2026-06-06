@@ -8,7 +8,7 @@ public class User {
     private String email;
     private String phone;
     private String address;
-    private int role; // 1: Admin, 0: User
+    private int role; // 2: Pro-Admin, 1: Admin, 0: User
     private String googleId;
     private String authProvider;
 
