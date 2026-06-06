@@ -96,23 +96,17 @@
             </div>
 
             <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
-                <div class="search-container d-none d-md-block">
-                    <form action="/admin/banner" method="get">
-                        <input type="text" name="search" class="search-input"
+                <div class="search-container d-none d-md-block" style="width: 320px;">
+                    <form action="/admin/banner" method="get" class="input-group">
+                        <input type="text" name="search" class="form-control search-input"
                                placeholder="Nhập tên banner để tìm kiếm" value=${currentSearch}>
-                        <button type="submit" class="btn p-0 border-0">
+                        <button type="submit" class="btn btn-success d-flex align-items-center">
                             <i class="bi bi-search search-icon"></i>
                         </button>
                     </form>
                 </div>
-                <!--Hiển thị danh sách banner tìm kiếm chạy bằng ajax -->
-                <div class="search-container position-relative">
-                    <input type="text" id="searchInput" name="search" class="search-input" autocomplete="off" ...>
-                    <div id="searchSuggestions" class="list-group position-absolute w-100 shadow-lg" style="z-index: 1000; display: none;">
-                    </div>
-                </div>
                 <!--Nút tạo banner mơis-->
-                <button class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                <button class="btn btn-success fw-semibold rounded-pill text-nowrap"
                         data-bs-toggle="modal" data-bs-target="#addBannerModal">
                     Tạo Banner mới
                 </button>
@@ -198,7 +192,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content shadow-lg">
                 <!-- Header: Thay đổi icon và tiêu đề -->
-                <div class="modal-header ">
+                <div class="modal-header bg-success text-white">
                     <h5 class="modal-title">
                         <i class="bi bi-image-fill me-2"></i>Thêm Banner Quảng Cáo Mới
                     </h5>
@@ -246,7 +240,7 @@
                         <!-- Nút bấm -->
                         <div class="d-flex justify-content-end gap-2 pt-3 border-top">
                             <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-primary px-4">
+                            <button type="submit" class="btn btn-success px-4">
                                 <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload & Lưu Banner
                             </button>
                         </div>
@@ -259,7 +253,7 @@
     <div class="modal fade" id="updateBannerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content shadow-lg">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header bg-success text-white">
                     <h5 class="modal-title">
                         <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa Banner
                     </h5>
@@ -315,7 +309,7 @@
 
                         <div class="d-flex justify-content-end gap-2 pt-3 border-top">
                             <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-primary px-4">Cập nhật Banner</button>
+                            <button type="submit" class="btn btn-success px-4">Cập nhật Banner</button>
                         </div>
                     </form>
                 </div>
