@@ -99,7 +99,7 @@
                 <div class="search-container d-none d-md-block" style="width: 320px;">
                     <form action="/admin/banner" method="get" class="input-group">
                         <input type="text" name="search" class="form-control search-input"
-                               placeholder="Nhập tên banner để tìm kiếm" value=${currentSearch}>
+                               placeholder="Nhập tên banner để tìm kiếm" value="${currentSearch}">
                         <button type="submit" class="btn btn-success d-flex align-items-center">
                             <i class="bi bi-search search-icon"></i>
                         </button>
@@ -169,9 +169,14 @@
                                             </c:choose>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-warning"
+                                            <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
                                                     data-bs-toggle="modal" data-bs-target="#updateBannerModal"
-                                                    onclick="openEditModal('${b.id}', '${b.title}', '${b.imageUrl}', '${b.linkUrl}', '${b.priority}', '${b.isActive}')">
+                                                    data-id="${b.id}"
+                                                    data-title="${b.title}"
+                                                    data-image="${b.imageUrl}"
+                                                    data-link="${b.linkUrl}"
+                                                    data-priority="${b.priority}"
+                                                    data-active="${b.isActive}">
                                                 Sửa
                                             </button>
                                         </td>
@@ -366,7 +371,7 @@
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="js/init.js"></script>
+<script src="${pageContext.request.contextPath}/js/banner_admin.js"></script>
 </body>
 
 </html>
