@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const response = await fetch(`${getBasePath()}/user/cancel-order`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
                     body: formData.toString()
                 });
 
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const response = await fetch(`${getBasePath()}/user/reorder`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
                     body: formData.toString()
                 });
 
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     const response = await fetch(`${getBasePath()}/submit-review`, {
                         method: 'POST',
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
                         body: formData.toString()
                     });
 
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const response = await fetch(`${getBasePath()}/user/requestRefund`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
                     body: formData.toString()
                 });
 
@@ -393,13 +393,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const trackModal = new bootstrap.Modal(trackOrderModalElement);
         const trackOrderIdDisplay = document.getElementById('trackOrderIdDisplay');
         const trackingTimelineContainer = document.getElementById('trackingTimelineContainer');
+        const trackExpectedDateDisplay = document.getElementById('trackExpectedDateDisplay');
 
         document.addEventListener('click', async (event) => {
             const trackBtn = event.target.closest('.btn-track-order');
             if (trackBtn) {
                 const orderId = trackBtn.dataset.orderId;
                 trackOrderIdDisplay.textContent = "#" + orderId;
-                
+                if(trackExpectedDateDisplay) trackExpectedDateDisplay.style.display = 'none';
+
                 trackingTimelineContainer.innerHTML = `
                     <div class="text-center text-muted py-4" id="trackingLoading">
                         <div class="spinner-border text-info" role="status">
@@ -413,47 +415,57 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     const response = await fetch(`${getBasePath()}/user/order-tracking?orderId=${orderId}`);
                     const data = await response.json();
-                    
+
                     if (data.status === 'error') {
                         trackingTimelineContainer.innerHTML = `<div class="alert alert-warning">${data.message}</div>`;
-                    } else if (data.data && data.data.log && data.data.log.length > 0) {
-                        let html = '<ul class="timeline">';
-                        // Sort log by updated_date descending
-                        const logs = data.data.log.sort((a, b) => new Date(b.updated_date) - new Date(a.updated_date));
-                        
-                        logs.forEach((item, index) => {
-                            const dateObj = new Date(item.updated_date);
-                            const dateStr = dateObj.toLocaleString('vi-VN', {
-                                year: 'numeric', month: '2-digit', day: '2-digit', 
-                                hour: '2-digit', minute:'2-digit'
-                            });
-                            
-                            // Map status in GHN to Vietnamese
-                            let statusText = item.status;
-                            if (statusText === 'ready_to_pick') statusText = 'Chờ lấy hàng';
-                            else if (statusText === 'picking') statusText = 'Đang lấy hàng';
-                            else if (statusText === 'picked') statusText = 'Đã lấy hàng';
-                            else if (statusText === 'storing') statusText = 'Lưu kho';
-                            else if (statusText === 'transporting') statusText = 'Đang luân chuyển';
-                            else if (statusText === 'delivering') statusText = 'Đang giao hàng';
-                            else if (statusText === 'delivered') statusText = 'Giao hàng thành công';
-                            else if (statusText === 'delivery_fail') statusText = 'Giao hàng thất bại';
-                            else if (statusText === 'return') statusText = 'Đang hoàn hàng';
-                            else if (statusText === 'returned') statusText = 'Đã hoàn hàng';
-                            else if (statusText === 'cancel') statusText = 'Đã hủy đơn';
-                            
-                            const isCompleted = index === 0 ? 'completed' : '';
-                            html += `
-                                <li class="timeline-item ${isCompleted}">
-                                    <div class="timeline-date">${dateStr}</div>
-                                    <div class="timeline-content">${statusText}</div>
-                                </li>
-                            `;
-                        });
-                        html += '</ul>';
-                        trackingTimelineContainer.innerHTML = html;
                     } else {
-                        trackingTimelineContainer.innerHTML = `<div class="alert alert-info">Chưa có thông tin cập nhật cho đơn hàng này.</div>`;
+                        // Hiển thị ngày giao dự kiến nếu có
+                        if (data.expected_delivery_date && trackExpectedDateDisplay) {
+                            const expectedDate = new Date(data.expected_delivery_date);
+                            const dateStr = expectedDate.toLocaleDateString('vi-VN', {
+                                weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit'
+                            });
+                            trackExpectedDateDisplay.innerHTML = `Dự kiến giao hàng: <strong class="text-success">${dateStr}</strong>`;
+                            trackExpectedDateDisplay.style.display = 'block';
+                        }
+
+                        if (data.data && data.data.log && data.data.log.length > 0) {
+                            let html = '<ul class="timeline">';
+                            const logs = data.data.log.sort((a, b) => new Date(b.updated_date) - new Date(a.updated_date));
+
+                            logs.forEach((item, index) => {
+                                const dateObj = new Date(item.updated_date);
+                                const dateStr = dateObj.toLocaleString('vi-VN', {
+                                    year: 'numeric', month: '2-digit', day: '2-digit',
+                                    hour: '2-digit', minute: '2-digit'
+                                });
+
+                                let statusText = item.status;
+                                if (statusText === 'ready_to_pick') statusText = 'Chờ lấy hàng';
+                                else if (statusText === 'picking') statusText = 'Đang lấy hàng';
+                                else if (statusText === 'picked') statusText = 'Đã lấy hàng';
+                                else if (statusText === 'storing') statusText = 'Lưu kho';
+                                else if (statusText === 'transporting') statusText = 'Đang luân chuyển';
+                                else if (statusText === 'delivering') statusText = 'Đang giao hàng';
+                                else if (statusText === 'delivered') statusText = 'Giao hàng thành công';
+                                else if (statusText === 'delivery_fail') statusText = 'Giao hàng thất bại';
+                                else if (statusText === 'return') statusText = 'Đang hoàn hàng';
+                                else if (statusText === 'returned') statusText = 'Đã hoàn hàng';
+                                else if (statusText === 'cancel') statusText = 'Đã hủy đơn';
+
+                                const isCompleted = index === 0 ? 'completed' : '';
+                                html += `
+                                    <li class="timeline-item ${isCompleted}">
+                                        <div class="timeline-date">${dateStr}</div>
+                                        <div class="timeline-content">${statusText}</div>
+                                    </li>
+                                `;
+                            });
+                            html += '</ul>';
+                            trackingTimelineContainer.innerHTML = html;
+                        } else {
+                            trackingTimelineContainer.innerHTML = `<div class="alert alert-info">Chưa có thông tin cập nhật cho đơn hàng này.</div>`;
+                        }
                     }
                 } catch (error) {
                     console.error('Error fetching tracking info:', error);

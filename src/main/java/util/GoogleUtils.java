@@ -39,13 +39,10 @@ public class GoogleUtils {
         String state = UUID.randomUUID().toString();
         session.setAttribute("google_state", state);
 
-        String clientId = ConfigLoader.getProperty("google.client.id");
-        String redirectUri = ConfigLoader.getProperty("google.redirect.uri");
-
         return "https://accounts.google.com/o/oauth2/auth?"
                 + "scope=email%20profile"
-                + "&redirect_uri=" + redirectUri
-                + "&client_id=" + clientId
+                + "&redirect_uri=" + REDIRECT_URI
+                + "&client_id=" + CLIENT_ID
                 + "&response_type=code"
                 + "&state=" + state;
     }

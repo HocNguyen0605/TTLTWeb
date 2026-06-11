@@ -1,5 +1,7 @@
 package controller.profile;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dao.OrderDAO;
 import model.Order;
 import util.DBContext;
@@ -42,7 +44,11 @@ public class OrderTrackingServlet extends HttpServlet {
             if (trackingData == null) {
                 out.print("{\"status\":\"error\",\"message\":\"Không thể lấy thông tin vận chuyển.\"}");
             } else {
-                out.print(trackingData);
+                JsonObject root = JsonParser.parseString(trackingData).getAsJsonObject();
+                if (order.getExpectedDeliveryDate() != null) {
+                    root.addProperty("expected_delivery_date", order.getExpectedDeliveryDate().toString());
+                }
+                out.print(root.toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -203,7 +203,7 @@ public class OrderDAO {
 
     //Lấy thông tin đơn hàng theo id
     public model.Order getOrderById(int orderId) {
-        String sql = "SELECT id, id_user, tracking_code, status_order AS status, total AS totalPrice, delivered_date AS deliveredDate FROM orders WHERE id = ?";
+        String sql = "SELECT id, id_user, tracking_code, expected_delivery_date, status_order AS status, total AS totalPrice, delivered_date AS deliveredDate FROM orders WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -212,6 +212,7 @@ public class OrderDAO {
                     o.setId(rs.getInt("id"));
                     o.setUserId(rs.getInt("id_user"));
                     o.setTrackingCode(rs.getString("tracking_code"));
+                    o.setExpectedDeliveryDate(rs.getTimestamp("expected_delivery_date"));
                     o.setStatus(rs.getString("status"));
                     o.setTotalPrice(rs.getDouble("totalPrice"));
                     o.setDeliveredDate(rs.getTimestamp("deliveredDate"));
@@ -256,11 +257,16 @@ public class OrderDAO {
         return -1; // not found
     }
     //Cập nhật mã vận đơn cho đơn hàng(mã lâý từ GHN)
-    public boolean updateTrackingCode(int orderId, String trackingCode) {
-        String sql = "UPDATE orders SET tracking_code = ? WHERE id = ?";
+    public boolean updateTrackingCodeAndExpectedDate(int orderId, String trackingCode, Timestamp expectedDate) {
+        String sql = "UPDATE orders SET tracking_code = ?, expected_delivery_date = ? WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, trackingCode);
-            ps.setInt(2, orderId);
+            if (expectedDate != null) {
+                ps.setTimestamp(2, expectedDate);
+            } else {
+                ps.setNull(2, java.sql.Types.TIMESTAMP);
+            }
+            ps.setInt(3, orderId);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

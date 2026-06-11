@@ -18,6 +18,7 @@ public class Order {
     private List<OrderItemDetail> items;
     private String cancelReason;
     private String trackingCode;
+    private Timestamp expectedDeliveryDate;
 
     public Order() {
     }
@@ -140,5 +141,13 @@ public class Order {
 
     public void setTrackingCode(String trackingCode) {
         this.trackingCode = trackingCode;
+    }
+
+    public Timestamp getExpectedDeliveryDate() {
+        return expectedDeliveryDate;
+    }
+
+    public void setExpectedDeliveryDate(Timestamp expectedDeliveryDate) {
+        this.expectedDeliveryDate = expectedDeliveryDate;
     }
 }

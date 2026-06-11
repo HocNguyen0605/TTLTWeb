@@ -4,6 +4,8 @@ import model.GooglePojo;
 import model.User;
 import util.DBContext;
 
+import java.util.List;
+
 
 public class UserDAO {
     public User login(String emailOrUsername, String password) {
@@ -157,7 +159,7 @@ public class UserDAO {
                 .orElse(null));
     }
 
-    public java.util.List<User> getAllUsers() {
+    public List<User> getAllUsers() {
         String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
                 "FROM account a LEFT JOIN user u ON a.id = u.id_account";
 

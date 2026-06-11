@@ -354,7 +354,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-2">
-                <p class="mb-3 text-muted">Đơn hàng: <strong id="trackOrderIdDisplay" class="text-dark"></strong></p>
+                <p class="mb-1 text-muted">Đơn hàng: <strong id="trackOrderIdDisplay" class="text-dark"></strong></p>
+                <p class="mb-3 text-muted" id="trackExpectedDateDisplay" style="display:none;"></p>
                 <div id="trackingTimelineContainer" class="position-relative px-3">
                     <!-- JS sẽ render timeline ở đây -->
                     <div class="text-center text-muted py-4" id="trackingLoading">

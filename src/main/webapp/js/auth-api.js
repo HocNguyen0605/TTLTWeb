@@ -7,11 +7,10 @@ export function initLoginAPI() {
 
         const formData = new URLSearchParams(new FormData(form));
 
-        // Remove existing alerts
+        // Xóa lỗi trước đó
         const existingAlert = form.querySelector('.alert');
         if (existingAlert) existingAlert.remove();
 
-        // Add a loading indicator or disable button here if desired
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = 'Đang xử lý...';
@@ -30,7 +29,7 @@ export function initLoginAPI() {
                 if (data.status === 'success') {
                     window.location.href = data.redirect;
                 } else {
-                    // Show error message
+                    // Hiển báo lỗi
                     const alertDiv = document.createElement('div');
                     alertDiv.className = 'alert alert-danger alert-dismissible fade show d-flex align-items-center';
                     alertDiv.role = 'alert';
@@ -62,13 +61,13 @@ export function initRegisterAPI() {
 
         const formData = new URLSearchParams(new FormData(form));
 
-        // Clear previous errors
+        // xóa lỗi trước đó
         form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
         form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
         const existingAlert = form.querySelector('.alert');
         if (existingAlert) existingAlert.remove();
 
-        // Also clear otp timer message to avoid confusion
+        // xoá timer
         const otpTimer = document.getElementById('otpTimer');
         if (otpTimer) otpTimer.innerHTML = '';
 

@@ -7,6 +7,10 @@ import jakarta.servlet.annotation.*;
 import util.MailUtil;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+
 import java.util.UUID;
 
 @WebServlet(name = "ForgotPasswordServlet", value = "/forgot-password")
@@ -25,11 +29,11 @@ public class ForgotPasswordServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        java.util.Map<String, String> result = new java.util.HashMap<>();
+        Map<String, String> result = new HashMap<>();
 
         if (dao.isUserEmailExists(email)) {
             // Tạo mật khẩu mới ngẫu nhiên
-            String newPassword = java.util.UUID.randomUUID().toString().substring(0, 8);
+            String newPassword = UUID.randomUUID().toString().substring(0, 8);
             String hashedNewPassword = org.mindrot.jbcrypt.BCrypt.hashpw(newPassword, org.mindrot.jbcrypt.BCrypt.gensalt());
 
             // Cập nhật vào Database
