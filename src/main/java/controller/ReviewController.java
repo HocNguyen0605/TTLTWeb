@@ -136,7 +136,7 @@ public class ReviewController extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         User auth = (User) request.getSession().getAttribute("auth");
-        if (auth == null || auth.getRole() != 1) {
+        if (auth == null || auth.getRole() < 1) {
             jsonResponse.put("status", "error");
             jsonResponse.put("message", "Bạn không có quyền thực hiện chức năng này.");
             out.print(new Gson().toJson(jsonResponse));

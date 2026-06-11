@@ -26,7 +26,7 @@ public class AdminFilter implements Filter {
             // Chưa đăng nhập -> Redirect về login
             response.sendRedirect(request.getContextPath() + "/login");
             return;
-        } else if (user.getRole() != 1) {
+        } else if (user.getRole() < 1) {
             // Đã đăng nhập nhưng không phải admin -> Forward sang 403
             request.getRequestDispatcher("/view/user/403.jsp").forward(request, response);
             return;

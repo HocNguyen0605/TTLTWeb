@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
         //
         if (session != null && session.getAttribute("auth") != null) {
             User u = (User) session.getAttribute("auth");
-            if (u.getRole() == 1) {
+            if (u.getRole() >= 1) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 //dánh giá
             } else {
@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
             User u = dao.getUserByToken(token);
             if (u != null) {
                 request.getSession().setAttribute("auth", u);
-                if (u.getRole() == 1) {
+                if (u.getRole() >= 1) {
                     response.sendRedirect(request.getContextPath() + "/admin/dashboard");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/products");
@@ -121,8 +121,9 @@ public class LoginServlet extends HttpServlet {
             }
 
             String redirectUrl;
-            if (u.getRole() == 1) {
+            if (u.getRole() >= 1) {
                 redirectUrl = request.getContextPath() + "/admin/dashboard";
+                session.setAttribute("justLoggedIn", true);
                 //đánh giá
             } else {
                 String returnUrl = (String) session.getAttribute("returnUrl");
@@ -145,7 +146,7 @@ public class LoginServlet extends HttpServlet {
             } else {
                 response.sendRedirect(redirectUrl);
             }
-            
+
         } else {
             if (isApi) {
                 response.setContentType("application/json");

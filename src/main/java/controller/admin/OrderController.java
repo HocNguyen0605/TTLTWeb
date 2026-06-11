@@ -32,7 +32,7 @@ public class OrderController extends HttpServlet {
             return;
         }
 
-        if (user.getRole() != 1) { // 1 is ADMIN
+        if (user.getRole() < 1) { // 1 is ADMIN
             response.sendRedirect(request.getContextPath() + "/view/user/403.jsp");
             return;
         }
@@ -65,7 +65,7 @@ public class OrderController extends HttpServlet {
             return;
         }
 
-        if (user.getRole() != 1) {
+        if (user.getRole() < 1) {
             response.sendRedirect(request.getContextPath() + "/view/user/403.jsp");
             return;
         }

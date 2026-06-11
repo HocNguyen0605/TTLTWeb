@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const response = await fetch(`${getBasePath()}/user/cancel-order`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
                     body: formData.toString()
                 });
 
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const response = await fetch(`${getBasePath()}/user/reorder`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
                     body: formData.toString()
                 });
 
@@ -191,15 +191,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     const response = await fetch(`${getBasePath()}/submit-review`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
                         body: formData.toString()
                     });
 
                     const data = await response.json();
                     if (data.status === 'success') {
-                        const reviewModal = bootstrap.Modal.getInstance(reviewModalElement) || bootstrap.Modal.getOrCreateInstance(reviewModalElement);
-                        reviewModal.hide();
-
                         if (typeof Swal !== 'undefined') {
                             Swal.fire({
                                 icon: 'success',
@@ -207,13 +204,19 @@ document.addEventListener("DOMContentLoaded", () => {
                                 text: data.message,
                                 timer: 2000,
                                 showConfirmButton: false
-                            }).then(() => {
-                                window.location.reload();
                             });
-                        } else {
-                            alert(data.message);
-                            window.location.reload();
-                        }
+                        } else alert(data.message);
+
+                        bootstrap.Modal.getInstance(reviewModalElement).hide();
+
+                        // Cập nhật nút ngoài giao diện
+                        const buttons = document.querySelectorAll(`.review-btn[data-product-id="${productId}"]`);
+                        buttons.forEach(btn => {
+                            btn.disabled = true;
+                            btn.removeAttribute('data-bs-toggle'); // Gỡ bỏ toggle để không mở lại modal
+                            btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Đã đánh giá';
+                            btn.classList.replace('btn-primary', 'btn-outline-secondary');
+                        });
                     } else {
                         if (typeof Swal !== 'undefined') Swal.fire('Lỗi', data.message, 'error');
                         else alert(data.message);
