@@ -104,10 +104,11 @@ public class AdminDAO {
     public List<model.TopProductDTO> getTopSellingProducts(int limit) {
         List<model.TopProductDTO> list = new ArrayList<>();
         // Table name appears to be 'ordenitems' based on user screenshot
-        String sql = "SELECT p.product_name AS name, SUM(oi.quantity) as total_sold " +
+        String sql = "SELECT p.product_name AS name, SUM(oi.quantity) as total_sold, COALESCE(pi.image_URL, p.image) AS img " +
                 "FROM orderitems oi " +
                 "JOIN products p ON oi.id_product = p.id " +
-                "GROUP BY p.id, p.product_name " +
+                "LEFT JOIN product_images pi ON p.image = pi.id " +
+                "GROUP BY p.id, p.product_name, img " +
                 "ORDER BY total_sold DESC " +
                 "LIMIT ?";
 
@@ -117,7 +118,8 @@ public class AdminDAO {
                 while (rs.next()) {
                     list.add(new model.TopProductDTO(
                             rs.getString("name"),
-                            rs.getInt("total_sold")));
+                            rs.getInt("total_sold"),
+                            rs.getString("img")));
                 }
             }
         } catch (Exception e) {

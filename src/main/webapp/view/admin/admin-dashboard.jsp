@@ -193,11 +193,24 @@
 
                     <ul class="list-group">
                         <c:forEach items="${topProducts}" var="p">
-                            <li class="list-group-item d-flex justify-content-between">
-                                <span>${p.name}</span>
-                                <span class="fw-bold text-success">
-                                                ${p.sold} đã bán
-                                            </span>
+                            <li class="list-group-item d-flex align-items-center justify-content-between p-3">
+                                <div class="d-flex align-items-center flex-grow-1 overflow-hidden pe-2">
+                                    <c:choose>
+                                        <c:when test="${p.img != null && p.img.contains('http')}">
+                                            <img src="${p.img}" class="rounded me-3 border" style="width: 45px; height: 45px; object-fit: cover;" alt="${p.name}" onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'">
+                                        </c:when>
+                                        <c:when test="${p.img != null && (p.img.contains('/') || p.img.contains('\\\\'))}">
+                                            <img src="${pageContext.request.contextPath}${p.img.startsWith('/') ? '' : '/'}${p.img}" class="rounded me-3 border" style="width: 45px; height: 45px; object-fit: cover;" alt="${p.name}" onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${pageContext.request.contextPath}/images/product/${p.img}" class="rounded me-3 border" style="width: 45px; height: 45px; object-fit: cover;" alt="${p.name}" onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'">
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <span class="fw-medium text-truncate" title="${p.name}">${p.name}</span>
+                                </div>
+                                <span class="badge bg-success rounded-pill px-3 py-2 ms-2" style="font-size: 0.85rem;">
+                                    ${p.sold} đã bán
+                                </span>
                             </li>
                         </c:forEach>
                     </ul>
