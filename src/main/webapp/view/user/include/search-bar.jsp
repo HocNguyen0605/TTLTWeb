@@ -8,8 +8,8 @@
                       method="get">
                     <div class="position-relative flex-grow-1 me-2">
                         <input id="searchInput" class="form-control form-control-lg border-success w-100"
-                               type="search" name="query" placeholder="Tìm kiếm tên sản phẩm, loại trái cây..."
-                               aria-label="Search" value="${param.query}" autocomplete="off">
+                               type="text" name="query" placeholder="Tìm kiếm tên sản phẩm, loại trái cây..."
+                               aria-label="Search" value="${param.query}" autocomplete="off" spellcheck="false">
 
                         <div id="searchSuggestions">
                         </div>
@@ -28,12 +28,17 @@
     document.addEventListener("DOMContentLoaded", function () {
         const searchInput = document.getElementById('searchInput');
         const searchSuggestions = document.getElementById('searchSuggestions');
+        const form = searchInput.closest('form');
+
+        // Prevent form autocomplete
+        if(form) form.setAttribute('autocomplete', 'off');
 
         // Format dropdown using bootstrap classes instead of custom style
         searchSuggestions.className = 'list-group position-absolute w-100 shadow mt-1';
         searchSuggestions.style.zIndex = '1050';
-        searchSuggestions.style.maxHeight = '300px';
+        searchSuggestions.style.maxHeight = '400px';
         searchSuggestions.style.overflowY = 'auto';
+        searchSuggestions.style.display = 'none';
 
         let timeout = null;
 
@@ -57,23 +62,45 @@
                             // Gợi ý tìm shop (giống Shopee)
                             const shopItem = document.createElement('a');
                             shopItem.href = '${pageContext.request.contextPath}/search?query=' + encodeURIComponent(query);
-                            shopItem.className = 'list-group-item list-group-item-action border-0 py-2 px-3 text-dark';
-                            shopItem.innerHTML = `<i class="bi bi-shop text-danger me-2"></i>Tìm Shop "` + query + `"`;
+                            shopItem.className = 'list-group-item list-group-item-action border-0 py-2 px-3 text-dark bg-light';
+                            shopItem.innerHTML = `<i class="bi bi-search text-danger me-2"></i>Tìm kết quả cho "<b>\${query}</b>"`;
                             searchSuggestions.appendChild(shopItem);
 
-                            // Danh sách sản phẩm (chữ trơn)
+                            // Danh sách sản phẩm
                             data.forEach(product => {
                                 const item = document.createElement('a');
                                 item.href = '${pageContext.request.contextPath}/product-detail?id=' + product.id;
-                                item.className = 'list-group-item list-group-item-action border-0 py-2 px-3 text-dark';
-                                item.innerText = product.name;
+                                item.className = 'list-group-item list-group-item-action border-0 py-2 px-3 text-dark d-flex align-items-center';
+
+                                // Format price
+                                const price = new Intl.NumberFormat('vi-VN').format(product.price) + ' đ';
+
+                                // Handle image path
+                                let imgSrc = product.img;
+                                if (!imgSrc) {
+                                    imgSrc = '${pageContext.request.contextPath}/images/logo/logo-juicy.png';
+                                } else if (imgSrc.startsWith('http')) {
+                                    // keep as is
+                                } else if (!imgSrc.includes('/')) {
+                                    imgSrc = '${pageContext.request.contextPath}/images/product/' + imgSrc;
+                                } else if (!imgSrc.startsWith('${pageContext.request.contextPath}')) {
+                                    imgSrc = '${pageContext.request.contextPath}' + (imgSrc.startsWith('/') ? '' : '/') + imgSrc;
+                                }
+
+                                item.innerHTML = `
+                                    <img src="\${imgSrc}" alt="\${product.name}" class="rounded me-3 border" style="width: 45px; height: 45px; object-fit: cover;" onerror="this.src='${pageContext.request.contextPath}/images/logo/logo-juicy.png'">
+                                    <div class="d-flex flex-column flex-grow-1 overflow-hidden">
+                                        <span class="fw-bold text-truncate">\${product.name}</span>
+                                        <span class="text-danger small fw-semibold">\${price}</span>
+                                    </div>
+                                `;
                                 searchSuggestions.appendChild(item);
                             });
                             searchSuggestions.style.display = 'block';
                         } else {
                             const emptyMsg = document.createElement('div');
-                            emptyMsg.className = 'list-group-item border-0 py-2 px-3 text-muted';
-                            emptyMsg.innerText = 'Không tìm thấy sản phẩm phù hợp';
+                            emptyMsg.className = 'list-group-item border-0 py-3 px-3 text-center text-muted';
+                            emptyMsg.innerHTML = '<i class="bi bi-emoji-frown fs-4 d-block mb-2"></i>Không tìm thấy sản phẩm phù hợp';
                             searchSuggestions.appendChild(emptyMsg);
                             searchSuggestions.style.display = 'block';
                         }
