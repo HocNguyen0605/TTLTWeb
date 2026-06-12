@@ -29,7 +29,7 @@
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Số điện thoại</label>
                     <input type="tel" name="phone"
-                           class="form-control" required>
+                           class="form-control" maxlength="10" required>
                 </div>
 
                 <div class="mb-3">

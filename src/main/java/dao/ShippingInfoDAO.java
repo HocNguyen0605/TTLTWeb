@@ -12,7 +12,7 @@ public class ShippingInfoDAO {
         this.conn = conn;
     }
 
-    public void insert(ShippingInfo info) {
+    public void insert(ShippingInfo info) throws SQLException {
         String sql = "INSERT INTO shippinginfo(id_order, receiver_name, receiver_phone, address, shipping_fee, note) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, info.getOrderId());
@@ -20,10 +20,8 @@ public class ShippingInfoDAO {
             ps.setString(3, info.getReceiverPhone());
             ps.setString(4, info.getAddress());
             ps.setDouble(5, info.getShippingFee());
-            ps.setString(6, info.getNote());
+            ps.setString(6, info.getNote() != null ? info.getNote() : "");
             ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }
