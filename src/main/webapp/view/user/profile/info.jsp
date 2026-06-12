@@ -30,8 +30,28 @@
             <div class="invalid-feedback">${errors['phone']}</div>
         </c:if>
     </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label fw-semibold">Tỉnh/Thành phố</label>
+            <select class="form-select" id="provinceSelect" name="provinceId" data-province-id="${auth.provinceId}">
+                <option value="">-- Chọn Tỉnh/Thành phố --</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label fw-semibold">Quận/Huyện</label>
+            <select class="form-select" id="districtSelect" name="districtId" data-district-id="${auth.districtId}">
+                <option value="">-- Chọn Quận/Huyện --</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label fw-semibold">Phường/Xã</label>
+            <select class="form-select" id="wardSelect" name="wardCode" data-ward-code="${auth.wardCode}">
+                <option value="">-- Chọn Phường/Xã --</option>
+            </select>
+        </div>
+    </div>
     <div class="mb-3">
-        <label class="form-label fw-semibold">Địa chỉ</label>
+        <label class="form-label fw-semibold">Số nhà, tên đường</label>
         <textarea name="address" class="form-control" rows="2"
                   placeholder="">${auth.address}</textarea>
     </div>
@@ -83,3 +103,7 @@
 <script>
     setupOTPSender('btnSendOTPProfile', '#profileEmail', 'otpTimerProfile', '${pageContext.request.contextPath}');
 </script>
+<script>
+    window.GHN_PROXY_BASE = '${pageContext.request.contextPath}';
+</script>
+<script src="${pageContext.request.contextPath}/js/ghn-address.js"></script>

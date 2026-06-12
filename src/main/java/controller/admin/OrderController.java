@@ -116,6 +116,8 @@ public class OrderController extends HttpServlet {
                                         sInfo.getReceiverName(),
                                         sInfo.getReceiverPhone(),
                                         sInfo.getAddress(),
+                                        sInfo.getDistrictId() != null ? sInfo.getDistrictId() : 0,
+                                        sInfo.getWardCode() != null ? sInfo.getWardCode() : "",
                                         itemsArray
                                 );
 

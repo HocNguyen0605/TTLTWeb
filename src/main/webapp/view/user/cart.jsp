@@ -251,17 +251,39 @@
                     <input type="hidden" name="action" value="confirm">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Họ và tên người nhận</label>
-                        <input type="text" name="receiverName" class="form-control"
+                        <input type="text" name="fullName" class="form-control"
                                value="${sessionScope.auth.fullName}" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Địa chỉ nhận hàng</label>
-                        <input type="text" name="address" class="form-control" placeholder="Số nhà, tên đường..."
-                               required>
+                        <label class="form-label fw-semibold">Số điện thoại</label>
+                        <input type="tel" name="phone" class="form-control"
+                               value="${sessionScope.auth.phone}" placeholder="0123456789" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Số điện thoại</label>
-                        <input type="tel" name="phone" class="form-control" placeholder="0123456789" required>
+                        <label class="form-label fw-semibold">Tỉnh/Thành phố</label>
+                        <select class="form-select" id="provinceSelect" name="provinceId"
+                                data-province-id="${sessionScope.auth.provinceId}" required>
+                            <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Quận/Huyện</label>
+                        <select class="form-select" id="districtSelect" name="districtId"
+                                data-district-id="${sessionScope.auth.districtId}" required>
+                            <option value="">-- Chọn Quận/Huyện --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Phường/Xã</label>
+                        <select class="form-select" id="wardSelect" name="wardCode"
+                                data-ward-code="${sessionScope.auth.wardCode}" required>
+                            <option value="">-- Chọn Phường/Xã --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Số nhà, tên đường</label>
+                        <input type="text" name="address" class="form-control"
+                               value="${sessionScope.auth.address}" placeholder="Số nhà, tên đường..." required>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Phương thức thanh toán</label>
@@ -280,5 +302,10 @@
     </div>
 </div>
 
+
+<script>
+    window.GHN_PROXY_BASE = '${pageContext.request.contextPath}';
+</script>
+<script src="${pageContext.request.contextPath}/js/ghn-address.js"></script>
 <%@include file="/view/user/include/footer.jsp" %>
 l

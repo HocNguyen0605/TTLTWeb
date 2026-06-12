@@ -161,6 +161,9 @@ public class OrderDAO {
                     info.setAddress(rs.getString("address"));
                     info.setShippingFee(rs.getDouble("shipping_fee"));
                     info.setNote(rs.getString("note"));
+                    info.setProvinceId((Integer) rs.getObject("province_id"));
+                    info.setDistrictId((Integer) rs.getObject("district_id"));
+                    info.setWardCode(rs.getString("ward_code"));
                     return info;
                 }
             }

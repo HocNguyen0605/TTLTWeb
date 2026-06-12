@@ -42,6 +42,9 @@ public class OrderServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         String paymentMethod = request.getParameter("paymentMethod");
+        String provinceIdStr = request.getParameter("provinceId");
+        String districtIdStr = request.getParameter("districtId");
+        String wardCode = request.getParameter("wardCode");
 
         // Tạo Order
         Order order = new Order();
@@ -90,6 +93,13 @@ public class OrderServlet extends HttpServlet {
             shippingInfo.setAddress(address);
             shippingInfo.setShippingFee(15000);
             shippingInfo.setNote("");
+            if (provinceIdStr != null && !provinceIdStr.isEmpty()) {
+                shippingInfo.setProvinceId(Integer.parseInt(provinceIdStr));
+            }
+            if (districtIdStr != null && !districtIdStr.isEmpty()) {
+                shippingInfo.setDistrictId(Integer.parseInt(districtIdStr));
+            }
+            shippingInfo.setWardCode(wardCode);
             shippingDAO.insert(shippingInfo);
             conn.commit(); // Thành công
             session.removeAttribute("cart");
