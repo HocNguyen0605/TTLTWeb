@@ -92,5 +92,25 @@ document.addEventListener("DOMContentLoaded", function (){
         });
     }
 });
+//lắng nghe sự kiện xoá
+document.addEventListener("DOMContentLoaded", function (){
+    const deleteBannerModal = document.getElementById('deleteBannerModal');
+    if (deleteBannerModal) {
+        deleteBannerModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
 
-console.log(">>> File banner_admin.js đã load!");
+            const id = button.getAttribute('data-id');
+            const title = button.getAttribute('data-title');
+
+
+            const inputId = document.getElementById('delete-banner-id');
+            const spanTitle = document.getElementById('delete-banner-title');
+            if (inputId) {
+                inputId.value = id;
+            }
+            if (spanTitle) {
+                spanTitle.textContent = title;
+            }
+            });
+                }
+            });

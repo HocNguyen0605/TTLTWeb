@@ -169,18 +169,27 @@
                                             </c:choose>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
-                                                    data-bs-toggle="modal"
-                                                    data-id="${b.id}"
-                                                    data-title="${b.title}"
-                                                    data-image="${b.imageUrl}"
-                                                    data-link="${b.linkUrl}"
-                                                    data-bs-target="#updateBannerModal"
-                                                    data-priority="${b.priority}"
-                                                    data-active="${b.isActive}"
-                                                    data-promotion-name="${b.promotionName}" >
-                                                Sửa
-                                            </button>
+                                            <div class="d-flex gap-2 justify-content-center">
+                                                <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-image="${b.imageUrl}"
+                                                        data-link="${b.linkUrl}"
+                                                        data-bs-target="#updateBannerModal"
+                                                        data-priority="${b.priority}"
+                                                        data-active="${b.isActive}"
+                                                        data-promotion-name="${b.promotionName}" >
+                                                    Sửa
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-bs-target="#deleteBannerModal">
+                                                    Xóa
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -270,18 +279,27 @@
                                             </c:choose>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
-                                                    data-bs-toggle="modal"
-                                                    data-id="${b.id}"
-                                                    data-title="${b.title}"
-                                                    data-image="${b.imageUrl}"
-                                                    data-link="${b.linkUrl}"
-                                                    data-bs-target="#updateBannerModal"
-                                                    data-priority="${b.priority}"
-                                                    data-active="${b.isActive}"
-                                                    data-promotion-name="${b.promotionName}" >
-                                                Sửa
-                                            </button>
+                                            <div class="d-flex gap-2 justify-content-center">
+                                                <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-image="${b.imageUrl}"
+                                                        data-link="${b.linkUrl}"
+                                                        data-bs-target="#updateBannerModal"
+                                                        data-priority="${b.priority}"
+                                                        data-active="${b.isActive}"
+                                                        data-promotion-name="${b.promotionName}" >
+                                                    Sửa
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-bs-target="#deleteBannerModal">
+                                                    Xóa
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -448,8 +466,30 @@
             </div>
         </div>
     </div>
+    <!--Modal xác nhận xóa banner -->
+    <div class="modal fade" id="deleteBannerModal" tabindex="-1" aria-labelledby="deleteBannerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="deleteBannerModalLabel">Xác nhận xóa Banner</h5>
+                    <button type="button" class="btn-close" data-bs-toggle="modal" data-bs-target="#deleteBannerModal" aria-label="Close"></button>
+                </div>
+                <form action="/admin/banner" method="post">
+                    <input type="hidden" name="action" value="delete">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="delete-banner-id">
+                        <p>Bạn có chắc chắn muốn xóa banner <strong id="delete-banner-title" class="text-dark"></strong> không?</p>
+                        <span class="text-muted small">Hành động này không thể hoàn tác.</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 <!--footer-->
 <footer class="bg-dark text-white pt-5 pb-4">

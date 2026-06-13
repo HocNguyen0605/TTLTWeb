@@ -29,20 +29,22 @@ public class BannerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        String title = request.getParameter("title");
-        String linkUrl = request.getParameter("link_url");
-        int priority = Integer.parseInt(request.getParameter("priority"));
-        int promotionId = Integer.parseInt(request.getParameter("promotionId"));
 
 
         CloudinaryService cloudinaryService = new CloudinaryService();
             try(Connection conn = DBContext.getConnection()) {
+
                 conn.setAutoCommit(false);
                 //Xử lý thêm và update banner
                 BannerDAO bannerDAO = new BannerDAO(conn);
                 PromotionComboItemDAO pciDAO = new PromotionComboItemDAO(conn);
                 BannerProductDAO bpDAO = new BannerProductDAO(conn);
                 if ("add".equals(action)) {
+                    int priority = Integer.parseInt(request.getParameter("priority"));
+                    int promotionId = Integer.parseInt(request.getParameter("promotionId"));
+                    String title = request.getParameter("title");
+                    String linkUrl = request.getParameter("link_url");
+
                     Part filePart = request.getPart("bannerImage");
                     if (filePart != null && filePart.getSize() > 0) {
                         byte[] fileBytes = filePart.getInputStream().readAllBytes();
@@ -69,6 +71,10 @@ public class BannerServlet extends HttpServlet {
                 }
                 else if ("update".equals(action)) {
                     int id = Integer.parseInt(request.getParameter("id"));
+                    int priority = Integer.parseInt(request.getParameter("priority"));
+                    int promotionId = Integer.parseInt(request.getParameter("promotionId"));
+                    String title = request.getParameter("title");
+                    String linkUrl = request.getParameter("link_url");
                     boolean isActive = Boolean.parseBoolean(request.getParameter("is_active"));
 
                     Part filePart = request.getPart("bannerImage");
@@ -100,6 +106,20 @@ public class BannerServlet extends HttpServlet {
                         }
                     }
                 }
+                else if ("delete".equals(action)) {
+                    try {
+                        int id = Integer.parseInt(request.getParameter("id"));
+                        if (id!=0) {
+                            bpDAO.deleteBannerProducts(id);
+                            bannerDAO.deleteBanner(id);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        response.sendRedirect(request.getContextPath() + "/admin/banner?error=delete_failed");
+                        return;
+                    }
+                }
+
                 conn.commit();
             } catch (Exception e) {
                 e.printStackTrace();

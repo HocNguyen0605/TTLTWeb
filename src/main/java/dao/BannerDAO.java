@@ -187,4 +187,12 @@ public class BannerDAO {
         }
         return list;
     }
+    //Xóa banner
+    public void deleteBanner(int id) throws SQLException {
+        String sql = "DELETE FROM banners WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+    }
 }
