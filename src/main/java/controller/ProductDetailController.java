@@ -34,6 +34,12 @@ public class  ProductDetailController extends HttpServlet {
                     List<Product> relatedProducts = dao.getRelatedProducts(id);
                     request.setAttribute("relatedProducts", relatedProducts);
 
+                    // 4.1 Lấy danh sách sản phẩm cùng nhóm dung tích
+                    if (p.getGroupId() > 0) {
+                        List<Product> groupProducts = dao.getProductsByGroupId(p.getGroupId());
+                        request.setAttribute("groupProducts", groupProducts);
+                    }
+
                     // 5. Lấy danh sách đánh giá & tính toán thống kê
                     ReviewDAO reviewDAO = new ReviewDAO();
 

@@ -53,14 +53,14 @@ public class ContactController extends HttpServlet {
             MailUtil.sendContactMail(contact);
 
             // 4. Trả về thông báo thành công
-            request.setAttribute("success", "Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm.");
+            request.getSession().setAttribute("success", "Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm.");
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại sau.");
+            request.getSession().setAttribute("error", "Có lỗi xảy ra, vui lòng thử lại sau.");
         }
 
-        // Quay lại trang contact để hiển thị thông báo
-        request.getRequestDispatcher("/view/user/contact.jsp").forward(request, response);
+        // Redirect để tránh resubmit form khi F5
+        response.sendRedirect(request.getContextPath() + "/contact");
     }
 }

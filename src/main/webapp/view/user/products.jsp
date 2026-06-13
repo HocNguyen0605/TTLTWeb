@@ -63,22 +63,7 @@
         color: #0d3d28;
     }
 </style>
-<section class="bg-light py-4 border-bottom">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <form class="d-flex" action="${pageContext.request.contextPath}/search" method="get">
-                    <input class="form-control form-control-lg me-2 border-success" type="search"
-                           name="query" placeholder="Tìm kiếm tên sản phẩm, loại trái cây..."
-                           aria-label="Search">
-                    <button class="btn btn-primary-custom btn-lg fw-bold" type="submit">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</section>
+<jsp:include page="/view/user/include/search-bar.jsp" />
 
 <div class="container my-5">
     <div class="row">

@@ -41,4 +41,73 @@ public class  ContactDAO {
         insert(c.getFullName(), c.getEmail(), c.getPhone(),
                 c.getSubject(), c.getMessage(), c.getIdUser());
     }
+
+    public java.util.List<Contact> getAll() {
+        java.util.List<Contact> list = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM Contact ORDER BY created_at DESC";
+        try (Connection con = DBContext.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             java.sql.ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Contact c = new Contact();
+                c.setIdContact(rs.getInt("id_contact"));
+                c.setIdUser(rs.getObject("id_user") != null ? rs.getInt("id_user") : null);
+                c.setFullName(rs.getString("full_name"));
+                c.setEmail(rs.getString("email"));
+                c.setPhone(rs.getString("phone"));
+                c.setSubject(rs.getString("subject"));
+                c.setMessage(rs.getString("message"));
+                c.setStatus(rs.getString("status"));
+                java.sql.Timestamp ts = rs.getTimestamp("created_at");
+                if (ts != null) {
+                    c.setCreatedAt(ts.toLocalDateTime());
+                }
+                list.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public Contact findById(int id) {
+        String sql = "SELECT * FROM Contact WHERE id_contact = ?";
+        try (Connection con = DBContext.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Contact c = new Contact();
+                    c.setIdContact(rs.getInt("id_contact"));
+                    c.setIdUser(rs.getObject("id_user") != null ? rs.getInt("id_user") : null);
+                    c.setFullName(rs.getString("full_name"));
+                    c.setEmail(rs.getString("email"));
+                    c.setPhone(rs.getString("phone"));
+                    c.setSubject(rs.getString("subject"));
+                    c.setMessage(rs.getString("message"));
+                    c.setStatus(rs.getString("status"));
+                    java.sql.Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) {
+                        c.setCreatedAt(ts.toLocalDateTime());
+                    }
+                    return c;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateStatus(int id, String status) {
+        String sql = "UPDATE Contact SET status = ? WHERE id_contact = ?";
+        try (Connection con = DBContext.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

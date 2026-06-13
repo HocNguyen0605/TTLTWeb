@@ -31,15 +31,47 @@
                               required></textarea>
                 </div>
                 <button type="submit" class="btn btn-success rounded-pill fw-semibold">Gửi Liên Hệ</button>
-                <c:if test="${not empty success}">
-                    <p class="text-success mt-3 fw-semibold"> ${success}</p>
-                </c:if>
-                <c:if test="${not empty error}">
-                    <p class="text-danger mt-3 fw-semibold"> ${error}</p>
-                </c:if>
             </form>
         </div>
     </div>
 </section>
+
+<c:if test="${not empty sessionScope.success}">
+    <script>
+        window.onload = function () {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: '${sessionScope.success}',
+                    icon: 'success',
+                    confirmButtonColor: '#198754'
+                });
+            } else {
+                alert("${sessionScope.success}");
+            }
+        };
+    </script>
+    <c:remove var="success" scope="session"/>
+</c:if>
+
+<c:if test="${not empty sessionScope.error}">
+    <script>
+        window.onload = function () {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: '${sessionScope.error}',
+                    icon: 'error',
+                    confirmButtonColor: '#dc3545'
+                });
+            } else {
+                alert("${sessionScope.error}");
+            }
+        };
+    </script>
+    <c:remove var="error" scope="session"/>
+</c:if>
+
 <!-- Thông tin liên hệ -->
 <%@include file="/view/user/include/footer.jsp" %>
+ q

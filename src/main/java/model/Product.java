@@ -14,7 +14,8 @@ public class Product implements Serializable {
     private int promotion;
     private String promotionName;
     private int version;
-    public Product() {} // Cần thiết cho Jdbi
+    private int groupId;
+    public Product() {}
 
     // --- BỔ SUNG ĐẦY ĐỦ SETTER ---
     public void setId(int id) { this.id = id; }
@@ -28,6 +29,7 @@ public class Product implements Serializable {
     public void setPromotion(int promotion) { this.promotion = promotion; }
     public void setPromotionName(String promotionName) {this.promotionName = promotionName;
     }
+    public void setGroupId(int groupId) { this.groupId = groupId; }
 
     // --- GIỮ NGUYÊN GETTERS ---
     public int getId() { return id; }
@@ -48,4 +50,6 @@ public class Product implements Serializable {
     public void setVersion(int version) {
         this.version = version;
     }
+
+    public int getGroupId() { return groupId; }
 }

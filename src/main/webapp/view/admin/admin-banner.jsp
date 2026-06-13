@@ -77,6 +77,11 @@
                            href="${pageContext.request.contextPath}/admin/reviews">
                             Quản lý Đánh giá </a>
                     </li>
+                    <li>
+                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('contacts') ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/admin/contacts">
+                            Quản lý Liên hệ </a>
+                    </li>
                 </ol>
             </li>
             <li class="mt-3">
