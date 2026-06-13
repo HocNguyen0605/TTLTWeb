@@ -63,6 +63,29 @@ public class BannerDAO {
         }
         return list;
     }
+    //Lấy banner không active
+    public List<Banner> getUnactiveBanners() {
+        List<Banner> list = new ArrayList<>();
+        String sql = "SELECT * FROM banners WHERE is_active = FALSE ORDER BY priority ASC";
+        try (
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(new Banner(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("image_url"),
+                        rs.getString("link_url"),
+                        rs.getInt("priority"),
+                        rs.getBoolean("is_active"),
+                        rs.getTimestamp("created_at")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     // Thêm banner mới
     public int insertBanner(Banner b) throws SQLException {

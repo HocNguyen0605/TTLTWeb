@@ -112,6 +112,7 @@ public class BannerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Banner> banners = new ArrayList<>();
         List<Promotion>  listComboPromotion = new ArrayList<>();
+        List<Banner>  bannersUnactive = new ArrayList<>();
         String search = request.getParameter("search");
 
         try(Connection conn =DBContext.getConnection()){
@@ -119,12 +120,14 @@ public class BannerServlet extends HttpServlet {
             if (search != null && !search.trim().isEmpty()) {
                 banners = bannerDAO.getBannerByTitle(search.trim());
             }  else {
-                banners = bannerDAO.getAllBanners();
+                banners = bannerDAO.getActiveBanners();
+                bannersUnactive=bannerDAO.getUnactiveBanners();
             }
 
             PromotionDAO promotionDAO = new PromotionDAO(conn);
             listComboPromotion =promotionDAO.getActiveComboPromotions();
             request.setAttribute("listComboPromotion", listComboPromotion);
+            request.setAttribute("bannersUnactive", bannersUnactive);
         }catch(Exception e){
             e.printStackTrace();
         }

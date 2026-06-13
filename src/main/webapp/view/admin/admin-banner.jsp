@@ -119,7 +119,7 @@
                 <div class="alert alert-info">Không tìm thấy banner nào khớp với từ khóa "${currentSearch}"</div>
             </c:otherwise>
         </c:choose>
-        <div class="card card-custom animate__animated animate__fadeInUp">
+        <div class="card card-custom animate__animated animate__fadeInUp my-5">
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-custom mb-0">
@@ -144,6 +144,107 @@
 
                             <c:otherwise>
                                 <c:forEach var="b" items="${banners}">
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="${b.imageUrl}"
+                                                         width="60"
+                                                         class="rounded me-3"
+                                                         alt="${b.title}">
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>${b.title}</td>
+                                        <td>${b.priority}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${b.isActive}">
+                                                    <span class="badge bg-success">Đang hiện</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge bg-secondary">Đang ẩn</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
+                                                    data-bs-toggle="modal"
+                                                    data-id="${b.id}"
+                                                    data-title="${b.title}"
+                                                    data-image="${b.imageUrl}"
+                                                    data-link="${b.linkUrl}"
+                                                    data-bs-target="#updateBannerModal"
+                                                    data-priority="${b.priority}"
+                                                    data-active="${b.isActive}"
+                                                    data-promotion-name="${b.promotionName}" >
+                                                Sửa
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+
+                        </c:choose>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 animate__animated animate__fadeInDown">
+            <div>
+                <h2 class="fw-bold text-success mb-1">Quản Lý Banner đang ẩn </h2>
+                <p class="text-muted mb-0">Xem và quản lý tất cả Banner đang ẩn</p>
+            </div>
+
+            <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
+                <div class="search-container d-none d-md-block" style="width: 320px;">
+                    <form action="/admin/banner" method="get" class="input-group">
+                        <input type="text" name="search" class="form-control search-input"
+                               placeholder="Nhập tên banner để tìm kiếm" value="${currentSearch}">
+                        <button type="submit" class="btn btn-success d-flex align-items-center">
+                            <i class="bi bi-search search-icon"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <c:choose>
+            <c:when test="${not empty bannersUnactive}">
+            </c:when>
+            <c:otherwise>
+                <div class="alert alert-info">Không tìm thấy banner nào khớp với từ khóa "${currentSearch}"</div>
+            </c:otherwise>
+        </c:choose>
+        <div class="card card-custom animate__animated animate__fadeInUp">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                        <tr>
+                            <th class="ps-4">Banner</th>
+                            <th>Tên</th>
+                            <th>Vị trí</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:choose>
+
+                            <c:when test="${empty bannersUnactive}">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        Hiện không bất kì banner nào bị ẩn!!!
+                                    </td>
+                                </tr>
+                            </c:when>
+
+                            <c:otherwise>
+                                <c:forEach var="b" items="${bannersUnactive}">
                                     <tr>
                                         <td class="ps-4">
                                             <div class="d-flex align-items-center">
