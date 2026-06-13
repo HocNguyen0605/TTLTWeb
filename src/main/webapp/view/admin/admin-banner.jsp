@@ -170,13 +170,15 @@
                                         </td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
-                                                    data-bs-toggle="modal" data-bs-target="#updateBannerModal"
+                                                    data-bs-toggle="modal"
                                                     data-id="${b.id}"
                                                     data-title="${b.title}"
                                                     data-image="${b.imageUrl}"
                                                     data-link="${b.linkUrl}"
+                                                    data-bs-target="#updateBannerModal"
                                                     data-priority="${b.priority}"
-                                                    data-active="${b.isActive}">
+                                                    data-active="${b.isActive}"
+                                                    data-promotion-name="${b.promotionName}" >
                                                 Sửa
                                             </button>
                                         </td>
@@ -232,6 +234,19 @@
                                 <label class="form-label fw-semibold text-secondary">Đường dẫn khi click (URL)</label>
                                 <input type="text" name="link_url" class="form-control"
                                        placeholder="/san-pham/nuoc-ep-tao hoặc https://...">
+                            </div>
+                            <!-- Danh sách chương trình khuyến mãi -->
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Chọn CTKM</label>
+                                <select class="form-select" id="promotionSelect" name="promotionId" required>
+                                    <option value="" selected disabled>-- Chọn CTKM --</option>
+                                    <option value="0">Không áp dụng chương trình khuyến mãi</option>
+                                    <c:forEach items="${listComboPromotion}" var="promo">
+                                        <option value="${promo.id}">
+                                                ${promo.name} (Giảm ${promo.discount_value})
+                                        </option>
+                                    </c:forEach>
+                                </select>
                             </div>
 
                             <!-- Độ ưu tiên (Priority) -->
@@ -310,6 +325,17 @@
                                     <option value="false">Ẩn</option>
                                 </select>
                             </div>
+                        </div>
+                        <!-- CTKM -->
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Chọn CTKM</label>
+                            <select class="form-select" id="editPromotionSelect" name="promotionId" required>
+                                <option id="editDefaultPromoOption" value="0">Không áp dụng chương trình khuyến mãi</option>
+                                <c:forEach items="${listComboPromotion}" var="promo">
+                                    <option value="${promo.id}" data-name="${promo.name}">${promo.name} (Giảm ${promo.discount_value})
+                                    </option>
+                                </c:forEach>
+                            </select>
                         </div>
 
                         <div class="d-flex justify-content-end gap-2 pt-3 border-top">

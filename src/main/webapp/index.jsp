@@ -41,9 +41,21 @@
         <div class="carousel-inner">
             <c:forEach items="${banners}" var="b" varStatus="status">
             <div class="carousel-item ${status.first ? 'active' : ''}">
-                <a href="${b.linkUrl}">
-                    <img src="${b.imageUrl}" class="d-block w-100" alt="${b.title}">
-                </a>
+                <c:choose>
+                    <%-- linkUrl có thì hiển gán cho ảnh --%>
+                    <c:when test="${not empty b.linkUrl}">
+                        <a href="${b.linkUrl}">
+                            <img src="${b.imageUrl}" class="d-block w-100" alt="${b.title}">
+                        </a>
+                    </c:when>
+
+                    <%-- linkUrl bị rỗng điền link trang product --%>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/products?action=showProductLinks&bannerId=${b.id}">
+                            <img src="${b.imageUrl}" class="d-block w-100" alt="${b.title}">
+                        </a>
+                    </c:otherwise>
+                </c:choose>
             </div>
             </c:forEach>
         </div>

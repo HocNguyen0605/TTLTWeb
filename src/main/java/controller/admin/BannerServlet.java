@@ -1,14 +1,21 @@
 package controller.admin;
 
 import dao.BannerDAO;
+import dao.BannerProductDAO;
+import dao.PromotionComboItemDAO;
+import dao.PromotionDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.Banner;
 import model.Product;
+import model.Promotion;
+import model.PromotionComboItem;
 import service.CloudinaryService;
+import util.DBContext;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,16 +32,22 @@ public class BannerServlet extends HttpServlet {
         String title = request.getParameter("title");
         String linkUrl = request.getParameter("link_url");
         int priority = Integer.parseInt(request.getParameter("priority"));
+        int promotionId = Integer.parseInt(request.getParameter("promotionId"));
 
-        BannerDAO dao = new BannerDAO();
+
         CloudinaryService cloudinaryService = new CloudinaryService();
-            try {
+            try(Connection conn = DBContext.getConnection()) {
+                conn.setAutoCommit(false);
+                //Xử lý thêm và update banner
+                BannerDAO bannerDAO = new BannerDAO(conn);
+                PromotionComboItemDAO pciDAO = new PromotionComboItemDAO(conn);
+                BannerProductDAO bpDAO = new BannerProductDAO(conn);
                 if ("add".equals(action)) {
                     Part filePart = request.getPart("bannerImage");
                     if (filePart != null && filePart.getSize() > 0) {
                         byte[] fileBytes = filePart.getInputStream().readAllBytes();
                         String secureUrl = cloudinaryService.uploadImage(fileBytes, filePart.getSubmittedFileName(), "banners");
-
+                        //Thêm thông tin banner vào DB
                         Banner banner = new Banner();
                         banner.setTitle(title);
                         banner.setImageUrl(secureUrl);
@@ -42,7 +55,16 @@ public class BannerServlet extends HttpServlet {
                         banner.setPriority(priority);
                         banner.setIsActive(true);
 
-                        dao.insertBanner(banner);
+                        int bannerId=bannerDAO.insertBanner(banner);
+
+                        //Thêm thông tin các id sản phẩm khuyến mãi vào DB
+                        List<PromotionComboItem> listItem = pciDAO.getItemsByComboId(promotionId);
+                        System.out.println(listItem.size());
+                        if(listItem.size()>0){
+                            for (PromotionComboItem item : listItem) {
+                                bpDAO.insertBannerProduct(bannerId,item.getProductId(),promotionId);
+                            }
+                        }
                     }
                 }
                 else if ("update".equals(action)) {
@@ -58,13 +80,27 @@ public class BannerServlet extends HttpServlet {
                         finalImageUrl = cloudinaryService.uploadImage(fileBytes, filePart.getSubmittedFileName(), "banners");
                     } else {
                         // Không chọn ảnh mới thì lấy lại link ảnh cũ từ DB
-                        Banner oldBanner = dao.getBannerById(id);
+                        Banner oldBanner = bannerDAO.getBannerById(id);
                         finalImageUrl = (oldBanner != null) ? oldBanner.getImageUrl() : "";
                     }
 
                     Banner updatedBanner = new Banner(id, title, finalImageUrl, linkUrl, priority, isActive, null);
-                    dao.updateBanner(updatedBanner);
+                    bannerDAO.updateBanner(updatedBanner);
+                    bpDAO.deleteBannerProducts(id);
+
+                    if (promotionId > 0) {
+                        List<PromotionComboItem> listItem = pciDAO.getItemsByComboId(promotionId);
+                        if (listItem != null && listItem.size() > 0) {
+                            // Nếu chương trình khuyến mãi có danh sách sản phẩm đi kèm
+                            for (PromotionComboItem item : listItem) {
+                                bpDAO.insertBannerProduct(id, item.getProductId(), promotionId);
+                            }
+                        } else {
+                            bpDAO.insertBannerProduct(id, 0, promotionId);
+                        }
+                    }
                 }
+                conn.commit();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -74,13 +110,23 @@ public class BannerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        BannerDAO bannerDAO = new BannerDAO();
         List<Banner> banners = new ArrayList<>();
+        List<Promotion>  listComboPromotion = new ArrayList<>();
         String search = request.getParameter("search");
-        if (search != null && !search.trim().isEmpty()) {
-            banners = bannerDAO.getBannerByTitle(search.trim());
-        }  else {
-            banners = bannerDAO.getAllBanners();
+
+        try(Connection conn =DBContext.getConnection()){
+            BannerDAO bannerDAO = new BannerDAO(conn);
+            if (search != null && !search.trim().isEmpty()) {
+                banners = bannerDAO.getBannerByTitle(search.trim());
+            }  else {
+                banners = bannerDAO.getAllBanners();
+            }
+
+            PromotionDAO promotionDAO = new PromotionDAO(conn);
+            listComboPromotion =promotionDAO.getActiveComboPromotions();
+            request.setAttribute("listComboPromotion", listComboPromotion);
+        }catch(Exception e){
+            e.printStackTrace();
         }
 
         request.setAttribute("banners", banners);
