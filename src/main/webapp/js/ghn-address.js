@@ -96,9 +96,66 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (selectedWardCode) {
                         wardSelect.value = selectedWardCode;
+                        updateShippingFee(districtId, selectedWardCode);
                     }
                 }
             })
             .catch(err => console.error("Error loading wards:", err));
+    }
+
+    wardSelect.addEventListener("change", function () {
+        const districtId = districtSelect.value;
+        const wardCode = this.value;
+        if (districtId && wardCode) {
+            updateShippingFee(districtId, wardCode);
+        }
+    });
+
+    function updateShippingFee(districtId, wardCode) {
+        fetch(`${apiBasePath}/fee`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `district_id=${districtId}&ward_code=${wardCode}`
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.code === 200 && data.data && data.data.total != null) {
+                    const fee = data.data.total;
+                    const shippingFeeElem = document.getElementById("shippingFee");
+                    if (shippingFeeElem) {
+                        shippingFeeElem.innerHTML = new Intl.NumberFormat('vi-VN').format(fee) + ' đ';
+                    }
+                    updateTotal(fee);
+                }
+            })
+            .catch(err => console.error("Error calculating fee:", err));
+    }
+
+    function updateTotal(newShippingFee) {
+        const totalPriceElem = document.getElementById("totalPrice");
+        const totalDiscountElem = document.getElementById("totalDiscount");
+        const totalElem = document.getElementById("total");
+
+        if (totalPriceElem && totalDiscountElem && totalElem) {
+            const parseValue = (text) => parseInt(text.replace(/[^0-9]/g, '')) || 0;
+            const totalPrice = parseValue(totalPriceElem.innerText);
+            const totalDiscount = parseValue(totalDiscountElem.innerText);
+            let total = totalPrice - totalDiscount + newShippingFee;
+            if (total < 0) total = 0;
+
+            totalElem.innerHTML = new Intl.NumberFormat('vi-VN').format(total) + ' đ';
+            
+            // Cập nhật input hidden nếu form order cần (nếu có)
+            let hiddenFeeInput = document.getElementById("hiddenShippingFee");
+            if (!hiddenFeeInput) {
+                hiddenFeeInput = document.createElement("input");
+                hiddenFeeInput.type = "hidden";
+                hiddenFeeInput.id = "hiddenShippingFee";
+                hiddenFeeInput.name = "shippingFee";
+                const checkoutForm = document.querySelector("#checkoutModal form");
+                if (checkoutForm) checkoutForm.appendChild(hiddenFeeInput);
+            }
+            if (hiddenFeeInput) hiddenFeeInput.value = newShippingFee;
+        }
     }
 });

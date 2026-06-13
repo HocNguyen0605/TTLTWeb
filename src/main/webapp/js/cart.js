@@ -104,3 +104,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const btn = document.getElementById("applyVoucherBtn");
     if (btn) btn.addEventListener("click", applyVoucher);
 });
+
+function updateQuantityAjax(input) {
+    const productId = input.getAttribute("data-product-id");
+    const quantity = input.value;
+    const params = new URLSearchParams();
+    params.append("action", "update");
+    params.append("productId", productId);
+    params.append("quantity", quantity);
+    fetch(window.contextPath + '/cart', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Requested-With": "XMLHttpRequest"
+        },
+        body: params.toString()
+    }).then(response => {
+        if (response.ok) {
+            fetchCart();
+        }
+    }).catch(error => console.error("Lỗi cập nhật số lượng: ", error));
+}

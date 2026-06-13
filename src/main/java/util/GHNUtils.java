@@ -18,6 +18,7 @@ public class GHNUtils {
     public static final String API_PROVINCE = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province";
     public static final String API_DISTRICT = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/district";
     public static final String API_WARD = "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/ward";
+    public static final String API_FEE = "https://dev-online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee";
 
     public static String getProvinces() {
         try {
@@ -84,7 +85,7 @@ public class GHNUtils {
         }
     }
 
-    public static JsonObject createOrder(String toName, String toPhone, String toAddress, int districtId, String wardCode, com.google.gson.JsonArray items) {
+    public static JsonObject createOrder(String toName, String toPhone, String toAddress, int districtId, String wardCode, int weight, com.google.gson.JsonArray items) {
         try {
             JsonObject json = new JsonObject();
             json.addProperty("payment_type_id", 2); // 2=người nhận trả phí vc
@@ -98,7 +99,7 @@ public class GHNUtils {
             json.addProperty("to_ward_code", wardCode); 
             json.addProperty("to_district_id", districtId); 
             
-            json.addProperty("weight", 200);
+            json.addProperty("weight", weight);
             json.addProperty("length", 15);
             json.addProperty("width", 15);
             json.addProperty("height", 15);
@@ -120,6 +121,33 @@ public class GHNUtils {
                 System.err.println("GHN API Error: " + responseStr);
                 return null;
             }
+
+            return JsonParser.parseString(responseStr).getAsJsonObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public static JsonObject calculateFee(int toDistrictId, String toWardCode, int weight) {
+        try {
+            JsonObject json = new JsonObject();
+            json.addProperty("service_type_id", 2); // Chuẩn
+            json.addProperty("to_district_id", toDistrictId);
+            json.addProperty("to_ward_code", toWardCode);
+            json.addProperty("weight", weight);
+            json.addProperty("length", 15);
+            json.addProperty("width", 15);
+            json.addProperty("height", 15);
+
+            String responseStr = Request.Post(API_FEE)
+                    .addHeader("Token", GHN_TOKEN)
+                    .addHeader("ShopId", SHOP_ID)
+                    .bodyString(json.toString(), ContentType.APPLICATION_JSON)
+                    .execute()
+                    .returnContent()
+                    .asString(StandardCharsets.UTF_8);
 
             return JsonParser.parseString(responseStr).getAsJsonObject();
         } catch (Exception e) {

@@ -102,13 +102,17 @@ public class OrderController extends HttpServlet {
                             model.ShippingInfo sInfo = orderDAO.getShippingInfoByOrderId(orderId);
 
                             if (sInfo != null) {
+                                int totalWeight = 0;
                                 JsonArray itemsArray = new JsonArray();
                                 for (model.OrderItem oi : itemDAO.getItemsByOrderId(orderId)) {
                                     model.Product p = productDAO.getProductForUpdate(oi.getProductId());
+                                    int pWeight = p != null ? p.getVolume() : 0;
+                                    totalWeight += pWeight * oi.getQuantity();
+                                    
                                     JsonObject itemJson = new JsonObject();
                                     itemJson.addProperty("name", p != null ? p.getName() : "Sản phẩm");
                                     itemJson.addProperty("quantity", oi.getQuantity());
-                                    itemJson.addProperty("weight", 100); // Tạm đặt weight
+                                    itemJson.addProperty("weight", pWeight);
                                     itemsArray.add(itemJson);
                                 }
 
@@ -118,6 +122,7 @@ public class OrderController extends HttpServlet {
                                         sInfo.getAddress(),
                                         sInfo.getDistrictId() != null ? sInfo.getDistrictId() : 0,
                                         sInfo.getWardCode() != null ? sInfo.getWardCode() : "",
+                                        totalWeight,
                                         itemsArray
                                 );
 

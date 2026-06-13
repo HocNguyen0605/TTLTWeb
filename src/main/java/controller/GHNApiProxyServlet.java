@@ -1,5 +1,6 @@
 package controller;
 
+import jakarta.servlet.http.HttpSession;
 import util.GHNUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import com.google.gson.JsonObject;
 
 @WebServlet("/api/ghn/*")
 public class GHNApiProxyServlet extends HttpServlet {
@@ -57,6 +59,34 @@ public class GHNApiProxyServlet extends HttpServlet {
                     } else {
                         resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         jsonResult = "{\"error\":\"Missing district_id\"}";
+                    }
+                    break;
+                case "/fee":
+                    String toDistrictStr = req.getParameter("district_id");
+                    String toWardCode = req.getParameter("ward_code");
+                    if (toDistrictStr != null && !toDistrictStr.isEmpty() && toWardCode != null
+                            && !toWardCode.isEmpty()) {
+                        HttpSession session = req.getSession(false);
+                        model.Cart cart = session != null ? (model.Cart) session.getAttribute("cart") : null;
+                        int weight = 0;
+                        if (cart != null) {
+                            for (model.CartItem item : cart.getAllItems()) {
+                                if (item.isChecked()) {
+                                    weight += item.getProduct().getVolume() * item.getQuantity();
+                                }
+                            }
+                        }
+                        if (weight <= 0) {
+                            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                            jsonResult = "{\"error\":\"No items selected\"}";
+                        } else {
+                            JsonObject feeResponse = GHNUtils.calculateFee(Integer.parseInt(toDistrictStr), toWardCode, weight);
+                            jsonResult = feeResponse != null ? feeResponse.toString()
+                                    : "{\"error\":\"Error calculating fee\"}";
+                        }
+                    } else {
+                        resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        jsonResult = "{\"error\":\"Missing district_id or ward_code\"}";
                     }
                     break;
                 default:

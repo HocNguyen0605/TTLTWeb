@@ -12,6 +12,11 @@
             ${messageCart}
     </div>
 </c:if>
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger">
+            ${errorMessage}
+    </div>
+</c:if>
 <section class="container my-5">
     <h2 class="text-center text-success fw-bold mb-4">Giỏ Hàng Của Bạn</h2>
 
@@ -77,20 +82,13 @@
 
                                         <%-- Số lượng --%>
                                     <td class="text-center">
-                                        <form action="${pageContext.request.contextPath}/cart"
-                                              method="post"
-                                              class="d-inline">
-                                            <input type="hidden" name="action" value="update">
-                                            <input type="hidden" name="productId"
-                                                   value="${item.product.id}">
-                                            <input type="number"
-                                                   name="quantity"
-                                                   value="${item.quantity}"
-                                                   min="1"
-                                                   class="form-control text-center"
-                                                   style="width:70px"
-                                                   onchange="this.form.submit()">
-                                        </form>
+                                        <input type="number"
+                                               value="${item.quantity}"
+                                               min="1"
+                                               class="form-control text-center cart-qty-input"
+                                               style="width:70px"
+                                               data-product-id="${item.product.id}"
+                                               onchange="updateQuantityAjax(this)">
                                     </td>
 
                                         <%-- Đơn giá --%>
@@ -111,7 +109,8 @@
                                               method="post">
                                             <input type="hidden" name="action" value="remove">
                                             <input type="hidden" name="productId"
-                                                   value="${item.product.id}">
+                                                   value="${item.product.id}"
+                                                   class="remove-product-id">
                                             <button class="btn btn-sm btn-outline-danger">
                                                 <i class="bi bi-trash"></i>
                                             </button>

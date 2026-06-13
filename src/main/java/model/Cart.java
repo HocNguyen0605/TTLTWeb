@@ -59,6 +59,13 @@ public class Cart implements Serializable {
         }
         return total;
     }
+    public int getTotalVolume() {
+        int totalVolume = 0;
+        for (CartItem item : data.values()) {
+            totalVolume += item.getProduct().getVolume() * item.getQuantity();
+        }
+        return totalVolume > 0 ? totalVolume : 200; // Default to 200g if 0
+    }
     public CartItem findItemByProductId(int productId) {
         if (data == null) return null;
         return data.get(productId);
