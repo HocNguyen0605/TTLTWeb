@@ -44,6 +44,10 @@ public class BannerServlet extends HttpServlet {
                     int promotionId = Integer.parseInt(request.getParameter("promotionId"));
                     String title = request.getParameter("title");
                     String linkUrl = request.getParameter("link_url");
+                    //Chèn vị trí nếu priority đã có
+                    if (priority > 0) {
+                        bannerDAO.shiftPriorities(priority);
+                    }
 
                     Part filePart = request.getPart("bannerImage");
                     if (filePart != null && filePart.getSize() > 0) {
@@ -87,6 +91,10 @@ public class BannerServlet extends HttpServlet {
                     } else {
                         // Không chọn ảnh mới thì lấy lại link ảnh cũ từ DB
                         Banner oldBanner = bannerDAO.getBannerById(id);
+                        int oldPriority = oldBanner.getPriority();
+                        if (priority > 0) {
+                            bannerDAO.updatePriorities(oldPriority, priority);
+                        }
                         finalImageUrl = (oldBanner != null) ? oldBanner.getImageUrl() : "";
                     }
 

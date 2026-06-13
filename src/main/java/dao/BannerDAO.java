@@ -195,4 +195,31 @@ public class BannerDAO {
             ps.executeUpdate();
         }
     }
+    //Chèn priority
+    public void shiftPriorities(int newPriority) throws SQLException {
+        String sql = "UPDATE banners SET priority = priority + 1 WHERE priority >= ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, newPriority);
+            ps.executeUpdate();
+        }
+    }
+    //update priority khi update banner
+
+    public void updatePriorities(int oldPriority, int newPriority) throws SQLException {
+        if (newPriority < oldPriority) {
+            String sql = "UPDATE banners SET priority = priority + 1 WHERE priority >= ? AND priority < ?";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, newPriority);
+                ps.setInt(2, oldPriority);
+                ps.executeUpdate();
+            }
+        }else if (newPriority > oldPriority) {
+            String sql = "UPDATE banners SET priority = priority - 1 WHERE priority > ? AND priority <= ?";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, oldPriority);
+                ps.setInt(2, newPriority);
+                ps.executeUpdate();
+            }
+        }
+    }
 }
