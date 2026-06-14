@@ -9,22 +9,27 @@ public class Cart implements Serializable {
     public Cart() {
         data = new HashMap<>();
     }
+
     public void addProduct(Product product, int quantity) {
         if (data.containsKey(product.getId())) {
             data.get(product.getId()).increaseQuantity(quantity);
         } else data.put(product.getId(), new CartItem(product, product.getPrice(), quantity));
     }
-    public CartItem deleteProduct(int productId){
+
+    public CartItem deleteProduct(int productId) {
         return data.remove(productId);
     }
-    public ArrayList<CartItem> deleteAll(){
+
+    public ArrayList<CartItem> deleteAll() {
         Collection<CartItem> values = data.values();
         data.clear();
         return new ArrayList<>(values);
     }
+
     public List<CartItem> getAllItems() {
         return new ArrayList<>(data.values());
     }
+
     public double getTotalPrice() {
         double total = 0;
         for (CartItem item : data.values()) {
@@ -32,13 +37,15 @@ public class Cart implements Serializable {
         }
         return total;
     }
+
     public int getTotalQuantityByID(int productId) {
         if (data.containsKey(productId)) {
             return data.get(productId).getQuantity();
         }
         return 0;
     }
-    public boolean update(int id, int q){
+
+    public boolean update(int id, int q) {
         if (!data.containsKey(id)) return false;
 
         if (q <= 0) {
@@ -48,9 +55,11 @@ public class Cart implements Serializable {
         }
         return true;
     }
+
     public boolean empty() {
         return data.isEmpty();
     }
+
     public int getTotalItems() {
         int total = 0;
         // Giả sử giỏ hàng của bạn lưu trong một Map hoặc List tên là items
@@ -59,6 +68,7 @@ public class Cart implements Serializable {
         }
         return total;
     }
+
     //Tính trọng lượng đơn dựa trên ml của tất cả sp trong đơn
     public int getTotalVolume() {
         int totalVolume = 0;
@@ -67,10 +77,12 @@ public class Cart implements Serializable {
         }
         return totalVolume;
     }
+
     public CartItem findItemByProductId(int productId) {
         if (data == null) return null;
         return data.get(productId);
     }
+
     public Set<Integer> getPromotionIdsFromCart(List<CartItem> cartItems) {
         Set<Integer> promoIdSet = new HashSet<>();
         for (CartItem item : cartItems) {
@@ -81,6 +93,7 @@ public class Cart implements Serializable {
         }
         return promoIdSet;
     }
+
     public List<CartItem> getSelectedItemsForCheckout() {
         List<CartItem> checkoutList = new ArrayList<>();
         List<CartItem> sessionCart = getAllItems();
@@ -91,5 +104,9 @@ public class Cart implements Serializable {
             }
         }
         return checkoutList;
+    }
+
+    public void removeCheckedItems() {
+        data.entrySet().removeIf(entry -> entry.getValue().isChecked());
     }
 }
