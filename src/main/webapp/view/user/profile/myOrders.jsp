@@ -284,7 +284,7 @@
                         <textarea class="form-control" id="cancelReason" name="reason" rows="4" required minlength="5"
                                   placeholder="Vui lòng cho chúng tôi biết lý do bạn hủy đơn..."></textarea>
                         <div class="invalid-feedback">
-                            Vui lòng nhập lý do hủy đơn (ít nhất 10 ký tự).
+                            Vui lòng nhập lý do hủy đơn (ít nhất 5 ký tự).
                         </div>
                     </div>
                     <input type="hidden" id="cancelOrderIdInput" name="orderId">
