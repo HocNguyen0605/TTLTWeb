@@ -47,7 +47,6 @@ public class ProductDAO extends BaseDao {
         return getAll();
     }
 
-    // Lấy sản phẩm theo ID
     public Product findById(int id) {
         String sql = """
                     SELECT
@@ -59,17 +58,49 @@ public class ProductDAO extends BaseDao {
                         p.quantity,
                         COALESCE(pi.image_URL, p.image) AS img,
                         p.description,
-                        p.promotion
+                        p.promotion,
+                        p.group_id AS groupId
                     FROM products p
                     LEFT JOIN product_images pi ON p.image = pi.id
-                    WHERE p.id = :id
+                    WHERE p.id = ?
                 """;
 
-        return get().withHandle(handle -> handle.createQuery(sql)
-                .bind("id", id)
-                .mapToBean(Product.class)
-                .findOne()
-                .orElse(null));
+        Connection currentConn = null;
+        boolean shouldClose = false;
+        try {
+            if (this.conn != null) {
+                currentConn = this.conn;
+            } else {
+                currentConn = util.DBContext.getConnection();
+                shouldClose = true;
+            }
+            try (PreparedStatement ps = currentConn.prepareStatement(sql)) {
+                ps.setInt(1, id);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        Product p = new Product();
+                        p.setId(rs.getInt("id"));
+                        p.setName(rs.getString("name"));
+                        p.setPrice(rs.getDouble("price"));
+                        p.setVolume(rs.getInt("volume"));
+                        p.setSupplier_name(rs.getString("supplier_name"));
+                        p.setQuantity(rs.getInt("quantity"));
+                        p.setImg(rs.getString("img"));
+                        p.setDescription(rs.getString("description"));
+                        p.setPromotion(rs.getInt("promotion"));
+                        p.setGroupId(rs.getInt("groupId"));
+                        return p;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (shouldClose && currentConn != null) {
+                try { currentConn.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+        return null;
     }
 
     // Thêm sản phẩm
@@ -187,6 +218,63 @@ public class ProductDAO extends BaseDao {
                 .bind("id", currentId)
                 .mapToBean(Product.class)
                 .list());
+    }
+
+    public List<Product> getProductsByGroupId(int groupId) {
+        String sql = """
+                    SELECT
+                        p.id AS id,
+                        p.product_name AS name,
+                        p.price,
+                        p.volume,
+                        p.supplier_name,
+                        p.quantity,
+                        COALESCE(pi.image_URL, p.image) AS img,
+                        p.description,
+                        p.group_id AS groupId
+                    FROM products p
+                    LEFT JOIN product_images pi ON p.image = pi.id
+                    WHERE p.group_id = ? AND p.group_id IS NOT NULL AND p.group_id > 0
+                    GROUP BY p.id
+                    ORDER BY p.volume ASC
+                """;
+
+        List<Product> list = new java.util.ArrayList<>();
+        Connection currentConn = null;
+        boolean shouldClose = false;
+        try {
+            if (this.conn != null) {
+                currentConn = this.conn;
+            } else {
+                currentConn = util.DBContext.getConnection();
+                shouldClose = true;
+            }
+            try (PreparedStatement ps = currentConn.prepareStatement(sql)) {
+                ps.setInt(1, groupId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Product p = new Product();
+                        p.setId(rs.getInt("id"));
+                        p.setName(rs.getString("name"));
+                        p.setPrice(rs.getDouble("price"));
+                        p.setVolume(rs.getInt("volume"));
+                        p.setSupplier_name(rs.getString("supplier_name"));
+                        p.setQuantity(rs.getInt("quantity"));
+                        p.setImg(rs.getString("img"));
+                        p.setDescription(rs.getString("description"));
+                        p.setGroupId(rs.getInt("groupId"));
+                        list.add(p);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (shouldClose && currentConn != null) {
+                try { currentConn.close(); } catch (SQLException e) { e.printStackTrace(); }
+            }
+        }
+        return list;
     }
 
     // Lấy danh sách thể tích duy nhất để hiển thị bộ lọc

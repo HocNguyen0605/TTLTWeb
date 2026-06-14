@@ -77,6 +77,11 @@
                            href="${pageContext.request.contextPath}/admin/reviews">
                             Quản lý Đánh giá </a>
                     </li>
+                    <li>
+                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('contacts') ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/admin/contacts">
+                            Quản lý Liên hệ </a>
+                    </li>
                 </ol>
             </li>
             <li class="mt-3">
@@ -138,23 +143,23 @@
                                 </tr>
                             </c:when>
 
-                                            <c:otherwise>
-                                                <c:forEach var="p" items="${promotionProducts}">
-                                                    <tr>
-                                                        <td class="ps-4">
-                                                            <div class="d-flex align-items-center">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <img src="${item.product.img}"
-                                                                             width="60"
-                                                                             class="rounded me-3"
-                                                                             alt="${item.product.name}">
-                                                                </div>
-                                                                <div class="ms-3">
-                                                                    <h6>${p.name}</h6>
-                                                                    <small>ID: #${p.id}</small>
-                                                                </div>
-                                                            </div>
-                                                        </td>
+                            <c:otherwise>
+                                <c:forEach var="p" items="${promotionProducts}">
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="${item.product.img}"
+                                                         width="60"
+                                                         class="rounded me-3"
+                                                         alt="${item.product.name}">
+                                                </div>
+                                                <div class="ms-3">
+                                                    <h6>${p.name}</h6>
+                                                    <small>ID: #${p.id}</small>
+                                                </div>
+                                            </div>
+                                        </td>
 
                                         <td>${p.price}₫</td>
                                         <td>${p.volume}ml</td>
@@ -189,194 +194,194 @@
         </div>
     </div>
 
-                    <!-- Modal thêm voucher -->
-                    <div class="modal fade" id="addVoucherModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content shadow-lg">
-                                <!-- Header -->
-                                <div class="modal-header">
-                                    <h5 class="modal-title">
-                                        <i class="bi bi-box-seam-fill me-2"></i>Thêm Voucher Mới
-                                    </h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <!-- Body -->
-                                <div class="modal-body">
-                                    <form method="post" action="${pageContext.request.contextPath}/admin/voucher">
-                                        <input type="hidden" name="action" value="add">
-                                        <input type="hidden" name="type" value="voucher">
-                                        <input type="hidden" name="status" value="active">
-                                        <div class="row">
-                                            <!-- Tên voucher -->
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Tên Voucher</label>
-                                                <input type="text" name="name" class="form-control"
-                                                       placeholder="SALE50, GIAM10..." required>
-                                            </div>
-
-                                            <!-- Mã voucher -->
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Mã Voucher</label>
-                                                <input type="text" name="code" class="form-control"
-                                                       placeholder="SALE50, GIAM10..." required>
-                                            </div>
-
-                                            <!-- Loại giảm giá -->
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Loại giảm giá</label>
-                                                <select name="discount_type" class="form-select" required>
-                                                    <option value="">-- Chọn loại --</option>
-                                                    <option value="percent">Giảm theo %</option>
-                                                    <option value="amount">Giảm theo số tiền</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <!-- Giá trị giảm -->
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Giá trị giảm</label>
-                                                <input type="number" name="discount_value" class="form-control"
-                                                       placeholder="10 hoặc 50" required>
-                                            </div>
-
-                                            <!-- Số lượng -->
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Số lượng Voucher</label>
-                                                <input type="number" name="quantity" class="form-control"
-                                                       placeholder="100" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <!-- Ngày bắt đầu -->
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Ngày bắt đầu</label>
-                                                <input type="datetime-local" name="start_date" class="form-control" required>
-                                            </div>
-
-                                            <!-- Ngày kết thúc -->
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Ngày kết thúc</label>
-                                                <input type="datetime-local" name="end_date" class="form-control" required>
-                                            </div>
-                                        </div>
-
-                                        <!-- Nút -->
-                                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                                            <button type="button" class="btn btn-light px-4 border"
-                                                    data-bs-dismiss="modal">Hủy bỏ</button>
-                                            <button type="submit" class="btn btn-premium px-4">
-                                                <i class="bi bi-check-lg me-1"></i> Lưu Voucher
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal thêm CTKM -->
-                    <div class="modal fade" id="addPromotionModal" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content shadow-lg">
-                                <!-- Header -->
-                                <div class="modal-header">
-                                    <h5 class="modal-title">
-                                        <i class="bi bi-box-seam-fill me-2"></i>Thêm CTKM Mới
-                                    </h5>
-                                    <p class="text-muted small">Áp dụng tối đa cho 2 sản phẩm khác nhau</p>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    <hr>
-                                </div>
-                                <!-- Body -->
-                                <div class="modal-body">
-                                    <form method="post" action="${pageContext.request.contextPath}/admin/addCTKM">
-                                        <input type="hidden" name="action" value="add">
-                                        <input type="hidden" name="type" value="combo">
-                                        <input type="hidden" name="status" value="active">
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Tên Chương trình</label>
-                                                <input type="text" name="name" class="form-control"
-                                                       placeholder="Khuyến mãi mùa hè..." required>
-                                            </div>
-                                        </div>
-
-                                        <hr class="m-3 text-secondary">
-                                        <h6 class="mb-3 fw-bold text-primary"><i class="bi bi-box-seam me-2"></i>Sản phẩm áp dụng</h6>
-
-                                        <div class="row">
-                                            <div class="col-md-8 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Sản phẩm 1 (Bắt buộc)</label>
-                                                <select name="product_id_1" class="form-select select2-enable" required>
-                                                    <option value="">-- Nhập tên sản phẩm chính --</option>
-                                                    <c:forEach items="${productList}" var="p">
-                                                        <option value="${p.id}">${p.name}</option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Số lượng</label>
-                                                <input type="number" name="quantity_1" class="form-control" value="1" min="1">
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-8 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Sản phẩm 2 (Tùy chọn)</label>
-                                                <select name="product_id_2" class="form-select">
-                                                    <option value="0">-- Không chọn thêm sản phẩm --</option>
-                                                    <c:forEach items="${productList}" var="p">
-                                                        <option value="${p.id}">${p.name}</option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Số lượng</label>
-                                                <input type="number" name="quantity_2" class="form-control" value="1" min="1">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Loại giảm giá</label>
-                                                <select name="discount_type" class="form-select" required>
-                                                    <option value="">-- Chọn loại --</option>
-                                                    <option value="percent">Giảm theo %</option>
-                                                    <option value="amount">Giảm theo số tiền</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Giá trị giảm</label>
-                                                <input type="number" name="discount_value" class="form-control"
-                                                       placeholder="Ví dụ: 10 hoặc 50000" required>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Ngày bắt đầu</label>
-                                                <input type="datetime-local" name="start_date" class="form-control" required>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label fw-semibold text-secondary">Ngày kết thúc</label>
-                                                <input type="datetime-local" name="end_date" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <!-- Nút -->
-                                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                                            <button type="button" class="btn btn-light px-4 border"
-                                                    data-bs-dismiss="modal">Hủy bỏ</button>
-                                            <button type="submit" class="btn btn-premium px-4">
-                                                <i class="bi bi-check-lg me-1"></i> Lưu
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Modal thêm voucher -->
+    <div class="modal fade" id="addVoucherModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow-lg">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-box-seam-fill me-2"></i>Thêm Voucher Mới
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                 </div>
+                <!-- Body -->
+                <div class="modal-body">
+                    <form method="post" action="${pageContext.request.contextPath}/admin/voucher">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="type" value="voucher">
+                        <input type="hidden" name="status" value="active">
+                        <div class="row">
+                            <!-- Tên voucher -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Tên Voucher</label>
+                                <input type="text" name="name" class="form-control"
+                                       placeholder="SALE50, GIAM10..." required>
+                            </div>
+
+                            <!-- Mã voucher -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Mã Voucher</label>
+                                <input type="text" name="code" class="form-control"
+                                       placeholder="SALE50, GIAM10..." required>
+                            </div>
+
+                            <!-- Loại giảm giá -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Loại giảm giá</label>
+                                <select name="discount_type" class="form-select" required>
+                                    <option value="">-- Chọn loại --</option>
+                                    <option value="percent">Giảm theo %</option>
+                                    <option value="amount">Giảm theo số tiền</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Giá trị giảm -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Giá trị giảm</label>
+                                <input type="number" name="discount_value" class="form-control"
+                                       placeholder="10 hoặc 50" required>
+                            </div>
+
+                            <!-- Số lượng -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Số lượng Voucher</label>
+                                <input type="number" name="quantity" class="form-control"
+                                       placeholder="100" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- Ngày bắt đầu -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Ngày bắt đầu</label>
+                                <input type="datetime-local" name="start_date" class="form-control" required>
+                            </div>
+
+                            <!-- Ngày kết thúc -->
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Ngày kết thúc</label>
+                                <input type="datetime-local" name="end_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <!-- Nút -->
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                            <button type="button" class="btn btn-light px-4 border"
+                                    data-bs-dismiss="modal">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-premium px-4">
+                                <i class="bi bi-check-lg me-1"></i> Lưu Voucher
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal thêm CTKM -->
+    <div class="modal fade" id="addPromotionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content shadow-lg">
+                <!-- Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-box-seam-fill me-2"></i>Thêm CTKM Mới
+                    </h5>
+                    <p class="text-muted small">Áp dụng tối đa cho 2 sản phẩm khác nhau</p>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    <hr>
+                </div>
+                <!-- Body -->
+                <div class="modal-body">
+                    <form method="post" action="${pageContext.request.contextPath}/admin/addCTKM">
+                        <input type="hidden" name="action" value="add">
+                        <input type="hidden" name="type" value="combo">
+                        <input type="hidden" name="status" value="active">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Tên Chương trình</label>
+                                <input type="text" name="name" class="form-control"
+                                       placeholder="Khuyến mãi mùa hè..." required>
+                            </div>
+                        </div>
+
+                        <hr class="m-3 text-secondary">
+                        <h6 class="mb-3 fw-bold text-primary"><i class="bi bi-box-seam me-2"></i>Sản phẩm áp dụng</h6>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Sản phẩm 1 (Bắt buộc)</label>
+                                <select name="product_id_1" class="form-select select2-enable" required>
+                                    <option value="">-- Nhập tên sản phẩm chính --</option>
+                                    <c:forEach items="${productList}" var="p">
+                                        <option value="${p.id}">${p.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Số lượng</label>
+                                <input type="number" name="quantity_1" class="form-control" value="1" min="1">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Sản phẩm 2 (Tùy chọn)</label>
+                                <select name="product_id_2" class="form-select">
+                                    <option value="0">-- Không chọn thêm sản phẩm --</option>
+                                    <c:forEach items="${productList}" var="p">
+                                        <option value="${p.id}">${p.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Số lượng</label>
+                                <input type="number" name="quantity_2" class="form-control" value="1" min="1">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Loại giảm giá</label>
+                                <select name="discount_type" class="form-select" required>
+                                    <option value="">-- Chọn loại --</option>
+                                    <option value="percent">Giảm theo %</option>
+                                    <option value="amount">Giảm theo số tiền</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Giá trị giảm</label>
+                                <input type="number" name="discount_value" class="form-control"
+                                       placeholder="Ví dụ: 10 hoặc 50000" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Ngày bắt đầu</label>
+                                <input type="datetime-local" name="start_date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Ngày kết thúc</label>
+                                <input type="datetime-local" name="end_date" class="form-control" required>
+                            </div>
+                        </div>
+                        <!-- Nút -->
+                        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                            <button type="button" class="btn btn-light px-4 border"
+                                    data-bs-dismiss="modal">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-premium px-4">
+                                <i class="bi bi-check-lg me-1"></i> Lưu
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!--footer-->
@@ -452,4 +457,4 @@
 </script>
 </body>
 
-            </html>
+</html>
