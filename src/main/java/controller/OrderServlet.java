@@ -2,7 +2,11 @@
 
 package controller;
 
-import dao.*;
+import com.google.gson.JsonObject;
+import dao.OrderDAO;
+import dao.OrderItemDAO;
+import dao.ProductDAO;
+import dao.ShippingInfoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -41,6 +45,9 @@ public class OrderServlet extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         String paymentMethod = request.getParameter("paymentMethod");
+        String provinceIdStr = request.getParameter("provinceId");
+        String districtIdStr = request.getParameter("districtId");
+        String wardCode = request.getParameter("wardCode");
 
         // Tạo Order
         Order order = new Order();
@@ -65,8 +72,12 @@ public class OrderServlet extends HttpServlet {
             conn.setAutoCommit(false); //TRANSACTION
 
             ProductDAO productDAO = new ProductDAO(conn);
+            double checkedTotalPrice = 0;
+            boolean hasCheckedItem = false;
             //Kiểm tra có các item có đủ bán so với kho
             for (CartItem item : cartItemsChecked) {
+                hasCheckedItem = true;
+                checkedTotalPrice += item.getTotalPrice();
                 Product p = productDAO.getProductForUpdate(item.getProduct().getId());
                 if (p == null || p.getQuantity() < item.getQuantity()) {
                     throw new Exception("Sản phẩm " + item.getProduct().getName() + " không đủ tồn kho!");
@@ -76,6 +87,12 @@ public class OrderServlet extends HttpServlet {
                     throw new Exception("Sản phẩm " + item.getProduct().getName() + " vừa thay đổi, vui lòng thử lại!");
                 }
             }
+            order.setTotalPrice(checkedTotalPrice);
+
+            if (!hasCheckedItem) {
+                throw new Exception("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
+            }
+
             // Sau khi chắc chắn đủ hàng mới bắt đầu ghi order
             OrderDAO orderDAO = new OrderDAO(conn);
             int orderId = orderDAO.insertAndReturnId(order);
@@ -85,7 +102,6 @@ public class OrderServlet extends HttpServlet {
                 // Ghi chi tiết đơn hàng
                 OrderItem orderItem = new OrderItem(orderId, item.getProduct().getId(), item.getQuantity(), item.getProduct().getPrice());
                 orderItemDAO.insertOrderItem(orderItem);
-
             }
 
             // Ghi shipping info
@@ -95,8 +111,41 @@ public class OrderServlet extends HttpServlet {
             shippingInfo.setReceiverName(fullName);
             shippingInfo.setReceiverPhone(phone);
             shippingInfo.setAddress(address);
-            shippingInfo.setShippingFee(15000);
+
+            String shippingFeeStr = request.getParameter("shippingFee");
+            double shippingFee = 0;
+            if (shippingFeeStr != null && !shippingFeeStr.isEmpty()) {
+                try {
+                    shippingFee = Double.parseDouble(shippingFeeStr);
+                } catch (Exception e) {}
+            } else if (districtIdStr != null && !districtIdStr.isEmpty() && wardCode != null && !wardCode.isEmpty()) {
+                try {
+                    int weight = 0;
+                    if (cart != null) {
+                        for (model.CartItem item : cart.getAllItems()) {
+                            if (item.isChecked()) {
+                                weight += item.getProduct().getVolume() * item.getQuantity();
+                            }
+                        }
+                    }
+                    JsonObject feeJson = util.GHNUtils.calculateFee(Integer.parseInt(districtIdStr), wardCode, weight);
+                    if (feeJson != null && feeJson.has("code") && feeJson.get("code").getAsInt() == 200) {
+                        shippingFee = feeJson.getAsJsonObject("data").get("total").getAsDouble();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            shippingInfo.setShippingFee(shippingFee);
+
             shippingInfo.setNote("");
+            if (provinceIdStr != null && !provinceIdStr.isEmpty()) {
+                shippingInfo.setProvinceId(Integer.parseInt(provinceIdStr));
+            }
+            if (districtIdStr != null && !districtIdStr.isEmpty()) {
+                shippingInfo.setDistrictId(Integer.parseInt(districtIdStr));
+            }
+            shippingInfo.setWardCode(wardCode);
             shippingDAO.insert(shippingInfo);
             conn.commit(); // Thành công
             conn.commit(); // Lưu đơn hàng thành công
@@ -109,8 +158,13 @@ public class OrderServlet extends HttpServlet {
                 }
                 response.sendRedirect(request.getContextPath() + "/cart.jsp");
             }
+            response.sendRedirect(request.getContextPath() + "/home");
         } catch (Exception e) {
-            e.printStackTrace();
+            if (!(e instanceof IllegalArgumentException) && e.getCause() == null
+                    && e.getClass() == Exception.class) {
+            } else {
+                e.printStackTrace();
+            }
             if (conn != null) {
                 try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             }

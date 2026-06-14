@@ -40,9 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const reason = document.getElementById('cancelReason').value.trim();
-            if (reason.length < 10) {
-                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', "Vui lòng nhập lý do hủy đơn ít nhất 10 ký tự.", 'error');
-                else alert("Vui lòng nhập lý do hủy đơn ít nhất 10 ký tự.");
+            if (reason.length < 5) {
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', "Vui lòng nhập lý do hủy đơn ít nhất 5 ký tự.", 'error');
+                else alert("Vui lòng nhập lý do hủy đơn ít nhất 5 ký tự.");
                 return;
             }
 
@@ -70,10 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
                             icon: 'success',
                             title: 'Thành công!',
                             text: data.message || "Hủy đơn hàng thành công!",
-                            timer: 2000,
+                            timer: 1500,
                             showConfirmButton: false
+                        }).then(() => {
+                            window.location.reload();
                         });
-                    } else alert(data.message || "Hủy đơn hàng thành công!");
+                    } else {
+                        alert(data.message || "Hủy đơn hàng thành công!");
+                        window.location.reload();
+                    }
                 } else {
                     if (typeof Swal !== 'undefined') {
                         Swal.fire('Lỗi', data.message || "Có lỗi xảy ra khi hủy đơn.", 'error');
@@ -106,19 +111,26 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const response = await fetch(`${getBasePath()}/user/reorder`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json'},
                     body: formData.toString()
                 });
 
                 const data = await response.json();
                 if (response.ok && data.status === 'success') {
+                    const redirectUrl = getBasePath() + '/cart' + (data.productIds ? '?listIdSelected=' + data.productIds : '');
                     if (typeof Swal !== 'undefined') {
-                        Swal.fire({ icon: 'success', title: 'Thành công!', text: data.message, timer: 1000, showConfirmButton: false }).then(() => {
-                            window.location.href = getBasePath() + '/cart';
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: data.message,
+                            timer: 1000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = redirectUrl;
                         });
                     } else {
                         alert(data.message);
-                        window.location.href = getBasePath() + '/cart';
+                        window.location.href = redirectUrl;
                     }
                 } else {
                     if (typeof Swal !== 'undefined') Swal.fire('Lỗi', data.message || "Có lỗi xảy ra.", 'error');
@@ -185,6 +197,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const data = await response.json();
                     if (data.status === 'success') {
+                        const reviewModal = bootstrap.Modal.getInstance(reviewModalElement) || bootstrap.Modal.getOrCreateInstance(reviewModalElement);
+                        reviewModal.hide();
+
                         if (typeof Swal !== 'undefined') {
                             Swal.fire({
                                 icon: 'success',
@@ -192,19 +207,13 @@ document.addEventListener("DOMContentLoaded", () => {
                                 text: data.message,
                                 timer: 2000,
                                 showConfirmButton: false
+                            }).then(() => {
+                                window.location.reload();
                             });
-                        } else alert(data.message);
-
-                        bootstrap.Modal.getInstance(reviewModalElement).hide();
-
-                        // Cập nhật nút ngoài giao diện
-                        const buttons = document.querySelectorAll(`.review-btn[data-product-id="${productId}"]`);
-                        buttons.forEach(btn => {
-                            btn.disabled = true;
-                            btn.removeAttribute('data-bs-toggle'); // Gỡ bỏ toggle để không mở lại modal
-                            btn.innerHTML = '<i class="bi bi-check-circle me-1"></i>Đã đánh giá';
-                            btn.classList.replace('btn-primary', 'btn-outline-secondary');
-                        });
+                        } else {
+                            alert(data.message);
+                            window.location.reload();
+                        }
                     } else {
                         if (typeof Swal !== 'undefined') Swal.fire('Lỗi', data.message, 'error');
                         else alert(data.message);
@@ -220,24 +229,250 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    function updateOrderUIToCancelled(orderId) {
-        const cancelBtn = document.querySelector(`.btn-cancel-order[data-order-id="${orderId}"]`);
-        if (!cancelBtn) return;
-        const orderCard = cancelBtn.closest('.order-card');
-        if (!orderCard) return;
-        const statusPill = orderCard.querySelector('.status-pill');
-        if (statusPill) {
-            statusPill.className = 'status-pill status-cancelled';
-            statusPill.textContent = 'cancelled';
-        }
-        const actionContainer = orderCard.querySelector('.order-actions');
-        if (actionContainer) {
-            cancelBtn.remove();
-            const reorderBtn = document.createElement('button');
-            reorderBtn.className = 'btn btn-warning btn-sm';
-            reorderBtn.disabled = true;
-            reorderBtn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>Mua lại';
-            actionContainer.appendChild(reorderBtn);
-        }
+    // YÊU CẦU TRẢ HÀNG / HOÀN TIỀN
+    const refundModalElement = document.getElementById('refundOrderModal');
+    if (refundModalElement) {
+        const refundModal = new bootstrap.Modal(refundModalElement);
+        const refundForm = document.getElementById('refundForm');
+        const refundOrderIdInput = document.getElementById('refundOrderIdInput');
+        const refundOrderIdDisplay = document.getElementById('refundOrderIdDisplay');
+        const btnSubmitRefund = document.getElementById('btnSubmitRefund');
+
+        // Mở modal khi click
+        document.addEventListener('click', (event) => {
+            const refundBtn = event.target.closest('.request-refund-btn');
+            if (refundBtn) {
+                const orderId = refundBtn.dataset.orderId;
+                refundOrderIdInput.value = orderId;
+                refundOrderIdDisplay.textContent = '#' + orderId;
+                refundForm.reset();
+                refundForm.classList.remove('was-validated');
+                refundModal.show();
+            }
+        });
+
+        // Xử lí form
+        refundForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            if (!refundForm.checkValidity()) {
+                event.stopPropagation();
+                refundForm.classList.add('was-validated');
+                return;
+            }
+            //Kiểm tra input
+            const reason = document.getElementById('refundReason').value.trim();
+            if (reason.length < 5) {
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', 'Vui lòng nhập lý do ít nhất 5 ký tự.', 'error');
+                else alert('Vui lòng nhập lý do ít nhất 5 ký tự.');
+                return;
+            }
+            //Điền orderID vào form
+            const orderId = refundOrderIdInput.value;
+            const formData = new URLSearchParams();
+            formData.append('orderId', orderId);
+            formData.append('reason', reason);
+
+            btnSubmitRefund.disabled = true;
+            btnSubmitRefund.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...';
+
+            //Xử lí status data trả về thông báo hệ thống
+            try {
+                const response = await fetch(`${getBasePath()}/user/requestRefund`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+                    body: formData.toString()
+                });
+
+                const data = await response.json();
+                if (response.ok && data.status === 'success') {
+                    refundModal.hide();
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Thành công!',
+                            text: data.message || 'Yêu cầu hoàn tiền đã được ghi nhận.',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        alert(data.message || 'Yêu cầu hoàn tiền đã được ghi nhận.');
+                        window.location.reload();
+                    }
+                } else {
+                    if (typeof Swal !== 'undefined') Swal.fire('Lỗi', data.message || 'Có lỗi xảy ra.', 'error');
+                    else alert(data.message || 'Có lỗi xảy ra.');
+                }
+            } catch (error) {
+                console.error('Error requesting refund:', error);
+                if (typeof Swal !== 'undefined') Swal.fire('Lỗi', 'Lỗi kết nối đến máy chủ.', 'error');
+                else alert('Lỗi kết nối đến máy chủ.');
+            } finally {
+                btnSubmitRefund.disabled = false;
+                btnSubmitRefund.textContent = 'Gửi yêu cầu';
+            }
+        });
     }
+
+    function updateOrderUIToCancelled(orderId) {
+        const cancelBtns = document.querySelectorAll(`.btn-cancel-order[data-order-id="${orderId}"]`);
+        cancelBtns.forEach(cancelBtn => {
+            const orderCard = cancelBtn.closest('.order-card');
+            if (!orderCard) return;
+            const statusPill = orderCard.querySelector('.status-pill');
+            if (statusPill) {
+                statusPill.className = 'status-pill status-cancelled text-danger';
+                statusPill.textContent = 'ĐÃ HỦY';
+            }
+            const actionContainer = orderCard.querySelector('.order-actions');
+            if (actionContainer) {
+                cancelBtn.remove();
+                const reorderBtn = document.createElement('button');
+                reorderBtn.className = 'btn btn-warning btn-sm btn-reorder text-white';
+                reorderBtn.setAttribute('data-order-id', orderId);
+                reorderBtn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>Mua lại';
+                actionContainer.appendChild(reorderBtn);
+            }
+        });
+    }
+
+    // Search bar
+    const searchInput = document.getElementById('orderSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const activePane = document.querySelector('.tab-pane.active');
+            if (!activePane) return;
+
+            const cards = activePane.querySelectorAll('.order-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const orderId = card.getAttribute('data-order-id') || '';
+                const productTitles = Array.from(card.querySelectorAll('.order-items-preview .fw-bold')).map(el => el.textContent.toLowerCase());
+
+                const matchesId = orderId.includes(query);
+                const matchesProducts = productTitles.some(title => title.includes(query));
+
+                if (query === '' || matchesId || matchesProducts) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hiện/Ẩn trạng thái rỗng của tab hiện tại nếu tìm kiếm không ra kết quả
+            let emptyState = activePane.querySelector('.empty-tab-state');
+            if (!emptyState && visibleCount === 0) {
+                // Tạo một empty state động nếu chưa có
+                emptyState = document.createElement('div');
+                emptyState.className = 'text-center py-5 empty-tab-state dynamic-empty';
+                emptyState.innerHTML = `
+                    <i class="bi bi-search text-muted" style="font-size: 3rem; opacity: 0.4;"></i>
+                    <p class="text-muted mt-2 mb-0">Không tìm thấy đơn hàng nào phù hợp</p>
+                `;
+                activePane.appendChild(emptyState);
+            } else if (emptyState && visibleCount > 0) {
+                // Xoá empty state động hoặc ẩn đi
+                if (emptyState.classList.contains('dynamic-empty')) {
+                    emptyState.remove();
+                } else {
+                    emptyState.style.display = 'none';
+                }
+            } else if (emptyState && visibleCount === 0) {
+                emptyState.style.display = '';
+            }
+        });
+    }
+
+    // THEO DÕI ĐƠN HÀNG
+    const trackOrderModalElement = document.getElementById('trackOrderModal');
+    if (trackOrderModalElement) {
+        const trackModal = new bootstrap.Modal(trackOrderModalElement);
+        const trackOrderIdDisplay = document.getElementById('trackOrderIdDisplay');
+        const trackingTimelineContainer = document.getElementById('trackingTimelineContainer');
+        const trackExpectedDateDisplay = document.getElementById('trackExpectedDateDisplay');
+
+        document.addEventListener('click', async (event) => {
+            const trackBtn = event.target.closest('.btn-track-order');
+            if (trackBtn) {
+                const orderId = trackBtn.dataset.orderId;
+                trackOrderIdDisplay.textContent = "#" + orderId;
+                if(trackExpectedDateDisplay) trackExpectedDateDisplay.style.display = 'none';
+
+                trackingTimelineContainer.innerHTML = `
+                    <div class="text-center text-muted py-4" id="trackingLoading">
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Đang tải dữ liệu...</p>
+                    </div>
+                `;
+                trackModal.show();
+
+                try {
+                    const response = await fetch(`${getBasePath()}/user/order-tracking?orderId=${orderId}`);
+                    const data = await response.json();
+
+                    if (data.status === 'error') {
+                        trackingTimelineContainer.innerHTML = `<div class="alert alert-warning">${data.message}</div>`;
+                    } else {
+                        // Hiển thị ngày giao dự kiến nếu có
+                        if (data.expected_delivery_date && trackExpectedDateDisplay) {
+                            const expectedDate = new Date(data.expected_delivery_date);
+                            const dateStr = expectedDate.toLocaleDateString('vi-VN', {
+                                weekday: 'long', year: 'numeric', month: '2-digit', day: '2-digit'
+                            });
+                            trackExpectedDateDisplay.innerHTML = `Dự kiến giao hàng: <strong class="text-success">${dateStr}</strong>`;
+                            trackExpectedDateDisplay.style.display = 'block';
+                        }
+
+                        if (data.data && data.data.log && data.data.log.length > 0) {
+                            let html = '<ul class="timeline">';
+                            const logs = data.data.log.sort((a, b) => new Date(b.updated_date) - new Date(a.updated_date));
+
+                            logs.forEach((item, index) => {
+                                const dateObj = new Date(item.updated_date);
+                                const dateStr = dateObj.toLocaleString('vi-VN', {
+                                    year: 'numeric', month: '2-digit', day: '2-digit',
+                                    hour: '2-digit', minute: '2-digit'
+                                });
+
+                                let statusText = item.status;
+                                if (statusText === 'ready_to_pick') statusText = 'Chờ lấy hàng';
+                                else if (statusText === 'picking') statusText = 'Đang lấy hàng';
+                                else if (statusText === 'picked') statusText = 'Đã lấy hàng';
+                                else if (statusText === 'storing') statusText = 'Lưu kho';
+                                else if (statusText === 'transporting') statusText = 'Đang luân chuyển';
+                                else if (statusText === 'delivering') statusText = 'Đang giao hàng';
+                                else if (statusText === 'delivered') statusText = 'Giao hàng thành công';
+                                else if (statusText === 'delivery_fail') statusText = 'Giao hàng thất bại';
+                                else if (statusText === 'return') statusText = 'Đang hoàn hàng';
+                                else if (statusText === 'returned') statusText = 'Đã hoàn hàng';
+                                else if (statusText === 'cancel') statusText = 'Đã hủy đơn';
+
+                                const isCompleted = index === 0 ? 'completed' : '';
+                                html += `
+                                    <li class="timeline-item ${isCompleted}">
+                                        <div class="timeline-date">${dateStr}</div>
+                                        <div class="timeline-content">${statusText}</div>
+                                    </li>
+                                `;
+                            });
+                            html += '</ul>';
+                            trackingTimelineContainer.innerHTML = html;
+                        } else {
+                            trackingTimelineContainer.innerHTML = `<div class="alert alert-info">Chưa có thông tin cập nhật cho đơn hàng này.</div>`;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching tracking info:', error);
+                    trackingTimelineContainer.innerHTML = `<div class="alert alert-danger">Lỗi kết nối đến máy chủ. Không thể lấy thông tin vận chuyển.</div>`;
+                }
+            }
+        });
+    }
+
 });

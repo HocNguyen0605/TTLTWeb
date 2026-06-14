@@ -17,15 +17,18 @@ public class Order {
     private Timestamp deliveredDate;
     private List<OrderItemDetail> items;
     private String cancelReason;
+    private String trackingCode;
+    private Timestamp expectedDeliveryDate;
 
     public Order() {
     }
 
-    public Order(int id, double totalPrice, String status, Timestamp orderDate) {
+    public Order(int id, double totalPrice, String status, Timestamp orderDate, String trackingCode) {
         this.id = id;
         this.totalPrice = totalPrice;
         this.status = status;
         this.orderDate = orderDate;
+        this.trackingCode = trackingCode;
     }
 
     public int getUserId() {
@@ -130,5 +133,21 @@ public class Order {
 
     public void setCancelReason(String cancelReason) {
         this.cancelReason = cancelReason;
+    }
+
+    public String getTrackingCode() {
+        return trackingCode;
+    }
+
+    public void setTrackingCode(String trackingCode) {
+        this.trackingCode = trackingCode;
+    }
+
+    public Timestamp getExpectedDeliveryDate() {
+        return expectedDeliveryDate;
+    }
+
+    public void setExpectedDeliveryDate(Timestamp expectedDeliveryDate) {
+        this.expectedDeliveryDate = expectedDeliveryDate;
     }
 }

@@ -30,6 +30,7 @@ public class OrderDAO {
                     o.date AS order_date,
                     o.delivered_date,
                     o.id_user,
+                    o.tracking_code,
                     COALESCE(s.receiver_name, u.name) AS customer_name
                 FROM orders o
                 LEFT JOIN shippinginfo s ON o.id = s.id_order
@@ -49,7 +50,7 @@ public class OrderDAO {
                 o.setDeliveredDate(rs.getTimestamp("delivered_date"));
                 o.setCustomerName(rs.getString("customer_name"));
                 o.setUserId(rs.getInt("id_user"));
-
+                o.setTrackingCode(rs.getString("tracking_code"));
                 list.add(o);
             }
         } catch (SQLException e) {
@@ -88,14 +89,26 @@ public class OrderDAO {
     }
 
     public boolean cancelOrder(int orderId, int userId, String reason) {
-        String sql = "UPDATE orders SET status_order='cancelled', cancel_reason=? WHERE id=? AND id_user=?";
-        return util.DBContext.getJdbi().withHandle(handle ->
-                handle.createUpdate(sql)
-                        .bind(0, reason)
-                        .bind(1, orderId)
-                        .bind(2, userId)
-                        .execute() > 0
-        );
+        return DBContext.getJdbi().inTransaction(handle -> {
+            boolean updated = handle.createUpdate("UPDATE orders SET status_order='cancelled', cancel_reason=:reason WHERE id=:id AND id_user=:userId")
+                    .bind("reason", reason)
+                    .bind("id", orderId)
+                    .bind("userId", userId)
+                    .execute() > 0;
+            if (updated) {
+                List<java.util.Map<String, Object>> items = handle.createQuery("SELECT id_product, quantity FROM orderitems WHERE id_order = :id")
+                        .bind("id", orderId)
+                        .mapToMap()
+                        .list();
+                for (java.util.Map<String, Object> item : items) {
+                    handle.createUpdate("UPDATE products SET quantity = quantity + :quantity WHERE id = :pid")
+                            .bind("quantity", item.get("quantity"))
+                            .bind("pid", item.get("id_product"))
+                            .execute();
+                }
+            }
+            return updated;
+        });
     }
 
     public void deleteOrder(int orderId) {
@@ -159,6 +172,9 @@ public class OrderDAO {
                     info.setAddress(rs.getString("address"));
                     info.setShippingFee(rs.getDouble("shipping_fee"));
                     info.setNote(rs.getString("note"));
+                    info.setProvinceId((Integer) rs.getObject("province_id"));
+                    info.setDistrictId((Integer) rs.getObject("district_id"));
+                    info.setWardCode(rs.getString("ward_code"));
                     return info;
                 }
             }
@@ -186,7 +202,7 @@ public class OrderDAO {
             for (Order order : orders) {
                 List<model.OrderItemDetail> items = handle.createQuery(
                                 "SELECT oi.id_product AS productId, p.product_name AS productName, " +
-                                        "COALESCE(pi.image_URL, p.image) AS productImg, " +                                        "p.volume, oi.quantity, oi.price_at_time AS priceAtTime " +
+                                        "COALESCE(pi.image_URL, p.image) AS productImg, " + "p.volume, oi.quantity, oi.price_at_time AS priceAtTime " +
                                         "FROM orderitems oi " +
                                         "JOIN products p ON oi.id_product = p.id " +
                                         "LEFT JOIN product_images pi ON p.image = pi.id " +
@@ -203,27 +219,77 @@ public class OrderDAO {
             return orders;
         });
     }
-    public Order getOrderById(int orderId) {
-        String sql = "SELECT * FROM orders WHERE id = ?";
+
+    //Lấy thông tin đơn hàng theo id
+    public model.Order getOrderById(int orderId) {
+        String sql = "SELECT id, id_user, tracking_code, expected_delivery_date, status_order AS status, total AS totalPrice, delivered_date AS deliveredDate FROM orders WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    Order order = new Order();
-                    order.setId(rs.getInt("id"));
-                    order.setUserId(rs.getInt("id_user"));
-                    order.setOrderDate(rs.getTimestamp("date"));
-                    order.setStatus(rs.getString("status_order"));
-                    order.setStatus(rs.getString("status_payment"));
-                    order.setTotalPrice(rs.getDouble("total"));
-                    order.setCancelReason(rs.getString("cancel_reason"));
-
-                    return order;
+                    model.Order o = new model.Order();
+                    o.setId(rs.getInt("id"));
+                    o.setUserId(rs.getInt("id_user"));
+                    o.setTrackingCode(rs.getString("tracking_code"));
+                    o.setExpectedDeliveryDate(rs.getTimestamp("expected_delivery_date"));
+                    o.setStatus(rs.getString("status"));
+                    o.setTotalPrice(rs.getDouble("totalPrice"));
+                    o.setDeliveredDate(rs.getTimestamp("deliveredDate"));
+                    return o;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Trả về null nếu không tìm thấy đơn hàng
+        return null;
+    }
+
+    //Trả về tổng tiền của đơn
+    public double getOrderTotalById(int orderId) {
+        String sql = "SELECT total FROM orders WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    //Trả về userid của đơn
+    public int getUserIdByOrderId(int orderId) {
+        String sql = "SELECT id_user FROM orders WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_user");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // not found
+    }
+    //Cập nhật mã vận đơn cho đơn hàng(mã lâý từ GHN)
+    public boolean updateTrackingCodeAndExpectedDate(int orderId, String trackingCode, Timestamp expectedDate) {
+        String sql = "UPDATE orders SET tracking_code = ?, expected_delivery_date = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, trackingCode);
+            if (expectedDate != null) {
+                ps.setTimestamp(2, expectedDate);
+            } else {
+                ps.setNull(2, java.sql.Types.TIMESTAMP);
+            }
+            ps.setInt(3, orderId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

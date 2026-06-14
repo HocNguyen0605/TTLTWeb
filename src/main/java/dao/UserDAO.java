@@ -4,10 +4,12 @@ import model.GooglePojo;
 import model.User;
 import util.DBContext;
 
+import java.util.List;
+
 
 public class UserDAO {
     public User login(String emailOrUsername, String password) {
-        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
+        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address, u.province_id, u.district_id, u.ward_code " +
                 "FROM account a LEFT JOIN user u ON a.id = u.id_account " +
                 "WHERE (a.username = :user OR u.email = :user)";
 
@@ -23,7 +25,10 @@ public class UserDAO {
                         rs.getString("address"),
                         "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         null,
-                        "LOCAL"))
+                        "LOCAL",
+                        (Integer) rs.getObject("province_id"),
+                        (Integer) rs.getObject("district_id"),
+                        rs.getString("ward_code")))
                 .findFirst()
                 .orElse(null));
 
@@ -106,7 +111,7 @@ public class UserDAO {
                     .execute();
 
             String queryUser = "UPDATE user SET name = :name, email = :email, " +
-                    "phone = :phone, address = :address " +
+                    "phone = :phone, address = :address, province_id = :provinceId, district_id = :districtId, ward_code = :wardCode " +
                     "WHERE id_account = :id";
 
             int rows = handle.createUpdate(queryUser)
@@ -114,6 +119,9 @@ public class UserDAO {
                     .bind("email", user.getEmail())
                     .bind("phone", user.getPhone())
                     .bind("address", user.getAddress())
+                    .bind("provinceId", user.getProvinceId())
+                    .bind("districtId", user.getDistrictId())
+                    .bind("wardCode", user.getWardCode())
                     .bind("id", user.getId())
                     .execute();
 
@@ -134,7 +142,7 @@ public class UserDAO {
     }
 
     public User getUserByToken(String token) {
-        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
+        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address, u.province_id, u.district_id, u.ward_code " +
                 "FROM account a " +
                 "JOIN user u ON a.id = u.id_account " +
                 "JOIN User_Tokens ut ON a.id = ut.user_id " +
@@ -152,13 +160,16 @@ public class UserDAO {
                         rs.getString("address"),
                         "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         null,
-                        "LOCAL"))
+                        "LOCAL",
+                        (Integer) rs.getObject("province_id"),
+                        (Integer) rs.getObject("district_id"),
+                        rs.getString("ward_code")))
                 .findFirst()
                 .orElse(null));
     }
 
-    public java.util.List<User> getAllUsers() {
-        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address " +
+    public List<User> getAllUsers() {
+        String query = "SELECT a.id, a.username, a.password, a.role, u.name, u.email, u.phone, u.address, u.province_id, u.district_id, u.ward_code " +
                 "FROM account a LEFT JOIN user u ON a.id = u.id_account";
 
         return DBContext.getJdbi().withHandle(handle -> handle.createQuery(query)
@@ -172,7 +183,10 @@ public class UserDAO {
                         rs.getString("address"),
                         "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         null,
-                        "LOCAL"))
+                        "LOCAL",
+                        (Integer) rs.getObject("province_id"),
+                        (Integer) rs.getObject("district_id"),
+                        rs.getString("ward_code")))
                 .list());
     }
 
@@ -204,7 +218,7 @@ public class UserDAO {
 
     public User getUserByEmail(String email) {
         String query = "SELECT a.id, a.username, a.password, a.role, a.googleId, a.authProvider, " +
-                "u.name, u.email, u.phone, u.address " +
+                "u.name, u.email, u.phone, u.address, u.province_id, u.district_id, u.ward_code " +
                 "FROM account a JOIN user u ON a.id = u.id_account " +
                 "WHERE u.email = :email";
 
@@ -220,7 +234,10 @@ public class UserDAO {
                         rs.getString("address"),
                         "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         rs.getString("googleId"),
-                        rs.getString("authProvider")))
+                        rs.getString("authProvider"),
+                        (Integer) rs.getObject("province_id"),
+                        (Integer) rs.getObject("district_id"),
+                        rs.getString("ward_code")))
                 .findFirst()
                 .orElse(null));
     }
@@ -267,7 +284,7 @@ public class UserDAO {
 
     public User getUserById(int id) {
         String query = "SELECT a.id, a.username, a.password, a.role, a.googleId, a.authProvider, " +
-                "u.name, u.email, u.phone, u.address " +
+                "u.name, u.email, u.phone, u.address, u.province_id, u.district_id, u.ward_code " +
                 "FROM account a JOIN user u ON a.id = u.id_account " +
                 "WHERE a.id = :id";
 
@@ -283,7 +300,10 @@ public class UserDAO {
                         rs.getString("address"),
                         "pro-admin".equalsIgnoreCase(rs.getString("role")) ? 2 : "admin".equalsIgnoreCase(rs.getString("role")) ? 1 : 0,
                         rs.getString("googleId"),
-                        rs.getString("authProvider")))
+                        rs.getString("authProvider"),
+                        (Integer) rs.getObject("province_id"),
+                        (Integer) rs.getObject("district_id"),
+                        rs.getString("ward_code")))
                 .findFirst()
                 .orElse(null));
     }

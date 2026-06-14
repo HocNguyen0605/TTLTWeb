@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <jsp:include page="/view/user/include/header.jsp">
-    <jsp:param name="title" value="Giỏ hàng" />
+    <jsp:param name="title" value="Giỏ hàng"/>
 </jsp:include>
 
 <!-- GIỎ HÀNG -->
@@ -12,6 +12,11 @@
     <c:remove var="messageCart" scope="session"/>
     <c:remove var="messageCart" scope="session"/>
     <c:remove var="messageCart" scope="session"/>
+</c:if>
+<c:if test="${not empty errorMessage}">
+    <div class="alert alert-danger">
+            ${errorMessage}
+    </div>
 </c:if>
 <section class="container my-5">
     <h2 class="text-center text-success fw-bold mb-4">Giỏ Hàng Của Bạn</h2>
@@ -35,10 +40,10 @@
                     <tbody>
                     <c:choose>
                         <%-- Nếu giỏ hàng đang trống--%>
-                            <c:when test="${empty sessionScope.cart || empty sessionScope.cart.allItems}">
+                        <c:when test="${empty sessionScope.cart || empty sessionScope.cart.allItems}">
                             <tr>
                                 <td colspan="5" class="text-center text-muted py-4">
-                                     Giỏ hàng đang trống!!!
+                                    Giỏ hàng đang trống!!!
                                 </td>
                             </tr>
                         </c:when>
@@ -48,11 +53,17 @@
                             <c:forEach items="${sessionScope.cart.allItems}" var="item">
                                 <tr>
                                     <td class="text-center align-middle">
+                                        <c:set var="isChecked" value="false"/>
+                                        <c:forEach var="selId" items="${selectedIds}">
+                                            <c:if test="${selId == item.product.id}">
+                                                <c:set var="isChecked" value="true"/>
+                                            </c:if>
+                                        </c:forEach>
                                         <input type="checkbox"
                                                class="form-check-input cart-item-checkbox"
-                                               data-product-id="${item.product.id}">
-                                    </td>
-                                    <%-- Sản phẩm --%>
+                                               data-product-id="${item.product.id}"
+                                            ${isChecked ? 'checked' : ''}></td>
+                                        <%-- Sản phẩm --%>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <img src="${item.product.img}"
@@ -70,43 +81,37 @@
                                         </div>
                                     </td>
 
-                                    <%-- Số lượng --%>
+                                        <%-- Số lượng --%>
                                     <td class="text-center">
-                                        <form action="${pageContext.request.contextPath}/cart"
-                                              method="post"
-                                              class="d-inline">
-                                            <input type="hidden" name="action" value="update">
-                                            <input type="hidden" name="productId"
-                                                   value="${item.product.id}">
-                                            <input type="number"
-                                                   name="quantity"
-                                                   value="${item.quantity}"
-                                                   min="1"
-                                                   class="form-control text-center"
-                                                   style="width:70px"
-                                                   onchange="this.form.submit()">
-                                        </form>
+                                        <input type="number"
+                                               value="${item.quantity}"
+                                               min="1"
+                                               class="form-control text-center cart-qty-input"
+                                               style="width:70px"
+                                               data-product-id="${item.product.id}"
+                                               onchange="updateQuantityAjax(this)">
                                     </td>
 
-                                    <%-- Đơn giá --%>
+                                        <%-- Đơn giá --%>
                                     <td class="text-end">
                                         <fmt:formatNumber value="${item.price}"
                                                           pattern="#,### đ"/>
                                     </td>
 
-                                    <%-- Thành tiền --%>
+                                        <%-- Thành tiền --%>
                                     <td class="text-end fw-bold text-success">
                                         <fmt:formatNumber value="${item.totalPrice}"
-                                                          pattern="#,### đ" />
+                                                          pattern="#,### đ"/>
                                     </td>
 
-                                    <%-- Xóa --%>
+                                        <%-- Xóa --%>
                                     <td class="text-end">
                                         <form action="${pageContext.request.contextPath}/cart"
                                               method="post">
                                             <input type="hidden" name="action" value="remove">
                                             <input type="hidden" name="productId"
-                                                   value="${item.product.id}">
+                                                   value="${item.product.id}"
+                                                   class="remove-product-id">
                                             <button class="btn btn-sm btn-outline-danger">
                                                 <i class="bi bi-trash"></i>
                                             </button>
@@ -131,7 +136,7 @@
                     <span>Tạm tính:</span>
                     <span id="totalPrice">
                 <fmt:formatNumber value="${totalPrice}"
-                                  pattern="#,### đ" />
+                                  pattern="#,### đ"/>
             </span>
                 </div>
 
@@ -140,7 +145,7 @@
                     <span>Phí giao hàng:</span>
                     <span id="shippingFee">
                 <fmt:formatNumber value="${shippingFee}"
-                                  pattern="#,### đ" />
+                                  pattern="#,### đ"/>
             </span>
                 </div>
 
@@ -148,8 +153,8 @@
                     <span>Giảm Giá:</span>
                     <span id="totalDiscount" class="text-danger">
                         <fmt:formatNumber
-                            value="${totalDiscount}"
-                            pattern="#,### đ" />
+                                value="${totalDiscount}"
+                                pattern="#,### đ"/>
     </span>
                 </div>
 
@@ -158,15 +163,16 @@
                     <span id="total" class="text-success fs-5">
                 <fmt:formatNumber
                         value="${total}"
-                        pattern="#,### đ" />
+                        pattern="#,### đ"/>
             </span>
                 </div>
                 <!-- Mã giảm giá voucher -->
                 <div class="mt-3">
                     <label class="form-label fw-semibold">Mã giảm giá</label>
                     <form id="voucherForm" class="input-group">
-                        <input type="text" class="form-control" id="codeVoucher" name="codeVoucher" placeholder="Nhập mã..." maxlength="15">
-                        <button type="button" class="btn btn-outline-success" id="applyVoucherBtn" >
+                        <input type="text" class="form-control" id="codeVoucher" name="codeVoucher"
+                               placeholder="Nhập mã..." maxlength="15">
+                        <button type="button" class="btn btn-outline-success" id="applyVoucherBtn">
                             Áp dụng
                         </button>
                     </form>
@@ -182,18 +188,18 @@
                     </c:when>
                     <c:otherwise>
                         <c:choose>
-                        <c:when test="${empty sessionScope.auth}">
-                            <button type="button" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
-                                    data-bs-toggle="modal" data-bs-target="#loginModal">
-                                <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
-                            </button>
-                        </c:when>
-                        <c:otherwise>
-                            <button type="button" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
-                                    data-bs-toggle="modal" data-bs-target="#checkoutModal">
-                                <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
-                            </button>
-                        </c:otherwise>
+                            <c:when test="${empty sessionScope.auth}">
+                                <button type="button" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                                        data-bs-toggle="modal" data-bs-target="#loginModal">
+                                    <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
+                                </button>
+                            </c:when>
+                            <c:otherwise>
+                                <button type="button" class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                                        data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                                    <i class="bi bi-credit-card me-1"></i> Thanh Toán Ngay
+                                </button>
+                            </c:otherwise>
                         </c:choose>
                     </c:otherwise>
                 </c:choose>
@@ -203,72 +209,103 @@
     <p style="color: red;">${errorMessage}</p>
 
 </section>
-        <%--Modal khi khách hàng chưa đăng nhập --%>
-        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content shadow-lg border-0">
-                    <div class="modal-header bg-success text-dark">
-                        <h5 class="modal-title fw-bold" id="loginModalLabel">
-                            <i class="bi bi-info-circle-fill me-2 text-white"></i>
-                            <span class="text-white">Thông Báo</span>
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+<%--Modal khi khách hàng chưa đăng nhập --%>
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-success text-dark">
+                <h5 class="modal-title fw-bold" id="loginModalLabel">
+                    <i class="bi bi-info-circle-fill me-2 text-white"></i>
+                    <span class="text-white">Thông Báo</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-                    <div class="modal-body text-center py-4">
-                        <p class="fs-5 fw-bold text-dark mb-0">Quý khách chưa đăng nhập!</p>
-                        <small class="text-muted">Vui lòng đăng nhập tài khoản để thực hiện chức năng thanh toán.</small>
-                    </div>
+            <div class="modal-body text-center py-4">
+                <p class="fs-5 fw-bold text-dark mb-0">Quý khách chưa đăng nhập!</p>
+                <small class="text-muted">Vui lòng đăng nhập tài khoản để thực hiện chức năng thanh toán.</small>
+            </div>
 
-                    <div class="modal-footer justify-content-center border-0 pt-0">
-                        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
-                        <a href="${pageContext.request.contextPath}/login" class="btn btn-success px-4 fw-bold">
-                            Đăng nhập <i class="bi bi-arrow-right-short"></i>
-                        </a>
-                    </div>
-                </div>
+            <div class="modal-footer justify-content-center border-0 pt-0">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                <a href="${pageContext.request.contextPath}/login" class="btn btn-success px-4 fw-bold">
+                    Đăng nhập <i class="bi bi-arrow-right-short"></i>
+                </a>
             </div>
         </div>
-        <%--Modal xác nhận thông tin đặt --%>
-        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered"> <div class="modal-content shadow-lg border-0">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title fw-bold" id="checkoutModalLabel">
-                        <i class="bi bi-cart-check me-2"></i>Thông Tin Đặt Hàng
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <form action="${pageContext.request.contextPath}/order" method="post">
-                        <input type="hidden" name="action" value="confirm">
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Họ và tên người nhận</label>
-                            <input type="text" name="receiverName" class="form-control"
-                                   value="${sessionScope.auth.fullName}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Địa chỉ nhận hàng</label>
-                            <input type="text" name="address" class="form-control" placeholder="Số nhà, tên đường..." required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Số điện thoại</label>
-                            <input type="tel" name="phone" class="form-control" placeholder="0123456789" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-semibold">Phương thức thanh toán</label>
-                            <select name="paymentMethod" class="form-select" required>
-                                <option value="COD">Thanh toán khi nhận hàng (COD)</option>
-                                <option value="BANKING">Chuyển khoản ngân hàng</option>
-                            </select>
-                        </div>
-                        <hr>
-                        <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold">
-                            XÁC NHẬN ĐẶT HÀNG
-                        </button>
-                    </form>
-                </div>
+    </div>
+</div>
+<%--Modal xác nhận thông tin đặt --%>
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg border-0">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title fw-bold" id="checkoutModalLabel">
+                    <i class="bi bi-cart-check me-2"></i>Thông Tin Đặt Hàng
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
             </div>
+            <div class="modal-body p-4">
+                <form action="${pageContext.request.contextPath}/order" method="post">
+                    <input type="hidden" name="action" value="confirm">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Họ và tên người nhận</label>
+                        <input type="text" name="fullName" class="form-control"
+                               value="${sessionScope.auth.fullName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Số điện thoại</label>
+                        <input type="tel" name="phone" class="form-control"
+                               value="${sessionScope.auth.phone}" placeholder="0123456789" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Tỉnh/Thành phố</label>
+                        <select class="form-select" id="provinceSelect" name="provinceId"
+                                data-province-id="${sessionScope.auth.provinceId}" required>
+                            <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Quận/Huyện</label>
+                        <select class="form-select" id="districtSelect" name="districtId"
+                                data-district-id="${sessionScope.auth.districtId}" required>
+                            <option value="">-- Chọn Quận/Huyện --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Phường/Xã</label>
+                        <select class="form-select" id="wardSelect" name="wardCode"
+                                data-ward-code="${sessionScope.auth.wardCode}" required>
+                            <option value="">-- Chọn Phường/Xã --</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Số nhà, tên đường</label>
+                        <input type="text" name="address" class="form-control"
+                               value="${sessionScope.auth.address}" placeholder="Số nhà, tên đường..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Phương thức thanh toán</label>
+                        <select name="paymentMethod" class="form-select" required>
+                            <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                            <option value="BANKING">Chuyển khoản ngân hàng</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold">
+                        XÁC NHẬN ĐẶT HÀNG
+                    </button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
-        <%@include file="/view/user/include/footer.jsp" %>l
+
+<script>
+    window.GHN_PROXY_BASE = '${pageContext.request.contextPath}';
+</script>
+<script src="${pageContext.request.contextPath}/js/ghn-address.js"></script>
+<%@include file="/view/user/include/footer.jsp" %>
+l

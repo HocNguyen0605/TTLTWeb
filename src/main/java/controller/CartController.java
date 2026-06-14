@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.gson.JsonObject;
 import dao.ProductDAO;
 import dao.PromotionComboItemDAO;
 import dao.PromotionDAO;
@@ -21,6 +22,7 @@ import java.util.Set;
 public class CartController extends HttpServlet {
 
     private ProductDAO productDAO;
+
     @Override
     public void init() {
         productDAO = new ProductDAO();
@@ -38,24 +40,32 @@ public class CartController extends HttpServlet {
         String action = request.getParameter("action");
         int productId = Integer.parseInt(request.getParameter("productId"));
         String quantityRaw = request.getParameter("quantity");
-        try(Connection conn = DBContext.getConnection()) {
+        try (Connection conn = DBContext.getConnection()) {
             ProductDAO productDAO = new ProductDAO(conn);
             int stock = productDAO.getMaxQuantityById(productId);
             if ("add".equals(action)) {
                 // Nếu có truyền quantity thì lấy,
-                // nếu không (từ trang list) thì mặc định là 1
-                int quantity = (quantityRaw != null) ? Integer.parseInt(quantityRaw) : 1;
+                // nếu không thì mặc định là 1
+                int quantity = 1;
+                if (quantityRaw != null && !quantityRaw.isBlank()) {
+                    try {
+                        quantity = Integer.parseInt(quantityRaw);
+                    } catch (NumberFormatException e) {
+                    }
+                }
                 int countProduct = cart.getTotalQuantityByID(productId);
-                if (countProduct+quantity<=stock) {
+                if (countProduct + quantity <= stock) {
                     Product product = productDAO.findById(productId);
                     if (product != null) {
                         cart.addProduct(product, quantity);
                         if (session.getAttribute("auth") != null) {
                             User auth = (User) session.getAttribute("auth");
-                            new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), product.getId(), cart.findItemByProductId(product.getId()).getQuantity());
+                            new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), product.getId(),
+                                    cart.findItemByProductId(product.getId()).getQuantity());
                         }
                     }
-                } else session.setAttribute("messageCart","Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
+                } else
+                    session.setAttribute("messageCart", "Chúng tôi hiện không đủ tồn! Rất xin lỗi quý khách");
 
             } else if ("remove".equals(action)) {
                 cart.deleteProduct(productId);
@@ -74,8 +84,10 @@ public class CartController extends HttpServlet {
                 }
                 if (session.getAttribute("auth") != null && cart.findItemByProductId(productId) != null) {
                     User auth = (User) session.getAttribute("auth");
-                    new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), productId, cart.findItemByProductId(productId).getQuantity());
-                }            }
+                    new dao.CartDAO(conn).addOrUpdateCartItem(auth.getId(), productId,
+                            cart.findItemByProductId(productId).getQuantity());
+                }
+            }
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -86,7 +98,7 @@ public class CartController extends HttpServlet {
         }
 
         session.setAttribute("cart", cart);
-// Kiểm tra nếu là yêu cầu AJAX thì chỉ trả về mã thành công
+        // Kiểm tra nếu là yêu cầu AJAX thì chỉ trả về mã thành công
         String xRequestedWith = request.getHeader("X-Requested-With");
         if ("XMLHttpRequest".equals(xRequestedWith) || request.getHeader("accept").contains("application/json")) {
             response.setStatus(HttpServletResponse.SC_OK);
@@ -101,7 +113,7 @@ public class CartController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        //Xử lý thông báo về giỏ hàng > tồn
+        // Xử lý thông báo về giỏ hàng > tồn
         if (session != null) {
             String message = (String) session.getAttribute("messageCart");
             if (message != null) {
@@ -111,40 +123,49 @@ public class CartController extends HttpServlet {
         }
         Cart cart = (Cart) session.getAttribute("cart");
         Voucher voucher = (Voucher) session.getAttribute("voucher");
-        List<CartItem> listCalculate= new ArrayList<>();
-        String listIdSelectedParam= request.getParameter("listIdSelected");
-        double totalPrice= 0;
-        double discountVoucher =0;
+        List<CartItem> listCalculate = new ArrayList<>();
+        String listIdSelectedParam = request.getParameter("listIdSelected");
+        List<Integer> selectedIds = new ArrayList<>();
+        double totalPrice = 0;
+        double discountVoucher = 0;
         double discountPromotion = 0;
         double totalDiscount = 0;
-        double total=0;
-        //Tinh so tien san pham
+        double total = 0;
+        // Tinh so tien san pham
         if (cart != null && cart.getAllItems() != null && !cart.getAllItems().isEmpty()) {
-            if(listIdSelectedParam!=null){
+            if (listIdSelectedParam != null) {
                 List<String> listIds = Arrays.asList(listIdSelectedParam.split(","));
-                for(CartItem item : cart.getAllItems()) {
-                    if(listIds.contains(String.valueOf(item.getProduct().getId()))) {
+                for (CartItem item : cart.getAllItems()) {
+                    if (listIds.contains(String.valueOf(item.getProduct().getId()))) {
                         listCalculate.add(item);
+                        selectedIds.add(item.getProduct().getId());
                         item.setChecked(true);
+                    } else
+                        item.setChecked(false);
+                }
+            } else {
+                for (CartItem item : cart.getAllItems()) {
+                    if (item.isChecked()) {
+                        listCalculate.add(item);
+                        selectedIds.add(item.getProduct().getId());
                     }
-                    else item.setChecked(false);
                 }
             }
-
-            if(!listCalculate.isEmpty()){
-                for(CartItem item : listCalculate) {
-                    totalPrice+=item.getTotalPrice();
+            if (!listCalculate.isEmpty()) {
+                for (CartItem item : listCalculate) {
+                    totalPrice += item.getTotalPrice();
                 }
             }
 
             Set<Integer> promoIds = cart.getPromotionIdsFromCart(listCalculate);
-            //Tính số tiền giảm cho combo
+            // Tính số tiền giảm cho combo
             try (Connection conn = DBContext.getConnection()) {
                 PromotionDAO promoDAO = new PromotionDAO(conn);
                 PromotionComboItemDAO pciDAO = new PromotionComboItemDAO(conn);
                 for (int id : promoIds) {
                     double priceProductCombo = 0.0;
-                    if (id <= 0) continue;
+                    if (id <= 0)
+                        continue;
                     Promotion promotion = promoDAO.getById(id);
                     List<PromotionComboItem> pciList = pciDAO.getItemsByComboId(id);
                     boolean isComboSatisfied = true;
@@ -152,15 +173,15 @@ public class CartController extends HttpServlet {
                     int maxCombo = Integer.MAX_VALUE;
                     for (PromotionComboItem pci : pciList) {
                         CartItem item = null;
-                        for(CartItem cartItem : listCalculate) {
-                            if(cartItem.getProduct().getId() == pci.getProductId()) {
+                        for (CartItem cartItem : listCalculate) {
+                            if (cartItem.getProduct().getId() == pci.getProductId()) {
                                 item = cartItem;
                                 break;
                             }
                         }
                         if (item == null || item.getQuantity() < pci.getQuantity()) {
                             isComboSatisfied = false;
-                            maxCombo=0;
+                            maxCombo = 0;
                             break;
                         }
                         countCombo = item.getQuantity() / pci.getQuantity();
@@ -170,16 +191,18 @@ public class CartController extends HttpServlet {
                     if (isComboSatisfied && maxCombo > 0) {
                         for (PromotionComboItem pci : pciList) {
                             CartItem item = null;
-                            for(CartItem cartItem : listCalculate) {
-                                if(cartItem.getProduct().getId() == pci.getProductId()) {
+                            for (CartItem cartItem : listCalculate) {
+                                if (cartItem.getProduct().getId() == pci.getProductId()) {
                                     item = cartItem;
-                                    priceProductCombo += item.getPrice() * (pci.getQuantity() * maxCombo);                                    break;
+                                    priceProductCombo += item.getPrice() * (pci.getQuantity() * maxCombo);
+                                    break;
                                 }
                             }
                         }
                         if (promotion.getDiscount_type().equals("percent")) {
                             discountPromotion += priceProductCombo * promotion.getDiscount_value() * 0.01;
-                        } else discountPromotion += (promotion.getDiscount_value() * maxCombo);
+                        } else
+                            discountPromotion += (promotion.getDiscount_value() * maxCombo);
                     }
 
                 }
@@ -188,29 +211,45 @@ public class CartController extends HttpServlet {
             }
         }
 
-        //Tính giảm giá voucher
+        // Tính giảm giá voucher
         if (voucher != null) {
             if (voucher.getDiscountType().equals("percent")) {
-                discountVoucher= voucher.getDiscountValue()/100 * totalPrice;
+                discountVoucher = voucher.getDiscountValue() / 100 * totalPrice;
             } else if (voucher.getDiscountType().equals("amount")) {
-                discountVoucher= voucher.getDiscountValue();
+                discountVoucher = voucher.getDiscountValue();
             }
             session.removeAttribute("voucher");
         }
-        double shippingFee = listCalculate.isEmpty() ? 0 : 15000;
+        double shippingFee = 0;
+        if (!listCalculate.isEmpty() && session.getAttribute("auth") != null) {
+            User auth = (User) session.getAttribute("auth");
+            if (auth.getDistrictId() > 0 && auth.getWardCode() != null && !auth.getWardCode().isEmpty()) {
+                try {
+                    int weight = 0;
+                    for (CartItem item : listCalculate) {
+                        weight += item.getProduct().getVolume() * item.getQuantity();
+                    }
+                    JsonObject feeJson = util.GHNUtils.calculateFee(auth.getDistrictId(), auth.getWardCode(), weight);
+                    if (feeJson != null && feeJson.has("code") && feeJson.get("code").getAsInt() == 200) {
+                        shippingFee = feeJson.getAsJsonObject("data").get("total").getAsDouble();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         totalDiscount = discountVoucher + discountPromotion;
-        total = (totalPrice - totalDiscount + shippingFee)>0? totalPrice - totalDiscount + shippingFee:0 ;
-        //Hàm response cho AJAX của JS
+        total = (totalPrice - totalDiscount + shippingFee) > 0 ? totalPrice - totalDiscount + shippingFee : 0;
+        // Hàm response cho AJAX của JS
         String requestedWith = request.getHeader("X-Requested-With");
         if ("XMLHttpRequest".equals(requestedWith)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             String json = String.format(
                     "{\"totalPrice\":%.2f,\"discountPromotion\":%.2f,\"discountVoucher\":%.2f,\"totalDiscount\":%.2f,\"shippingFee\":%.2f,\"total\":%.2f}",
-                    totalPrice, discountPromotion, discountVoucher, totalDiscount, shippingFee, total
-            );
+                    totalPrice, discountPromotion, discountVoucher, totalDiscount, shippingFee, total);
             response.getWriter().write(json);
-        }else {
+        } else {
 
             request.setAttribute("totalPrice", totalPrice);
             request.setAttribute("discountPromotion", discountPromotion);

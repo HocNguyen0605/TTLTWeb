@@ -29,12 +29,33 @@
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Số điện thoại</label>
                     <input type="tel" name="phone"
-                           class="form-control" required>
+                           class="form-control" maxlength="10" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Địa chỉ giao hàng</label>
-                    <input type="text" name="address"
+                    <label class="form-label fw-semibold">Tỉnh/Thành phố</label>
+                    <select class="form-select" id="provinceSelect" name="provinceId" data-province-id="${sessionScope.auth.provinceId}" required>
+                        <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Quận/Huyện</label>
+                    <select class="form-select" id="districtSelect" name="districtId" data-district-id="${sessionScope.auth.districtId}" required>
+                        <option value="">-- Chọn Quận/Huyện --</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Phường/Xã</label>
+                    <select class="form-select" id="wardSelect" name="wardCode" data-ward-code="${sessionScope.auth.wardCode}" required>
+                        <option value="">-- Chọn Phường/Xã --</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Số nhà, tên đường</label>
+                    <input type="text" name="address" value="${sessionScope.auth.address}"
                            class="form-control" required>
                 </div>
 
@@ -113,4 +134,8 @@
 
     </div>
 </div>
+<script>
+    window.GHN_PROXY_BASE = '${pageContext.request.contextPath}';
+</script>
+<script src="${pageContext.request.contextPath}/js/ghn-address.js"></script>
 <%@include file="/view/user/include/footer.jsp" %>
