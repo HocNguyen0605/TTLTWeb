@@ -59,12 +59,13 @@ public class Cart implements Serializable {
         }
         return total;
     }
+    //Tính trọng lượng đơn dựa trên ml của tất cả sp trong đơn
     public int getTotalVolume() {
         int totalVolume = 0;
         for (CartItem item : data.values()) {
             totalVolume += item.getProduct().getVolume() * item.getQuantity();
         }
-        return totalVolume > 0 ? totalVolume : 200; // Default to 200g if 0
+        return totalVolume;
     }
     public CartItem findItemByProductId(int productId) {
         if (data == null) return null;
