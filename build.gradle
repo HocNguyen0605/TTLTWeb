@@ -8,19 +8,20 @@ plugins {
 apply plugin: 'org.hidetake.ssh'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 war {
-    archiveFileName = 'juicy.war'
+    archiveFileName = 'ROOT.war'
 }
-
+//Thong tin vps
 remotes {
-    host {
-        host = '192.168.13.129'
-        user = 'tran-duc-tri'
-        password = 'tri555'
+    vpsHost {
+        host = '103.72.97.53'
+        port = 24700
+        user = 'root'
+        password = vpsPassword
     }
 }
 
@@ -28,30 +29,52 @@ ssh.settings {
     knownHosts = allowAnyHosts
 }
 
-task docker_app_start {
-    doLast {
-        println 'Dùng Docker Compose để khởi động hệ thống...'
-        ssh.run {
-            session(remotes.host) {
-                execute 'cd ~/juicy-project && docker compose up -d'
-            }
-        }
-    }
-}
-
+//  TASK UP FILE LÊN ĐÚNG THƯ MỤC TRÊN VPS INET
 task docker_upload_file_to_server {
     doLast {
-        println 'Đang tải file juicy.war lên máy ảo...'
-        ssh.run {
-            session(remotes.host) {
-                execute 'rm -f /home/tran-duc-tri/deploy/juicy.war'
-                put from: "${project.projectDir}/build/libs/juicy.war",
-                        into: "/home/tran-duc-tri/deploy/juicy.war"
+        project.ssh.run {
+            session(project.remotes.vpsHost) {
+                // Xóa các file cũ trên VPS để tránh kẹt cache
+                execute 'rm -f /root/TTLTWeb/build/libs/ROOT.war'
+                execute 'rm -f /root/TTLTWeb/build/libs/juicy.war'
+
+                // Tạo thư mục hố hứng trên VPS nếu chưa có
+                execute 'mkdir -p /root/TTLTWeb/build/libs'
+
+                //  file ROOT.war từ Windows lên VPS
+                put from: "${project.projectDir}/build/libs/ROOT.war",
+                        into: "/root/TTLTWeb/build/libs/ROOT.war"
+
+                //  file Dockerfile từ Windows lên thư mục gốc dự án trên VPS
+                put from: "${project.projectDir}/Dockerfile",
+                        into: "/root/TTLTWeb/Dockerfile"
             }
         }
     }
 }
+task docker_app_start {
+    doLast {
 
+        def stdout = new ByteArrayOutputStream()
+        def stderr = new ByteArrayOutputStream()
+
+        try {
+            project.ssh.run {
+                session(project.remotes.vpsHost) {
+                    execute('cd /root/TTLTWeb && docker-compose down && docker-compose up -d --build juicy-app',
+                            outputStream: stdout,
+                            errorStream: stderr)
+                }
+            }
+        } catch (Exception e) {
+            println "ERROR MESSAGE: ${e.message}"
+        }
+
+        println "STDOUT: ${stdout.toString('UTF-8')}"
+        println "STDERR: ${stderr.toString('UTF-8')}"
+    }
+}
+// Chu trình deploy tự động
 task docker_deploy {
     dependsOn build
     dependsOn docker_upload_file_to_server
@@ -69,8 +92,9 @@ repositories {
     mavenCentral()
 }
 
+// THƯ VIỆN DỰ ÁN
 dependencies {
-    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
     implementation 'org.jdbi:jdbi3-core:3.51.0'
@@ -80,5 +104,4 @@ dependencies {
     implementation 'org.apache.httpcomponents:fluent-hc:4.5.14'
     implementation 'com.cloudinary:cloudinary-http44:1.36.0'
     implementation 'org.mindrot:jbcrypt:0.4'
-
 }
