@@ -145,6 +145,10 @@
                         <button class="btn btn-outline-danger btn-sm request-refund-btn ms-2" type="button"
                                 data-order-id="${o.id}"><i class="bi bi-arrow-counterclockwise me-1"></i>Yêu cầu trả hàng/hoàn tiền</button>
                     </c:if>
+                    <c:if test="${st == 'confirmed' or st == 'processing' or st == 'shipping' or st == 'delivered'}">
+                        <button class="btn btn-outline-info btn-sm btn-track-order ms-2" type="button"
+                                data-order-id="${o.id}"><i class="bi bi-geo-alt me-1"></i>Theo dõi đơn hàng</button>
+                    </c:if>
                 </div>
             </div>
         </div>
