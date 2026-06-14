@@ -1,12 +1,3 @@
-/**
- * Setup Forgot Password submission logic.
- *
- * @param {string} formId - ID of the forgot password form
- * @param {string} emailInputId - ID of the email input field
- * @param {string} msgDivId - ID of the div to show messages
- * @param {string} btnId - ID of the submit button
- * @param {string} contextPath - web app context path
- */
 function setupForgotPasswordLogic(formId, emailInputId, msgDivId, btnId, contextPath) {
     const form = document.getElementById(formId);
     if (!form) return;

@@ -3,6 +3,8 @@ package dao;
 import model.OrderItem;
 import util.DBContext;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderItemDAO extends DBContext {
     private Connection conn;
@@ -25,8 +27,8 @@ public class OrderItemDAO extends DBContext {
     }
 
     //Lấy ra các sp có orderID là x
-    public java.util.List<OrderItem> getItemsByOrderId(int orderId) throws SQLException {
-        java.util.List<OrderItem> list = new java.util.ArrayList<>();
+    public List<OrderItem> getItemsByOrderId(int orderId) throws SQLException {
+        List<OrderItem> list = new ArrayList<>();
         String sql = "SELECT * FROM orderitems WHERE id_order = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, orderId);

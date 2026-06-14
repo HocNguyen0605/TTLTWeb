@@ -11,6 +11,9 @@ public class User {
     private int role; // 2: Pro-Admin, 1: Admin, 0: User
     private String googleId;
     private String authProvider;
+    private Integer provinceId;
+    private Integer districtId;
+    private String wardCode;
 
     public User() {
     }
@@ -26,6 +29,22 @@ public class User {
         this.role = role;
         this.googleId = googleId;
         this.authProvider = authProvider;
+    }
+
+    public User(int id, String username, String password, String fullName, String email, String phone, String address, int role, String googleId, String authProvider, Integer provinceId, Integer districtId, String wardCode) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.role = role;
+        this.googleId = googleId;
+        this.authProvider = authProvider;
+        this.provinceId = provinceId;
+        this.districtId = districtId;
+        this.wardCode = wardCode;
     }
 
     public int getId() {
@@ -109,5 +128,29 @@ public class User {
     }
     public boolean isGoogleAccount() {
         return this.googleId != null && !this.googleId.trim().isEmpty();
+    }
+
+    public Integer getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Integer provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    public Integer getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(Integer districtId) {
+        this.districtId = districtId;
+    }
+
+    public String getWardCode() {
+        return wardCode;
+    }
+
+    public void setWardCode(String wardCode) {
+        this.wardCode = wardCode;
     }
 }

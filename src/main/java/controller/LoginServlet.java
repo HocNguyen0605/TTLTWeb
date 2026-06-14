@@ -1,15 +1,17 @@
 package controller;
 
+import com.google.gson.Gson;
 import dao.UserDAO;
 import model.User;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import util.ConfigLoader;
 import util.GoogleUtils;
-
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -107,7 +109,7 @@ public class LoginServlet extends HttpServlet {
 
             // Xử lí Cookies
             if (remember != null) {
-                String randToken = java.util.UUID.randomUUID().toString();
+                String randToken = UUID.randomUUID().toString();
 
                 dao.saveUserToken(u.getId(), randToken);
 
@@ -137,22 +139,22 @@ public class LoginServlet extends HttpServlet {
             if (isApi) {
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                java.util.Map<String, String> result = new java.util.HashMap<>();
+                Map<String, String> result = new HashMap<>();
                 result.put("status", "success");
                 result.put("redirect", redirectUrl);
-                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+                response.getWriter().write(new Gson().toJson(result));
             } else {
                 response.sendRedirect(redirectUrl);
             }
-            return;
+
         } else {
             if (isApi) {
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                java.util.Map<String, String> result = new java.util.HashMap<>();
+                Map<String, String> result = new HashMap<>();
                 result.put("status", "error");
                 result.put("message", "Sai tài khoản hoặc mật khẩu!");
-                response.getWriter().write(new com.google.gson.Gson().toJson(result));
+                response.getWriter().write(new Gson().toJson(result));
             } else {
                 request.setAttribute("mess", "Sai tài khoản hoặc mật khẩu!");
                 request.setAttribute("loginEmail", user);

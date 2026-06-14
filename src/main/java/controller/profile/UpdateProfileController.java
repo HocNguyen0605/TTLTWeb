@@ -65,6 +65,28 @@ public class UpdateProfileController extends HttpServlet {
         user.setPhone(phone != null && phone.trim().isEmpty() ? null : phone.trim());
 
         user.setAddress(address != null && address.trim().isEmpty() ? null : address.trim());
+        
+        String provinceIdStr = request.getParameter("provinceId");
+        String districtIdStr = request.getParameter("districtId");
+        String wardCode = request.getParameter("wardCode");
+        
+        if (provinceIdStr != null && !provinceIdStr.isEmpty()) {
+            user.setProvinceId(Integer.parseInt(provinceIdStr));
+        } else {
+            user.setProvinceId(null);
+        }
+        
+        if (districtIdStr != null && !districtIdStr.isEmpty()) {
+            user.setDistrictId(Integer.parseInt(districtIdStr));
+        } else {
+            user.setDistrictId(null);
+        }
+        
+        if (wardCode != null && !wardCode.isEmpty()) {
+            user.setWardCode(wardCode);
+        } else {
+            user.setWardCode(null);
+        }
 
         session.removeAttribute("errors");
 

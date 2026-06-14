@@ -10,11 +10,11 @@ import org.apache.http.client.fluent.Request;
 import java.util.UUID;
 
 public class GoogleUtils {
-    public static String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
-    public static String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
-    public static String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.uri");
-    public static String LINK_GET_TOKEN = "https://oauth2.googleapis.com/token";
-    public static String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
+    public static final String CLIENT_ID = ConfigLoader.getProperty("google.client.id");
+    public static final String CLIENT_SECRET = ConfigLoader.getProperty("google.client.secret");
+    public static final String REDIRECT_URI = ConfigLoader.getProperty("google.redirect.uri");
+    public static final String LINK_GET_TOKEN = "https://oauth2.googleapis.com/token";
+    public static final String LINK_GET_USER_INFO = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=";
 
     public static String getToken(final String code) throws Exception {
         String response = Request.Post(LINK_GET_TOKEN)
@@ -38,13 +38,10 @@ public class GoogleUtils {
         String state = UUID.randomUUID().toString();
         session.setAttribute("google_state", state);
 
-        String clientId = ConfigLoader.getProperty("google.client.id");
-        String redirectUri = ConfigLoader.getProperty("google.redirect.uri");
-
         return "https://accounts.google.com/o/oauth2/auth?"
                 + "scope=email%20profile"
-                + "&redirect_uri=" + redirectUri
-                + "&client_id=" + clientId
+                + "&redirect_uri=" + REDIRECT_URI
+                + "&client_id=" + CLIENT_ID
                 + "&response_type=code"
                 + "&state=" + state;
     }

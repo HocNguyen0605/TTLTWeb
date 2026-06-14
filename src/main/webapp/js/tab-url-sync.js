@@ -32,7 +32,7 @@ function syncOneFromUrl(tablist, ctx) {
 
     const match = triggers.find((el) => matchesPath(el, pathname, ctx)) || triggers[0];
     if (!match) return;
-
+    if (match.classList.contains('active')) return;
     if (window.bootstrap?.Tab) {
         window.bootstrap.Tab.getOrCreateInstance(match).show();
     }
@@ -43,7 +43,6 @@ function matchesPath(el, pathname, ctx) {
     const matchAttr = el.getAttribute('data-tab-match');
     const matchList = (matchAttr ? matchAttr.split(',') : []).map((s) => s.trim()).filter(Boolean);
 
-    // Always match its own URL
     const candidates = [url, ...matchList.map((m) => normalizeUrl(m, ctx))].filter(Boolean);
     return candidates.some((c) => pathname === c.toLowerCase());
 }
