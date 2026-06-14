@@ -9,68 +9,52 @@
 <!--SEARCH BAR-->
 <jsp:include page="/view/user/include/search-bar.jsp" />
 
+
 <!-- HERO SECTION -->
-<section class="hero-section d-flex align-items-center">
-    <div class="container text-center">
-        <section id="hero-carousel" class="carousel slide" data-bs-ride="carousel"
-                 data-bs-interval="3000">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="0" aria-label="Slide-1"></button>
-                <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="1" class="active" aria-current="true" aria-label="Slide-2"></button>
-                <button type="button" data-bs-target="#hero-carousel" data-bs-slide-to="2"  aria-label="Slide-3"></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item">
-                    <img src="${pageContext.request.contextPath}/images/banner/orangejuice.jpg" class="d-block w-100" alt="Nước Ép Cam">
-                    <div class="carousel-caption  d-md-block">
-                        <h2 class="fw-bold">Nước Ép Cam Tươi Mát</h2>
-                        <p>Giảm ngay <span class="text-warning fw-bold">20%</span> cho đơn hàng đầu
-                            tiên!</p>
-                        <a href="${pageContext.request.contextPath}/products"
-                           class="btn btn-warning rounded-pill px-4">Mua Ngay</a>
-                    </div>
-                </div>
-
-                <div class="carousel-item active">
-                    <img src="${pageContext.request.contextPath}/images/banner/service.jpg" class="d-block w-100" alt="dịch vụ">
-                    <div class="carousel-caption  d-md-block">
-                        <h2 class="fw-bold">Tiện Lợi – Nhanh Chóng – Hiệu Quả</h2>
-                        <p>Mang đến trải nghiệm tốt nhất từng phút giây</p>
-                        <a href="${pageContext.request.contextPath}/products"
-                           class="btn btn-warning rounded-pill px-4">Xem Thêm</a>
-                    </div>
-                </div>
-
-                <div class="carousel-item">
-                    <img src="${pageContext.request.contextPath}/images/banner/delivery.jpg" class="d-block w-100"
-                         alt="Giao hàng miễn phí">
-                    <div class="carousel-caption  d-md-block">
-                        <h2 class="fw-bold">Gọi Là Có – Giao Ngay Tận Cửa</h2>
-                        <p>Miễn phí giao hàng toàn TP.HCM trong hôm nay!</p>
-                        <a href="${pageContext.request.contextPath}/products"
-                           class="btn btn-warning rounded-pill px-4">Đặt Ngay</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Nút điều hướng -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#hero-carousel"
-                    data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
+<section id="hero-carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <%-- Tạo động theo số lượng banner --%>
+    <div class="carousel-indicators">
+        <c:forEach items="${banners}" var="b" varStatus="status">
+            <button type="button"
+                    data-bs-target="#hero-carousel"
+                    data-bs-slide-to="${status.index}"
+                    class="${status.first ? 'active' : ''}"
+            >
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#hero-carousel"
-                    data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-        </section>
-
-        <a href="${pageContext.request.contextPath}/products"
-           class="btn btn-lg btn-primary-custom px-4 py-2 rounded-pill shadow animate__animated animate__fadeInUp">
-            ĐẶT HÀNG NGAY
-        </a>
+        </c:forEach>
     </div>
-</section>
+        <%-- Carousel Items --%>
+        <div class="carousel-inner">
+            <c:forEach items="${banners}" var="b" varStatus="status">
+            <div class="carousel-item ${status.first ? 'active' : ''}">
+                <c:choose>
+                    <%-- linkUrl có thì hiển gán cho ảnh --%>
+                    <c:when test="${not empty b.linkUrl}">
+                        <a href="${b.linkUrl}">
+                            <img src="${b.imageUrl}" class="d-block w-100" alt="${b.title}">
+                        </a>
+                    </c:when>
 
+                    <%-- linkUrl bị rỗng điền link trang product --%>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/products?action=showProductLinks&bannerId=${b.id}">
+                            <img src="${b.imageUrl}" class="d-block w-100" alt="${b.title}">
+                        </a>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            </c:forEach>
+        </div>
+        <%-- Nút điều hướng --%>
+        <button class="carousel-control-prev" type="button"
+                data-bs-target="#hero-carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button"
+                data-bs-target="#hero-carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+</section>
 <section class="py-5 bg-light">
     <div class="container my-5">
         <div class="text-center mb-5 animate__animated animate__fadeIn">

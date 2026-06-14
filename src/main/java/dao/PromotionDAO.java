@@ -87,4 +87,40 @@ public class PromotionDAO {
         }
         return null;
     }
+    public List<Promotion> getActiveComboPromotions() {
+        List<Promotion> list = new ArrayList<>();
+        String sql = """
+                SELECT * FROM promotion 
+                WHERE type = ? 
+                AND ? BETWEEN start_date AND end_date 
+                AND status = 'active'
+                """;
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+
+        try (Connection conn = DBContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, "combo");
+            ps.setTimestamp(2, currentTime);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Promotion p = new Promotion();
+                    p.setId(rs.getInt("id"));
+                    p.setName(rs.getString("name"));
+                    p.setType(rs.getString("type"));
+                    p.setDiscount_type(rs.getString("discount_type"));
+                    p.setDiscount_value(rs.getInt("discount_value"));
+                    p.setStart_date(rs.getTimestamp("start_date"));
+                    p.setEnd_date(rs.getTimestamp("end_date"));
+                    p.setStatus(rs.getString("status"));
+
+                    list.add(p);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

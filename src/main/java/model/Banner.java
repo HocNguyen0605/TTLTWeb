@@ -1,7 +1,13 @@
 package model;
 
+import dao.BannerProductDAO;
+import util.DBContext;
+
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Banner implements Serializable {
     private int id;
@@ -45,5 +51,21 @@ public class Banner implements Serializable {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public String getPromotionName(){
+        try(Connection conn = DBContext.getConnection()){
+            BannerProductDAO bpDAO = new BannerProductDAO(conn);
+            String result = bpDAO.getPromotionName(this.id);
+
+
+            if (result == null) {
+                return "Chưa áp dụng";
+            }
+            return result;
+        } catch(Exception e){
+            System.out.println(">>> LỖI TẠI GETPROMOTIONNAME CỦA CLASS BANNER: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return "Lỗi kết nối DB";
+    }
 
 }

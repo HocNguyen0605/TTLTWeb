@@ -101,23 +101,17 @@
             </div>
 
             <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
-                <div class="search-container d-none d-md-block">
-                    <form action="/admin/banner" method="get">
-                        <input type="text" name="search" class="search-input"
-                               placeholder="Nhập tên banner để tìm kiếm" value=${currentSearch}>
-                        <button type="submit" class="btn p-0 border-0">
+                <div class="search-container d-none d-md-block" style="width: 320px;">
+                    <form action="/admin/banner" method="get" class="input-group">
+                        <input type="text" name="search" class="form-control search-input"
+                               placeholder="Nhập tên banner để tìm kiếm" value="${currentSearch}">
+                        <button type="submit" class="btn btn-success d-flex align-items-center">
                             <i class="bi bi-search search-icon"></i>
                         </button>
                     </form>
                 </div>
-                <!--Hiển thị danh sách banner tìm kiếm chạy bằng ajax -->
-                <div class="search-container position-relative">
-                    <input type="text" id="searchInput" name="search" class="search-input" autocomplete="off" ...>
-                    <div id="searchSuggestions" class="list-group position-absolute w-100 shadow-lg" style="z-index: 1000; display: none;">
-                    </div>
-                </div>
                 <!--Nút tạo banner mơis-->
-                <button class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
+                <button class="btn btn-success fw-semibold rounded-pill text-nowrap"
                         data-bs-toggle="modal" data-bs-target="#addBannerModal">
                     Tạo Banner mới
                 </button>
@@ -130,7 +124,7 @@
                 <div class="alert alert-info">Không tìm thấy banner nào khớp với từ khóa "${currentSearch}"</div>
             </c:otherwise>
         </c:choose>
-        <div class="card card-custom animate__animated animate__fadeInUp">
+        <div class="card card-custom animate__animated animate__fadeInUp my-5">
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-custom mb-0">
@@ -180,11 +174,137 @@
                                             </c:choose>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-sm btn-warning"
-                                                    data-bs-toggle="modal" data-bs-target="#updateBannerModal"
-                                                    onclick="openEditModal('${b.id}', '${b.title}', '${b.imageUrl}', '${b.linkUrl}', '${b.priority}', '${b.isActive}')">
-                                                Sửa
-                                            </button>
+                                            <div class="d-flex gap-2 justify-content-center">
+                                                <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-image="${b.imageUrl}"
+                                                        data-link="${b.linkUrl}"
+                                                        data-bs-target="#updateBannerModal"
+                                                        data-priority="${b.priority}"
+                                                        data-active="${b.isActive}"
+                                                        data-promotion-name="${b.promotionName}" >
+                                                    Sửa
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-bs-target="#deleteBannerModal">
+                                                    Xóa
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </c:otherwise>
+
+                        </c:choose>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 animate__animated animate__fadeInDown">
+            <div>
+                <h2 class="fw-bold text-success mb-1">Quản Lý Banner đang ẩn </h2>
+                <p class="text-muted mb-0">Xem và quản lý tất cả Banner đang ẩn</p>
+            </div>
+
+            <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
+                <div class="search-container d-none d-md-block" style="width: 320px;">
+                    <form action="/admin/banner" method="get" class="input-group">
+                        <input type="text" name="search" class="form-control search-input"
+                               placeholder="Nhập tên banner để tìm kiếm" value="${currentSearch}">
+                        <button type="submit" class="btn btn-success d-flex align-items-center">
+                            <i class="bi bi-search search-icon"></i>
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+        <c:choose>
+            <c:when test="${not empty bannersUnactive}">
+            </c:when>
+            <c:otherwise>
+                <div class="alert alert-info">Không tìm thấy banner nào khớp với từ khóa "${currentSearch}"</div>
+            </c:otherwise>
+        </c:choose>
+        <div class="card card-custom animate__animated animate__fadeInUp">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                        <tr>
+                            <th class="ps-4">Banner</th>
+                            <th>Tên</th>
+                            <th>Vị trí</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:choose>
+
+                            <c:when test="${empty bannersUnactive}">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        Hiện không bất kì banner nào bị ẩn!!!
+                                    </td>
+                                </tr>
+                            </c:when>
+
+                            <c:otherwise>
+                                <c:forEach var="b" items="${bannersUnactive}">
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="${b.imageUrl}"
+                                                         width="60"
+                                                         class="rounded me-3"
+                                                         alt="${b.title}">
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>${b.title}</td>
+                                        <td>${b.priority}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${b.isActive}">
+                                                    <span class="badge bg-success">Đang hiện</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge bg-secondary">Đang ẩn</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex gap-2 justify-content-center">
+                                                <button type="button" class="btn btn-sm btn-warning btn-edit-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-image="${b.imageUrl}"
+                                                        data-link="${b.linkUrl}"
+                                                        data-bs-target="#updateBannerModal"
+                                                        data-priority="${b.priority}"
+                                                        data-active="${b.isActive}"
+                                                        data-promotion-name="${b.promotionName}" >
+                                                    Sửa
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-danger btn-delete-banner"
+                                                        data-bs-toggle="modal"
+                                                        data-id="${b.id}"
+                                                        data-title="${b.title}"
+                                                        data-bs-target="#deleteBannerModal">
+                                                    Xóa
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -203,7 +323,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content shadow-lg">
                 <!-- Header: Thay đổi icon và tiêu đề -->
-                <div class="modal-header ">
+                <div class="modal-header bg-success text-white">
                     <h5 class="modal-title">
                         <i class="bi bi-image-fill me-2"></i>Thêm Banner Quảng Cáo Mới
                     </h5>
@@ -239,6 +359,19 @@
                                 <input type="text" name="link_url" class="form-control"
                                        placeholder="/san-pham/nuoc-ep-tao hoặc https://...">
                             </div>
+                            <!-- Danh sách chương trình khuyến mãi -->
+                            <div class="col-md-8 mb-3">
+                                <label class="form-label fw-semibold text-secondary">Chọn CTKM</label>
+                                <select class="form-select" id="promotionSelect" name="promotionId" required>
+                                    <option value="" selected disabled>-- Chọn CTKM --</option>
+                                    <option value="0">Không áp dụng chương trình khuyến mãi</option>
+                                    <c:forEach items="${listComboPromotion}" var="promo">
+                                        <option value="${promo.id}">
+                                                ${promo.name} (Giảm ${promo.discount_value})
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
 
                             <!-- Độ ưu tiên (Priority) -->
                             <div class="col-md-4 mb-3">
@@ -251,7 +384,7 @@
                         <!-- Nút bấm -->
                         <div class="d-flex justify-content-end gap-2 pt-3 border-top">
                             <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-primary px-4">
+                            <button type="submit" class="btn btn-success px-4">
                                 <i class="bi bi-cloud-arrow-up-fill me-1"></i> Upload & Lưu Banner
                             </button>
                         </div>
@@ -264,7 +397,7 @@
     <div class="modal fade" id="updateBannerModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content shadow-lg">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header bg-success text-white">
                     <h5 class="modal-title">
                         <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa Banner
                     </h5>
@@ -317,18 +450,51 @@
                                 </select>
                             </div>
                         </div>
+                        <!-- CTKM -->
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label fw-semibold text-secondary">Chọn CTKM</label>
+                            <select class="form-select" id="editPromotionSelect" name="promotionId" required>
+                                <option id="editDefaultPromoOption" value="0">Không áp dụng chương trình khuyến mãi</option>
+                                <c:forEach items="${listComboPromotion}" var="promo">
+                                    <option value="${promo.id}" data-name="${promo.name}">${promo.name} (Giảm ${promo.discount_value})
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
 
                         <div class="d-flex justify-content-end gap-2 pt-3 border-top">
                             <button type="button" class="btn btn-light px-4 border" data-bs-dismiss="modal">Hủy bỏ</button>
-                            <button type="submit" class="btn btn-primary px-4">Cập nhật Banner</button>
+                            <button type="submit" class="btn btn-success px-4">Cập nhật Banner</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <!--Modal xác nhận xóa banner -->
+    <div class="modal fade" id="deleteBannerModal" tabindex="-1" aria-labelledby="deleteBannerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger" id="deleteBannerModalLabel">Xác nhận xóa Banner</h5>
+                    <button type="button" class="btn-close" data-bs-toggle="modal" data-bs-target="#deleteBannerModal" aria-label="Close"></button>
+                </div>
+                <form action="/admin/banner" method="post">
+                    <input type="hidden" name="action" value="delete">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="delete-banner-id">
+                        <p>Bạn có chắc chắn muốn xóa banner <strong id="delete-banner-title" class="text-dark"></strong> không?</p>
+                        <span class="text-muted small">Hành động này không thể hoàn tác.</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
 
 <!--footer-->
 <footer class="bg-dark text-white pt-5 pb-4">
@@ -377,7 +543,7 @@
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="js/init.js"></script>
+<script src="${pageContext.request.contextPath}/js/banner_admin.js"></script>
 </body>
 
 </html>

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 @WebServlet("/order")
 public class OrderServlet extends HttpServlet {
@@ -33,6 +34,7 @@ public class OrderServlet extends HttpServlet {
 
         // Lấy cart từ session
         Cart cart = (Cart) session.getAttribute("cart");
+        List<CartItem> cartItemsChecked = cart.getSelectedItemsForCheckout();
         if (cart == null || cart.getAllItems().isEmpty()) {
             response.sendRedirect("product.jsp");
             return;
@@ -49,9 +51,15 @@ public class OrderServlet extends HttpServlet {
 
         // Tạo Order
         Order order = new Order();
-        order.setTotalPrice(cart.getTotalPrice());
         order.setStatus("PENDING");
+        order.setPaymentStatus("PENDING");
         order.setOrderDate(new Date());
+        double totalPrice = 0;
+        for (CartItem item : cartItemsChecked) {
+            totalPrice += item.getQuantity() * item.getProduct().getPrice();
+        }
+        order.setTotalPrice(totalPrice + 15000);
+
 
         // lấy user từ session
         User user = (User) session.getAttribute("auth");
@@ -67,8 +75,7 @@ public class OrderServlet extends HttpServlet {
             double checkedTotalPrice = 0;
             boolean hasCheckedItem = false;
             //Kiểm tra có các item có đủ bán so với kho
-            for (CartItem item : cart.getAllItems()) {
-                if (!item.isChecked()) continue;
+            for (CartItem item : cartItemsChecked) {
                 hasCheckedItem = true;
                 checkedTotalPrice += item.getTotalPrice();
                 Product p = productDAO.getProductForUpdate(item.getProduct().getId());
@@ -91,12 +98,12 @@ public class OrderServlet extends HttpServlet {
             int orderId = orderDAO.insertAndReturnId(order);
 
             OrderItemDAO orderItemDAO = new OrderItemDAO(conn);
-            for (CartItem item : cart.getAllItems()) {
-                if (!item.isChecked()) continue;
+            for (CartItem item : cartItemsChecked) {
                 // Ghi chi tiết đơn hàng
                 OrderItem orderItem = new OrderItem(orderId, item.getProduct().getId(), item.getQuantity(), item.getProduct().getPrice());
                 orderItemDAO.insertOrderItem(orderItem);
             }
+
             // Ghi shipping info
             ShippingInfoDAO shippingDAO = new ShippingInfoDAO(conn);
             ShippingInfo shippingInfo = new ShippingInfo();
@@ -104,7 +111,7 @@ public class OrderServlet extends HttpServlet {
             shippingInfo.setReceiverName(fullName);
             shippingInfo.setReceiverPhone(phone);
             shippingInfo.setAddress(address);
-            
+
             String shippingFeeStr = request.getParameter("shippingFee");
             double shippingFee = 0;
             if (shippingFeeStr != null && !shippingFeeStr.isEmpty()) {
@@ -130,7 +137,7 @@ public class OrderServlet extends HttpServlet {
                 }
             }
             shippingInfo.setShippingFee(shippingFee);
-            
+
             shippingInfo.setNote("");
             if (provinceIdStr != null && !provinceIdStr.isEmpty()) {
                 shippingInfo.setProvinceId(Integer.parseInt(provinceIdStr));
@@ -141,10 +148,15 @@ public class OrderServlet extends HttpServlet {
             shippingInfo.setWardCode(wardCode);
             shippingDAO.insert(shippingInfo);
             conn.commit(); // Thành công
-            session.removeAttribute("cart");
-            if (session.getAttribute("auth") != null) {
-                User auth = (User) session.getAttribute("auth");
-                new dao.CartDAO(conn).clearCart(auth.getId());
+            conn.commit(); // Lưu đơn hàng thành công
+            if ("BANKING".equals(paymentMethod)) {
+                response.sendRedirect(request.getContextPath() + "/payment/vnpay?orderId=" + orderId);
+            } else {
+                for(CartItem item : cartItemsChecked) {
+                    ProductDAO productDao = new ProductDAO(conn);
+                    productDao.updateProductQuantity(item.getProduct().getId(), item.getQuantity(), item.getQuantity());
+                }
+                response.sendRedirect(request.getContextPath() + "/cart.jsp");
             }
             response.sendRedirect(request.getContextPath() + "/home");
         } catch (Exception e) {

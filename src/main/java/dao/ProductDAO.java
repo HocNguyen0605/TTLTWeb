@@ -6,7 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class ProductDAO extends BaseDao {
     private Connection conn;
@@ -514,7 +516,7 @@ public class ProductDAO extends BaseDao {
                         p.description
                     FROM products p
                     LEFT JOIN product_images pi ON p.image = pi.id
-                    WHERE p.quantity >= 0
+                    WHERE p.quantity > 0
                     GROUP BY p.id
                     ORDER BY p.id DESC
                     LIMIT :offset, :limit
@@ -612,5 +614,61 @@ public class ProductDAO extends BaseDao {
         return get().withHandle(handle -> handle.createQuery(sql)
                 .mapToBean(Product.class)
                 .list());
+    }
+    //lấy danh sách sản phẩm dựa trên danh sách id
+    public List<Product> getProductsByIDs(List<Integer> listIdProduct) {
+        List<Product> listProduct = new ArrayList<>();
+
+        if (listIdProduct == null || listIdProduct.isEmpty()) {
+            return listProduct;
+        }
+
+        StringJoiner placeholders = new StringJoiner(",");
+        for (int i = 0; i < listIdProduct.size(); i++) {
+            placeholders.add("?");
+        }
+
+        String sql = """
+                    SELECT
+                        p.id AS id,
+                        p.product_name AS name,
+                        p.price,
+                        p.volume,
+                        p.supplier_name,
+                        p.quantity,
+                        COALESCE(pi.image_URL, p.image) AS img,
+                        p.description,
+                        p.promotion
+                    FROM products p
+                    LEFT JOIN product_images pi ON p.image = pi.id
+                    WHERE p.id IN (""" + placeholders.toString() + """
+                    ) AND p.quantity > 0
+                    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (int i = 0; i < listIdProduct.size(); i++) {
+                ps.setInt(i + 1, listIdProduct.get(i));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setPrice(rs.getDouble("price"));
+                    product.setVolume(rs.getInt("volume"));
+                    product.setSupplier_name(rs.getString("supplier_name"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    product.setImg(rs.getString("img"));
+                    product.setDescription(rs.getString("description"));
+                    product.setPromotion(rs.getInt("promotion"));
+
+                    listProduct.add(product);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listProduct;
     }
 }

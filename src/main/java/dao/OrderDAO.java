@@ -76,6 +76,17 @@ public class OrderDAO {
             e.printStackTrace();
         }
     }
+    public void updateStatusPayment(int orderId, String status) {
+        String sql = "UPDATE orders SET status_payment=? WHERE id=?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, orderId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public boolean cancelOrder(int orderId, int userId, String reason) {
         return DBContext.getJdbi().inTransaction(handle -> {

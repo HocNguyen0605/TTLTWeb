@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<fmt:setLocale value="vi_VN" scope="session" />
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -19,6 +20,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/orders.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/cart.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/myOrders.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/product-detail.css">
     <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>

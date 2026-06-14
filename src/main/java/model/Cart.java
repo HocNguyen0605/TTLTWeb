@@ -81,4 +81,15 @@ public class Cart implements Serializable {
         }
         return promoIdSet;
     }
+    public List<CartItem> getSelectedItemsForCheckout() {
+        List<CartItem> checkoutList = new ArrayList<>();
+        List<CartItem> sessionCart = getAllItems();
+
+        for (CartItem item : sessionCart) {
+            if (item.isChecked()) {
+                checkoutList.add(item);
+            }
+        }
+        return checkoutList;
+    }
 }

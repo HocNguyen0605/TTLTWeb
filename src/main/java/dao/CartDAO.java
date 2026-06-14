@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CartDAO {
     private Connection conn;
     public CartDAO(Connection conn) {
@@ -44,7 +47,6 @@ public class CartDAO {
     }
     public void syncCartToSession(int userId, Cart sessionCart) throws SQLException {
         ProductDAO productDAO = new ProductDAO(conn);
-
         // 1. Lấy sp từ db
         String sql = "SELECT product_id, quantity FROM cart WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -59,7 +61,8 @@ public class CartDAO {
                         if (sessionCart.findItemByProductId(productId) == null) {
                             sessionCart.addProduct(product, quantity);
                         } else {
-                            sessionCart.update(productId, quantity);
+                            int quantityCart = sessionCart.findItemByProductId(productId).getQuantity();
+                            sessionCart.update(productId,quantityCart + quantity);
                         }
                     }
                 }
