@@ -227,13 +227,7 @@
 
             </div>
         </div>
-        <c:choose>
-            <c:when test="${not empty bannersUnactive}">
-            </c:when>
-            <c:otherwise>
-                <div class="alert alert-info">Không tìm thấy banner nào khớp với từ khóa "${currentSearch}"</div>
-            </c:otherwise>
-        </c:choose>
+
         <div class="card card-custom animate__animated animate__fadeInUp">
             <div class="card-body p-0">
                 <div class="table-responsive">

@@ -320,7 +320,7 @@ public class ProductDAO extends BaseDao {
         }
 
         // Filter hidden products for valid valid
-        sql.append(" AND p.quantity >= 0");
+        sql.append(" AND p.quantity > 0");
 
         if (minVol != null) {
             sql.append(" AND p.volume >= :minVol");
