@@ -3,10 +3,7 @@
 package controller;
 
 import com.google.gson.JsonObject;
-import dao.OrderDAO;
-import dao.OrderItemDAO;
-import dao.ProductDAO;
-import dao.ShippingInfoDAO;
+import dao.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -154,7 +151,11 @@ public class OrderServlet extends HttpServlet {
             } else {
                 for(CartItem item : cartItemsChecked) {
                     ProductDAO productDao = new ProductDAO(conn);
+                    CartDAO cartDAO = new CartDAO(conn);
                     productDao.updateProductQuantity(item.getProduct().getId(), item.getQuantity(), item.getQuantity());
+                //Xóa sp đã mua ra khỏi giỏ
+                    cart.deleteProduct(item.getProduct().getId());
+                    cartDAO.removeCartItem(user.getId(), item.getProduct().getId());
                 }
                 response.sendRedirect(request.getContextPath() + "/view/user/cart.jsp");
             }
