@@ -561,7 +561,7 @@ public class ProductDAO extends BaseDao {
     }
     // Trong lớp ProductDAO.java
     public Product getProductForUpdate(int productId) throws SQLException {
-        String sql = "SELECT id, product_name, quantity, version FROM products WHERE id = ?";
+        String sql = "SELECT id, product_name, quantity, volume, version FROM products WHERE id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, productId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -570,6 +570,7 @@ public class ProductDAO extends BaseDao {
                     product.setId(rs.getInt("id"));
                     product.setName(rs.getString("product_name"));
                     product.setQuantity(rs.getInt("quantity"));
+                    product.setVolume(rs.getInt("volume"));
                     product.setVersion(rs.getInt("version"));
                     return product;
                 }
