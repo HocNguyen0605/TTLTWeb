@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
     id "org.hidetake.ssh" version "2.11.2"
     id 'war'
-}gi
+}
 
 apply plugin: 'org.hidetake.ssh'
 

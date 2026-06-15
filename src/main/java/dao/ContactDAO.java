@@ -5,7 +5,33 @@ import util.DBContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class  ContactDAO {
+public class ContactDAO {
+
+    public ContactDAO() {
+        createTableIfNotExists();
+    }
+
+    private void createTableIfNotExists() {
+        String sql = """
+            CREATE TABLE IF NOT EXISTS Contact (
+                id_contact INT AUTO_INCREMENT PRIMARY KEY,
+                full_name VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                phone VARCHAR(20),
+                subject VARCHAR(255),
+                message TEXT NOT NULL,
+                id_user INT,
+                status VARCHAR(50) DEFAULT 'NEW',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """;
+        try (Connection con = DBContext.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Hàm gốc: Chèn dữ liệu bằng các tham số rời
     public void insert(String name, String email, String phone,

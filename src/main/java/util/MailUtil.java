@@ -16,9 +16,18 @@ public class MailUtil {
     private static Properties getSmtpProperties() {
         Properties props = new Properties();
         props.put("mail.smtp.host", ConfigLoader.getProperty("mail.smtp.host"));
-        props.put("mail.smtp.port", ConfigLoader.getProperty("mail.smtp.port"));
+        props.put("mail.smtp.port", "465"); // Use 465 for SSL, as 587 is often blocked on VPS
         props.put("mail.smtp.auth", ConfigLoader.getProperty("mail.smtp.auth"));
-        props.put("mail.smtp.starttls.enable", ConfigLoader.getProperty("mail.smtp.starttls.enable"));
+        props.put("mail.smtp.starttls.enable", "false");
+        props.put("mail.smtp.ssl.enable", "true"); // Enable SSL for port 465
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.socketFactory.fallback", "false");
+
+        // Timeout to prevent hanging threads if SMTP is unreachable
+        props.put("mail.smtp.connectiontimeout", "5000");
+        props.put("mail.smtp.timeout", "5000");
+        props.put("mail.smtp.writetimeout", "5000");
         return props;
     }
     public static void sendContactMail(Contact c) {
