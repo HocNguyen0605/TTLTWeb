@@ -147,13 +147,13 @@ public class OrderController extends HttpServlet {
                     orderDAO.updateStatus(orderId, status);
                     break;
 
-                // ❌ XÓA 1 ĐƠN
+                //  XÓA 1 ĐƠN
                 case "delete":
                     int deleteId = Integer.parseInt(request.getParameter("orderId"));
                     orderDAO.deleteOrder(deleteId);
                     break;
 
-                // 🔥 XÓA TOÀN BỘ ĐƠN
+                // XÓA TOÀN BỘ ĐƠN
                 case "deleteAll":
                     orderDAO.deleteAllOrders();
                     break;
