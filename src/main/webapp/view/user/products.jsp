@@ -5,64 +5,6 @@
     <jsp:param name="title" value="Trang Chủ" />
     <jsp:param name="activePage" value="products" />
 </jsp:include>
-<style>
-    .product-card {
-        transition: transform 0.3s;
-        border: none;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border-radius: 15px;
-        overflow: hidden;
-    }
-
-    .product-card:hover {
-        transform: translateY(-5px);
-    }
-
-    .btn-primary-custom {
-        background-color: #28a745;
-        color: white;
-        border: none;
-    }
-
-    .card-img-top {
-        height: 220px;
-        object-fit: contain;
-        background-color: #fff;
-        padding: 10px;
-    }
-
-    /* --- PHÂN TRANG CIRCULAR --- */
-    .pagination-custom .page-item {
-        margin: 0 5px;
-    }
-
-    .pagination-custom .page-link {
-        width: 40px;
-        height: 40px;
-        border-radius: 50% !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #dee2e6;
-        color: #495057;
-        font-weight: 500;
-        transition: all 0.3s;
-    }
-
-    .pagination-custom .page-item.active .page-link {
-        background-color: #0d3d28;
-        /* Dark green matching request */
-        border-color: #0d3d28;
-        color: white;
-        box-shadow: 0 4px 8px rgba(13, 61, 40, 0.3);
-    }
-
-    .pagination-custom .page-link:hover:not(.active) {
-        background-color: #f8f9fa;
-        border-color: #0d3d28;
-        color: #0d3d28;
-    }
-</style>
 <jsp:include page="/view/user/include/search-bar.jsp" />
 
 <div class="container my-5">

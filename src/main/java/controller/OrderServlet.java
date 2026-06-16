@@ -149,16 +149,18 @@ public class OrderServlet extends HttpServlet {
             shippingDAO.insert(shippingInfo);
             conn.commit(); // Thành công
             conn.commit(); // Lưu đơn hàng thành công
+
+            // Xóa các item đã checkout khỏi cart trong session
+            cart.removeCheckedItems();
+            session.setAttribute("cart", cart);
+
             if ("BANKING".equals(paymentMethod)) {
                 response.sendRedirect(request.getContextPath() + "/payment/vnpay?orderId=" + orderId);
+                return;
             } else {
-                for(CartItem item : cartItemsChecked) {
-                    ProductDAO productDao = new ProductDAO(conn);
-                    productDao.updateProductQuantity(item.getProduct().getId(), item.getQuantity(), item.getQuantity());
-                }
-                response.sendRedirect(request.getContextPath() + "/cart.jsp");
+                response.sendRedirect(request.getContextPath() + "/home");
             }
-            response.sendRedirect(request.getContextPath() + "/home");
+            return;
         } catch (Exception e) {
             if (!(e instanceof IllegalArgumentException) && e.getCause() == null
                     && e.getClass() == Exception.class) {

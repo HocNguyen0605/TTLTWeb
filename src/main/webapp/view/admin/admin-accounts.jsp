@@ -80,6 +80,24 @@
               Quản lý Liên hệ </a>
           </li>
         </ol>
+      <li class="nav-item">
+        <a class="nav-link text-white ${pageContext.request.requestURI.contains('purchase-orders') ? 'active' : ''}"
+           href="#menuKV" data-bs-toggle="collapse">
+          c. Quản lý kho vận
+        </a>
+        <ol class="collapse show" id="menuKV">
+          <li>
+            <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('purchase-orders') ? 'active' : ''}"
+               href="${pageContext.request.contextPath}/admin/purchase-orders">
+              Đặt đơn hàng </a>
+          </li>
+          <li>
+            <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('purchase-orders/confirm') ? 'active' : ''}"
+               href="${pageContext.request.contextPath}/admin/purchase-orders/confirm">
+              Xác nhận đơn hàng </a>
+          </li>
+        </ol>
+      </li>
       </li>
       <li class="mt-3">
         <a href="${pageContext.request.contextPath}/logout"

@@ -13,11 +13,7 @@
     <c:remove var="messageCart" scope="session"/>
     <c:remove var="messageCart" scope="session"/>
 </c:if>
-<c:if test="${not empty errorMessage}">
-    <div class="alert alert-danger">
-            ${errorMessage}
-    </div>
-</c:if>
+
 <section class="container my-5">
     <h2 class="text-center text-success fw-bold mb-4">Giỏ Hàng Của Bạn</h2>
 
@@ -86,6 +82,7 @@
                                         <input type="number"
                                                value="${item.quantity}"
                                                min="1"
+                                               max="${item.product.quantity}"
                                                class="form-control text-center cart-qty-input"
                                                style="width:70px"
                                                data-product-id="${item.product.id}"

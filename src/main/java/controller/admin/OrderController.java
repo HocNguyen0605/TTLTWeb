@@ -96,7 +96,8 @@ public class OrderController extends HttpServlet {
 
                     if ("confirmed".equals(status)) {
                         model.Order order = orderDAO.getOrderById(orderId);
-                        if (order != null && (order.getTrackingCode() == null || order.getTrackingCode().trim().isEmpty())) {
+                        if (order != null
+                                && (order.getTrackingCode() == null || order.getTrackingCode().trim().isEmpty())) {
                             dao.OrderItemDAO itemDAO = new dao.OrderItemDAO(conn);
                             dao.ProductDAO productDAO = new dao.ProductDAO(conn);
                             model.ShippingInfo sInfo = orderDAO.getShippingInfoByOrderId(orderId);
@@ -108,7 +109,7 @@ public class OrderController extends HttpServlet {
                                     model.Product p = productDAO.getProductForUpdate(oi.getProductId());
                                     int pWeight = p != null ? p.getVolume() : 0;
                                     totalWeight += pWeight * oi.getQuantity();
-                                    
+
                                     JsonObject itemJson = new JsonObject();
                                     itemJson.addProperty("name", p != null ? p.getName() : "Sản phẩm");
                                     itemJson.addProperty("quantity", oi.getQuantity());
@@ -123,8 +124,7 @@ public class OrderController extends HttpServlet {
                                         sInfo.getDistrictId() != null ? sInfo.getDistrictId() : 0,
                                         sInfo.getWardCode() != null ? sInfo.getWardCode() : "",
                                         totalWeight,
-                                        itemsArray
-                                );
+                                        itemsArray);
 
                                 if (ghnResp != null && ghnResp.has("code") && ghnResp.get("code").getAsInt() == 200) {
                                     JsonObject data = ghnResp.getAsJsonObject("data");
@@ -147,13 +147,13 @@ public class OrderController extends HttpServlet {
                     orderDAO.updateStatus(orderId, status);
                     break;
 
-                // ❌ XÓA 1 ĐƠN
+                //  XÓA 1 ĐƠN
                 case "delete":
                     int deleteId = Integer.parseInt(request.getParameter("orderId"));
                     orderDAO.deleteOrder(deleteId);
                     break;
 
-                // 🔥 XÓA TOÀN BỘ ĐƠN
+                // XÓA TOÀN BỘ ĐƠN
                 case "deleteAll":
                     orderDAO.deleteAllOrders();
                     break;

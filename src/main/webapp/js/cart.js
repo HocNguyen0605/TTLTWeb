@@ -97,6 +97,7 @@ function applyVoucher(){
             fetchCart();
         }).catch(error=> console.error("Lỗi voucher: ", error));
 }
+
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".cart-item-checkbox").forEach(cb => {
         cb.addEventListener("change", fetchCart);
