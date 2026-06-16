@@ -120,11 +120,11 @@
 
             <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                 <div class="search-container d-none d-md-block">
-                    <form action="products" method="get">
+                    <input type="text" name="search" class="form-control search-input"
+                           placeholder="Nhập tên CTKM để tìm kiếm" value="${currentSearch}">
+                    <button type="submit" class="btn btn-success d-flex align-items-center">
                         <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" class="search-input"
-                               placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
-                    </form>
+                    </button>
                 </div>
                 <button class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
                         data-bs-toggle="modal" data-bs-target="#addVoucherModal">

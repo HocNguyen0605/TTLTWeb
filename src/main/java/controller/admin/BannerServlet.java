@@ -30,7 +30,6 @@ public class BannerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-
         CloudinaryService cloudinaryService = new CloudinaryService();
             try(Connection conn = DBContext.getConnection()) {
 

@@ -355,7 +355,7 @@
 <template id="orderDetailRowTemplate">
     <tr>
         <td class="text-center">
-            <img src="" alt="class="img-thumbnail product-img" style="max-height: 50px; max-width: 50px; object-fit: cover;">
+            <img src="" alt="" class="img-thumbnail product-img" style="max-height: 50px; max-width: 50px; object-fit: cover;">
         </td>
         <td class="product-id"></td>
         <td class="fw-semibold product-name"></td>

@@ -341,7 +341,7 @@ public class ProductDAO extends BaseDao {
         } else if ("nameAsc".equals(sortBy)) {
             sql.append(" ORDER BY p.product_name ASC");
         } else {
-            sql.append(" ORDER BY p.id DESC"); // Default sort: Newest first
+            sql.append(" ORDER BY p.id DESC");
         }
 
         sql.append(" LIMIT :offset, :limit");
@@ -372,7 +372,7 @@ public class ProductDAO extends BaseDao {
         if (maxPrice != null)
             sql.append(" AND p.price <= :maxPrice");
 
-        sql.append(" AND p.quantity >= 0"); // Filter hidden
+        sql.append(" AND p.quantity >0");
 
         if (minVol != null) {
             sql.append(" AND p.volume >= :minVol");
@@ -435,7 +435,7 @@ public class ProductDAO extends BaseDao {
                         p.description
                     FROM products p
                     LEFT JOIN product_images pi ON p.image = pi.id
-                    WHERE p.quantity >= 0
+                    WHERE p.quantity >0
                 """);
 
         if (supplier != null && !supplier.trim().isEmpty()) {
