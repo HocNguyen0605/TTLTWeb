@@ -3,7 +3,10 @@
 package controller;
 
 import com.google.gson.JsonObject;
-import dao.*;
+import dao.OrderDAO;
+import dao.OrderItemDAO;
+import dao.ProductDAO;
+import dao.ShippingInfoDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -144,21 +147,20 @@ public class OrderServlet extends HttpServlet {
             }
             shippingInfo.setWardCode(wardCode);
             shippingDAO.insert(shippingInfo);
+            conn.commit(); // Thành công
             conn.commit(); // Lưu đơn hàng thành công
+
+            // Xóa các item đã checkout khỏi cart trong session
+            cart.removeCheckedItems();
+            session.setAttribute("cart", cart);
+
             if ("BANKING".equals(paymentMethod)) {
                 response.sendRedirect(request.getContextPath() + "/payment/vnpay?orderId=" + orderId);
                 return;
             } else {
-                for(CartItem item : cartItemsChecked) {
-                    ProductDAO productDao = new ProductDAO(conn);
-                    CartDAO cartDAO = new CartDAO(conn);
-                    productDao.updateProductQuantity(item.getProduct().getId(), item.getQuantity(), item.getQuantity());
-                //Xóa sp đã mua ra khỏi giỏ
-                    cart.deleteProduct(item.getProduct().getId());
-                    cartDAO.removeCartItem(user.getId(), item.getProduct().getId());
-                }
-                response.sendRedirect(request.getContextPath() + "/view/user/cart.jsp");
+                response.sendRedirect(request.getContextPath() + "/home");
             }
+            return;
         } catch (Exception e) {
             if (!(e instanceof IllegalArgumentException) && e.getCause() == null
                     && e.getClass() == Exception.class) {
