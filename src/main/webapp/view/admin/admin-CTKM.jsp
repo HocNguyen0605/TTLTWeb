@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard | Juicy</title>
+    <title>Admin CTKM | Juicy</title>
 
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/logo/logo-juicy.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -84,6 +84,24 @@
                     </li>
                 </ol>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-white ${pageContext.request.requestURI.contains('purchase-orders') ? 'active' : ''}"
+                   href="#menuKV" data-bs-toggle="collapse">
+                    c. Quản lý kho vận
+                </a>
+                <ol class="collapse show" id="menuKV">
+                    <li>
+                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('purchase-orders') ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/admin/purchase-orders">
+                            Đặt đơn hàng </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('purchase-orders/confirm') ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/admin/purchase-orders/confirm">
+                            Xác nhận đơn hàng </a>
+                    </li>
+                </ol>
+            </li>
             <li class="mt-3">
                 <a href="${pageContext.request.contextPath}/logout"
                    class="btn btn-danger rounded-pill ms-3">
@@ -102,11 +120,11 @@
 
             <div class="d-flex gap-3 mt-3 mt-md-0 align-items-center">
                 <div class="search-container d-none d-md-block">
-                    <form action="products" method="get">
+                    <input type="text" name="search" class="form-control search-input"
+                           placeholder="Nhập tên CTKM để tìm kiếm" value="${currentSearch}">
+                    <button type="submit" class="btn btn-success d-flex align-items-center">
                         <i class="bi bi-search search-icon"></i>
-                        <input type="text" name="search" class="search-input"
-                               placeholder="Tìm kiếm sản phẩm..." value="${param.search}">
-                    </form>
+                    </button>
                 </div>
                 <button class="btn btn-success w-100 mt-4 fw-semibold rounded-pill"
                         data-bs-toggle="modal" data-bs-target="#addVoucherModal">

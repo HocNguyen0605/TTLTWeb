@@ -223,8 +223,7 @@ public class CartController extends HttpServlet {
         double shippingFee = 0;
         if (!listCalculate.isEmpty() && session.getAttribute("auth") != null) {
             User auth = (User) session.getAttribute("auth");
-            if (auth.getDistrictId() > 0 && auth.getWardCode() != null && !auth.getWardCode().isEmpty()) {
-                try {
+            if (auth.getDistrictId() != null && auth.getDistrictId() > 0 && auth.getWardCode() != null && !auth.getWardCode().isEmpty()) {                try {
                     int weight = 0;
                     for (CartItem item : listCalculate) {
                         weight += item.getProduct().getVolume() * item.getQuantity();

@@ -133,7 +133,7 @@ public class GHNUtils {
     public static JsonObject calculateFee(int toDistrictId, String toWardCode, int weight) {
         try {
             JsonObject json = new JsonObject();
-            json.addProperty("service_type_id", 2); // Chuẩn
+            json.addProperty("service_type_id", 2);
             json.addProperty("to_district_id", toDistrictId);
             json.addProperty("to_ward_code", toWardCode);
             json.addProperty("weight", weight);

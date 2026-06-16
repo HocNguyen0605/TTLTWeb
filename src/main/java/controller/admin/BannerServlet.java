@@ -30,7 +30,6 @@ public class BannerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-
         CloudinaryService cloudinaryService = new CloudinaryService();
             try(Connection conn = DBContext.getConnection()) {
 
@@ -147,7 +146,9 @@ public class BannerServlet extends HttpServlet {
             BannerDAO bannerDAO = new BannerDAO(conn);
             if (search != null && !search.trim().isEmpty()) {
                 banners = bannerDAO.getBannerByTitle(search.trim());
+                request.setAttribute("currentSearch", search);
             }  else {
+                request.removeAttribute("search");
                 banners = bannerDAO.getActiveBanners();
                 bannersUnactive=bannerDAO.getUnactiveBanners();
             }
@@ -161,7 +162,6 @@ public class BannerServlet extends HttpServlet {
         }
 
         request.setAttribute("banners", banners);
-        request.setAttribute("currentSearch", search);
         request.getRequestDispatcher("/view/admin/admin-banner.jsp").forward(request, response);
 
     }

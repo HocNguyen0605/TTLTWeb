@@ -16,26 +16,25 @@
 </head>
 
 <body>
-
 <!-- HEADER -->
 <header class="sticky-top shadow-sm">
     <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-        <a class="navbar-brand fw-bold text-success fs-3"
-           href="${pageContext.request.contextPath}/admin/dashboard">
-            <img src="${pageContext.request.contextPath}/images/logo/logo-juicy.png" height="40"
-                 class="me-2">
-            JUICY
-        </a>
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success fs-3"
+               href="${pageContext.request.contextPath}/admin/dashboard">
+                <img src="${pageContext.request.contextPath}/images/logo/logo-juicy.png" height="40"
+                     class="me-2">
+                JUICY
+            </a>
+        </div>
     </nav>
 </header>
 
-<!-- TỔNG QUAN -->
 
-
+<!-- Main Content -->
 <div class="d-flex">
     <!-- Sidebar -->
-    <div class="bg-success text-white "
-         style="width: 250px; min-height: 100vh;">
+    <div class="bg-success text-white p-3" style="width: 250px; min-height: 100vh;">
         <h4>Menu</h4>
         <ol class="nav flex-column">
             <li class="nav-item">
@@ -43,23 +42,21 @@
                    href="${pageContext.request.contextPath}/admin/dashboard">a. Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse" >
+                <a class="nav-link text-white " href="#menuQL" data-bs-toggle="collapse" aria-expanded="true">
                     b. Quản lý
                 </a>
-                <ol class="collapse" id="menuQL">
+                <ol class="collapse show" id="menuQL">
                     <li>
                         <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('products') ? 'active' : ''}"
                            href="${pageContext.request.contextPath}/admin/products">
                             Quản lý sản phẩm </a>
                     </li>
                     <li>
-                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('banner') ? 'active' : ''}"
-                           href="${pageContext.request.contextPath}/admin/banner">
+                        <a class="nav-link text-white ms-3" href="${pageContext.request.contextPath}/admin/banner">
                             Quản lý banner </a>
                     </li>
                     <li>
-                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('#') ? 'active' : ''}"
-                           href="${pageContext.request.contextPath}/admin/CTKM">
+                        <a class="nav-link text-white ms-3" href="${pageContext.request.contextPath}/admin/CTKM">
                             Quản lý CTKM </a>
                     </li>
                     <li>
@@ -81,6 +78,24 @@
                         <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('contacts') ? 'active' : ''}"
                            href="${pageContext.request.contextPath}/admin/contacts">
                             Quản lý Liên hệ </a>
+                    </li>
+                </ol>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white ${pageContext.request.requestURI.contains('purchase-orders') ? 'active' : ''}"
+                   href="#menuKV" data-bs-toggle="collapse">
+                    c. Quản lý kho vận
+                </a>
+                <ol class="collapse show" id="menuKV">
+                    <li>
+                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('purchase-orders') ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/admin/purchase-orders">
+                            Đặt đơn hàng </a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-white ms-3 ${pageContext.request.requestURI.contains('purchase-orders/confirm') ? 'active' : ''}"
+                           href="${pageContext.request.contextPath}/admin/purchase-orders/confirm">
+                            Xác nhận đơn hàng </a>
                     </li>
                 </ol>
             </li>
@@ -230,40 +245,48 @@
 <footer class="bg-dark text-white text-center py-3">
     © 2024 Juicy. All Rights Reserved.
 </footer>
-
 <c:if test="${not empty showOutOfStockAlert}">
-    <!-- Modal báo cáo hết hàng -->
     <div class="modal fade" id="outOfStockModal" tabindex="-1" aria-labelledby="outOfStockModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title" id="outOfStockModalLabel"><i class="fas fa-exclamation-triangle"></i> Báo cáo sản phẩm hết hàng</h5>
+                    <h5 class="modal-title" id="outOfStockModalLabel">
+                        <i class="bi bi-exclamation-triangle"></i> Báo cáo sản phẩm hết hàng
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Các sản phẩm sau đã hết hàng và tự động được chuyển sang trạng thái <strong>Đã ẩn</strong>:</p>
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Nhà cung cấp</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach var="p" items="${outOfStockProducts}">
-                            <tr>
-                                <td>${p.id}</td>
-                                <td>${p.name}</td>
-                                <td>${p.supplier_name}</td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
+                    <p>Các sản phẩm sau đã hết hàng và tự động được chuyển sang trạng thái <strong>Đã ẩn</strong>.
+                        Chọn sản phẩm để tạo đơn đặt hàng nhập:</p>
+
+                    <form id="outOfStockForm" action="${pageContext.request.contextPath}/admin/purchase-orders" method="get">
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Nhà cung cấp</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <c:forEach var="p" items="${outOfStockProducts}">
+                                    <tr>
+                                        <td>${p.id}</td>
+                                        <td>${p.name}</td>
+                                        <td>${p.supplier_name}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <a href="${pageContext.request.contextPath}/admin/products" class="btn btn-primary">Đi đến Quản lý sản phẩm</a>
+                    <button type="submit" form="outOfStockForm" class="btn btn-primary">
+                        Đi đến trang đặt hàng
+                    </button>
                 </div>
             </div>
         </div>

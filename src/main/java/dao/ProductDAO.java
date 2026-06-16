@@ -320,7 +320,7 @@ public class ProductDAO extends BaseDao {
         }
 
         // Filter hidden products for valid valid
-        sql.append(" AND p.quantity >= 0");
+        sql.append(" AND p.quantity > 0");
 
         if (minVol != null) {
             sql.append(" AND p.volume >= :minVol");
@@ -341,7 +341,7 @@ public class ProductDAO extends BaseDao {
         } else if ("nameAsc".equals(sortBy)) {
             sql.append(" ORDER BY p.product_name ASC");
         } else {
-            sql.append(" ORDER BY p.id DESC"); // Default sort: Newest first
+            sql.append(" ORDER BY p.id DESC");
         }
 
         sql.append(" LIMIT :offset, :limit");
@@ -372,7 +372,7 @@ public class ProductDAO extends BaseDao {
         if (maxPrice != null)
             sql.append(" AND p.price <= :maxPrice");
 
-        sql.append(" AND p.quantity >= 0"); // Filter hidden
+        sql.append(" AND p.quantity >0");
 
         if (minVol != null) {
             sql.append(" AND p.volume >= :minVol");
@@ -435,7 +435,7 @@ public class ProductDAO extends BaseDao {
                         p.description
                     FROM products p
                     LEFT JOIN product_images pi ON p.image = pi.id
-                    WHERE p.quantity >= 0
+                    WHERE p.quantity >0
                 """);
 
         if (supplier != null && !supplier.trim().isEmpty()) {
@@ -671,5 +671,35 @@ public class ProductDAO extends BaseDao {
             e.printStackTrace();
         }
         return listProduct;
+    }
+    public int hideOutOfStockProducts() {
+        String sql = "UPDATE products SET status = 'inactive' WHERE stock <= 0 AND status = 'active'";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    public List<Product> getAvailableProducts() {
+        String sql = """
+                SELECT 
+                    p.id AS id,
+                    p.product_name AS name,
+                    p.price,
+                    p.volume,
+                    p.supplier_name,
+                    p.quantity,
+                    COALESCE(pi.image_URL, p.image) AS img,
+                    p.description,
+                    p.promotion
+                FROM products p
+                LEFT JOIN product_images pi ON p.image = pi.id
+                GROUP BY p.id
+                ORDER BY p.quantity ASC
+            """;
+        return jdbi.withHandle(handle -> handle.createQuery(sql)
+                .mapToBean(Product.class)
+                .list());
     }
 }

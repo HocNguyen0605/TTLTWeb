@@ -1,0 +1,2 @@
+#productList { max-height: 360px; overflow-y: auto; }
+#cartTable tbody { max-height: 260px; }

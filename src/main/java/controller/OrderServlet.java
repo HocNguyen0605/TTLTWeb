@@ -147,6 +147,7 @@ public class OrderServlet extends HttpServlet {
             }
             shippingInfo.setWardCode(wardCode);
             shippingDAO.insert(shippingInfo);
+            conn.commit(); // Thành công
             conn.commit(); // Lưu đơn hàng thành công
 
             // Xóa các item đã checkout khỏi cart trong session
@@ -155,10 +156,11 @@ public class OrderServlet extends HttpServlet {
 
             if ("BANKING".equals(paymentMethod)) {
                 response.sendRedirect(request.getContextPath() + "/payment/vnpay?orderId=" + orderId);
+                return;
             } else {
                 response.sendRedirect(request.getContextPath() + "/home");
             }
-            return; // Kết thúc, không chạy tiếp vào catch
+            return;
         } catch (Exception e) {
             if (!(e instanceof IllegalArgumentException) && e.getCause() == null
                     && e.getClass() == Exception.class) {
